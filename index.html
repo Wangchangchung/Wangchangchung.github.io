@@ -258,6 +258,106 @@
             
               
                 
+                <a class="post-title-link" href="/2016/08/09/字节码文件——Java虚拟机的平台无关性/" itemprop="url">
+                  未命名
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-09T18:00:59+08:00" content="2016-08-09">
+              2016-08-09
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="字节码文件——Java-虚拟机的平台无关性"><a href="#字节码文件——Java-虚拟机的平台无关性" class="headerlink" title="字节码文件——Java 虚拟机的平台无关性"></a>字节码文件——Java 虚拟机的平台无关性</h1><p>标签（空格分隔）： Class字节码 平台无性 Java</p>
+<hr>
+<p>代码编译的结果从本地机器码转变为字节码，是存储格式发展的一小步，却是编程语言的一大步。</p>
+<h3 id="1-概述"><a href="#1-概述" class="headerlink" title="1. 概述"></a>1. 概述</h3><p>我们在上计算机课的时候，老师就讲过:“计算机就认识0和1,所以我们写的程序需要经过编译器翻译成由0和1构成的二进制格式才能由计算机执行”。现在的计算机的确是只认识0和1，但是由于近10年虚拟机以及大量建立在虚拟机之上的程序语言如雨后春笋般出现并蓬勃发展，将我们编写的程序编译成二进制本地机器码(Native Code)已经不再是唯一的选择了，越来越多的程序语言选择了与操作系统和机器指令集无关的、平台中立的格式作为程序编译后的存储格式。</p>
+<h3 id="2-无关性的基石"><a href="#2-无关性的基石" class="headerlink" title="2. 无关性的基石"></a>2. 无关性的基石</h3><p>如果计算机的CPU指令集只有x86一种，操作系统也只有一种Windows，那么也许Java语言就不会出现了，但是事实上是现在操作系统和硬件体系结构并不是单一的局面，在无时无刻充满竞争的IT领域，不可能只有一种操作系统和硬件体系结构存在，所以对于这样的环境下，所以java诞生的时候曾经提出一个非常著名的口号”一次编写，到处运行(Write Once， Run Anywhere)”,这句话充分体现了软件人员对冲破平台界限的渴望。“与平台无关”的理想最终实现在操作系统的应用层上:Sun 公司以及其他虚拟机提供商发布了许多可以运行在不同平台上的虚拟机，这些虚拟机都可以载入和执行同一种平台无关的字节码，从而实现了程序的“一次编写，到处运行”。</p>
+<p>各种不同平台的虚拟机与所有平台都统一使用的程序存储格式——<strong>字节码(ByteCode)</strong>是构成平台无关性的基石，语言无关性越来越受到开发者的重视，到目前为止，或许大部分程序员都还认为Java虚拟机执行Java程序是一件理所当然的事情。<strong>但在Java发展之初，设计者就曾经考虑过并实现了让其他语言运行在Java虚拟机之上的可能性</strong>，他们在发布规范文档的时候，也刻意把Java的规范查封成了Java语言规范《The Java Language Specification》及Java虚拟机规范《The Java Virtual Machine Specification》。并且在1997年的发布的第一版Java虚拟机规范中就曾经承若过:”<strong>在未来，我们会对Java虚拟机进行适当的扩展，以便更好的支持其他语言运行在JVM之上</strong>“。</p>
+<p>实现语言无关性的基础任仍然是虚拟机和字节码存储格式。Java虚拟机不和包括Java在内的任何语言绑定，它只与“Class文件”这中特定的二进制文件格式所关联，Class文件中包含了Java虚拟机指令集合符号表以及若干其他辅助信息。基于安全方面的考虑，Java虚拟机规范要求在Class 文件中使用许多强制性的语法和结构化约束，但任一门功能性语言都可以表示为一个能被Java虚拟机所接受的有效的Class文件。作为一个通用的、机器无关的执行平台，其他任何语言的实现者都可以将Java虚拟机作为语言的产品交付媒介。例如，使用Java编译器可以把Java代码编译为存储字节码的Class文件，使用JRuby等其他语言的编译器一样可以把程序代码编译成Class文件，虚拟机并不关心Class的来源是何种语言。如下图所示：<br><img src="picture/Java.png" alt="Java"></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/07/25/hello-world/" itemprop="url">
                   Hello World
                 </a>
@@ -380,18 +480,11 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">1</span>
+              <span class="site-state-item-count">2</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
-          
-            <div class="site-state-item site-state-categories">
-              <a href="/categories">
-                <span class="site-state-item-count">1</span>
-                <span class="site-state-item-name">分类</span>
-              </a>
-            </div>
           
 
           
