@@ -4,6 +4,9 @@
  */
 /* FONT PATH
  * -------------------------- */
+
+
+
 @font-face {
   font-family: 'FontAwesome';
   src: url('../fonts/fontawesome-webfont.eot?v=4.6.3');
@@ -180,6 +183,11 @@
 }
 /* Font Awesome uses the Unicode Private Use Area (PUA) to ensure screen
    readers do not read off random characters that represent icons */
+
+.icon-profile:before {
+  content: "\e923";
+}
+
 .fa-glass:before {
   content: "\f000";
 }
