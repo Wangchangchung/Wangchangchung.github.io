@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Java, Class字节码, 平台无关性" />
+  <meta name="keywords" content="Java,垃圾收集算法," />
 
 
 
@@ -84,18 +84,20 @@
 
 
 
-<meta name="description" content="代码编译的结果从本地机器码转变为字节码，是存储格式发展的一小步，却是编程语言的一大步。">
+<meta name="description" content="本篇文章主要讲解java中的主要几种垃圾收集算法思想，不讨论它的具体实现过程，因为垃圾收集算法的实现涉及大量的程序细节，而且各个平台的虚拟机操作内存的方法又各不相同。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="字节码文件--Java虚拟机的平台无关性">
-<meta property="og:url" content="http://yoursite.com/2016/08/09/字节码文件-Java虚拟机的平台无关性/index.html">
+<meta property="og:title" content="Java垃圾收集算法">
+<meta property="og:url" content="http://yoursite.com/2016/08/19/Java垃圾收集算法/index.html">
 <meta property="og:site_name" content="Charse Wan's Blog">
-<meta property="og:description" content="代码编译的结果从本地机器码转变为字节码，是存储格式发展的一小步，却是编程语言的一大步。">
-<meta property="og:image" content="http://yoursite.com/picture/1.jpg">
-<meta property="og:updated_time" content="2016-08-20T08:28:40.110Z">
+<meta property="og:description" content="本篇文章主要讲解java中的主要几种垃圾收集算法思想，不讨论它的具体实现过程，因为垃圾收集算法的实现涉及大量的程序细节，而且各个平台的虚拟机操作内存的方法又各不相同。">
+<meta property="og:image" content="http://yoursite.com/img/MarkClear.jpg">
+<meta property="og:image" content="http://yoursite.com/picture/CopyShuanfa.png">
+<meta property="og:image" content="http://yoursite.com/picture/MarkXZhengLi.png">
+<meta property="og:updated_time" content="2016-08-20T08:25:01.988Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="字节码文件--Java虚拟机的平台无关性">
-<meta name="twitter:description" content="代码编译的结果从本地机器码转变为字节码，是存储格式发展的一小步，却是编程语言的一大步。">
-<meta name="twitter:image" content="http://yoursite.com/picture/1.jpg">
+<meta name="twitter:title" content="Java垃圾收集算法">
+<meta name="twitter:description" content="本篇文章主要讲解java中的主要几种垃圾收集算法思想，不讨论它的具体实现过程，因为垃圾收集算法的实现涉及大量的程序细节，而且各个平台的虚拟机操作内存的方法又各不相同。">
+<meta name="twitter:image" content="http://yoursite.com/img/MarkClear.jpg">
 
 
 
@@ -116,9 +118,9 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2016/08/09/字节码文件-Java虚拟机的平台无关性/"/>
+  <link rel="canonical" href="http://yoursite.com/2016/08/19/Java垃圾收集算法/"/>
 
-  <title> 字节码文件--Java虚拟机的平台无关性 | Charse Wan's Blog </title>
+  <title> Java垃圾收集算法 | Charse Wan's Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -258,7 +260,7 @@
             
             
               
-                字节码文件--Java虚拟机的平台无关性
+                Java垃圾收集算法
               
             
           </h1>
@@ -270,8 +272,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-08-09T19:47:18+08:00" content="2016-08-09">
-              2016-08-09
+            <time itemprop="dateCreated" datetime="2016-08-19T11:11:45+08:00" content="2016-08-19">
+              2016-08-19
             </time>
           </span>
 
@@ -284,8 +286,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
+                  <a href="/categories/JVM-Java/" itemprop="url" rel="index">
+                    <span itemprop="name">JVM, Java</span>
                   </a>
                 </span>
 
@@ -300,8 +302,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/08/09/字节码文件-Java虚拟机的平台无关性/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/09/字节码文件-Java虚拟机的平台无关性/" itemprop="commentsCount"></span>
+                <a href="/2016/08/19/Java垃圾收集算法/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/19/Java垃圾收集算法/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -322,29 +324,28 @@
 
       
       
-        <div class="post-gallery" itemscope itemtype="http://schema.org/ImageGallery">
-          
-          
-            <div class="post-gallery-row">
-              <a class="post-gallery-img fancybox"
-                 href="/picture/1.jpg" rel="gallery_cis2xk2k6000otwcnv8hkx527"
-                 itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
-                <img src="/picture/1.jpg" itemprop="contentUrl"/>
-              </a>
-            
-          
-
-          
-          </div>
-        </div>
-      
 
       
-        <p>代码编译的结果从本地机器码转变为字节码，是存储格式发展的一小步，却是编程语言的一大步。<br><a id="more"></a></p>
-<h3 id="1-概述"><a href="#1-概述" class="headerlink" title="1. 概述"></a>1. 概述</h3><p>我们在上计算机课的时候，老师就讲过:“计算机就认识0和1,所以我们写的程序需要经过编译器翻译成由0和1构成的二进制格式才能由计算机执行”。现在的计算机的确是只认识0和1，但是由于近10年虚拟机以及大量建立在虚拟机之上的程序语言如雨后春笋般出现并蓬勃发展，将我们编写的程序编译成二进制本地机器码(Native Code)已经不再是唯一的选择了，越来越多的程序语言选择了与操作系统和机器指令集无关的、平台中立的格式作为程序编译后的存储格式。</p>
-<h3 id="2-无关性的基石"><a href="#2-无关性的基石" class="headerlink" title="2. 无关性的基石"></a>2. 无关性的基石</h3><p>如果计算机的CPU指令集只有x86一种，操作系统也只有一种Windows，那么也许Java语言就不会出现了，但是事实上是现在操作系统和硬件体系结构并不是单一的局面，在无时无刻充满竞争的IT领域，不可能只有一种操作系统和硬件体系结构存在，所以对于这样的环境下，所以java诞生的时候曾经提出一个非常著名的口号”一次编写，到处运行(Write Once， Run Anywhere)”,这句话充分体现了软件人员对冲破平台界限的渴望。“与平台无关”的理想最终实现在操作系统的应用层上:Sun 公司以及其他虚拟机提供商发布了许多可以运行在不同平台上的虚拟机，这些虚<br>拟机都可以载入和执行同一种平台无关的字节码，从而实现了程序的“一次编写，到处运行”。</p>
-<p>各种不同平台的虚拟机与所有平台都统一使用的程序存储格式——<strong>字节码(ByteCode)</strong>是构成平台无关性的基石，语言无关性越来越受到开发者的重视，到目前为止，或许大部分程序员都还认为Java虚拟机执行Java程序是一件理所当然的事情。<strong>但在Java发展之初，设计者就曾经考虑过并实现了让其他语言运行在Java虚拟机之上的可能性</strong>，他们在发布规范文档的时候，也刻意把Java的规范查封成了Java语言规范《The Java Language Specification》及Java虚拟机规范《The Java Virtual Machine Specification》。并且在1997年的发布的第一版Java虚拟机规范中就曾经承若过:”<strong>在未来，我们会对Java虚拟机进行适当的扩展，以便更好的支持其他语言运行在JVM之上</strong>“。</p>
-<p>实现语言无关性的基础任仍然是虚拟机和字节码存储格式。Java虚拟机不和包括Java在内的任何语言绑定，它只与“Class文件”这中特定的二进制文件格式所关联，Class文件中包含了Java虚拟机指令集合符号表以及若干其他辅助信息。基于安全方面的考虑，Java虚拟机规范要求在Class 文件中使用许多强制性的语法和结构化约束，但任一门功能性语言都可以表示为一个能被Java虚拟机所接受的有效的Class文件。作为一个通用的、机器无关的执行平台，其他任何语言的实现者都可以将Java虚拟机作为语言的产品交付媒介。例如，使用Java编译器可以把Java代码编译为存储字节码的Class文件，使用JRuby等其他语言的编译器一样可以把程序代码编译成Class文件，虚拟机并不关心Class的来源是何种语言。如下图所示：<br><img src="/picture/Java.png" alt="Java"></p>
+        <p>本篇文章主要讲解java中的主要几种垃圾收集算法思想，不讨论它的具体实现过程，因为垃圾收集算法的实现涉及大量的程序细节，而且各个平台的虚拟机操作内存的方法又各不相同。<br><a id="more"></a></p>
+<h3 id="1-标记-清除算法"><a href="#1-标记-清除算法" class="headerlink" title="1. 标记-清除算法"></a><strong>1. 标记-清除算法</strong></h3><h4 id="1-1-算法思想"><a href="#1-1-算法思想" class="headerlink" title="1.1  算法思想"></a><strong>1.1  算法思想</strong></h4><p>“标记-清除”(Mark-Sweep)算法是最基础的垃圾收集算法，我们可以顾名思义，大概知道它的算法分为”标记”和”清除”， 这个算法的思想的确也是这样的，这个算法分为”标记”和”清除”两个阶段：首先，标记所有要回收的对象，在标记完成后统一回收所有被标记的对象，它的标记过程就是前文《Java的垃圾收集机制》中的对对象标记判定的过程，之所以说这个算法是最基础的算法，是因为后续的算法是基于这个”标记-清除”算法的对其中的不足进行改进的。<br>标记-清除算法的执行过程如下图:<br><img src="/img/MarkClear.jpg" alt="1"></p>
+<h4 id="1-2-算法缺点"><a href="#1-2-算法缺点" class="headerlink" title="1.2 算法缺点"></a><strong>1.2 算法缺点</strong></h4><p>它的主要不足之处有两点:</p>
+<ul>
+<li>效率问题，标记和清除两个过程的效率都不太高的。</li>
+<li>空间问题，标记清除之后会产生大量不连续的内存碎片，空间碎片太多可能会导致在以后程序运行过程中需要分配较大对象的时候，无法找到足够的连续的内存空间而不得不提前触发另一次垃圾收集的动作。</li>
+</ul>
+<h3 id="2-复制算法"><a href="#2-复制算法" class="headerlink" title="2. 复制算法"></a><strong>2. 复制算法</strong></h3><h4 id="2-1-算法思想"><a href="#2-1-算法思想" class="headerlink" title="2.1 算法思想"></a><strong>2.1 算法思想</strong></h4><p>复制算法的出现是为了解决”标记-清除”算法的效率问题，它将可用的内存按照容量大小分为大小相等的两块，每次只使用其中的一块当这一块的内存用完了，就将还存活着的对象复制到另外一块上面，然后再把使用过的内存空间一次清理掉。这样使得每一次都是对整个半区进行内存回收，内存分配时也就不用考虑内存碎片等复杂问题，只要移动堆顶指针，按顺序分配内存即可。复制算法的执行过程如下图：</p>
+<p><img src="/picture/CopyShuanfa.png" alt="复制算法示意图"></p>
+<h4 id="2-2-算法优点"><a href="#2-2-算法优点" class="headerlink" title="2.2 算法优点"></a><strong>2.2 算法优点</strong></h4><ul>
+<li>解决”标记-清除”算法中的效率问题，实现简单，运行高效。</li>
+</ul>
+<p><strong>现在的商业虚拟机都采用这种收集算法回收新生代</strong>，IBM公司研究表明，新生代中的对象98%是”朝生夕死”的，所以没有必要按照 1:1 的比例来划分内存空间，而是将内存分为一块较大的Eden空间和两块较小的Survivor空间，每次使用Eden和其中的一块Survivor。当回收的时，将Eden和Survivor中还存活着的对象一次性的复制到另外一块Survivor空间上，最后清理掉Eden和刚才使用过的Survivor空间，HotSpot默认使用Eden和Survrivor的大小比例为8：1，也就是说：每次新生代中可用内存空间为整个新生代容量的90%（80% + 10%），只有10%的内存空间会被”浪费”，当然，98%的对象可回收只是一般场景下的数据，我们没有办法保证每次回收都只有不多于10%的对象存活，当Surviror空间不够用时，需要依赖其他内存(这里是指老年代)进行分配担保(Handle Promotion).</p>
+<p>内存的分配担保就好比我们去银行借款，如果我们信誉好，在98%的情况下都能按时还款，那么银行可能会默认我们下一次也能按时按量的偿还贷款，只需要有一个担保人能够保证我不能还款时，可以从他的账户中扣钱，那么银行就认为没有风险了，内存的分配担保也一样，如果另外一块Survivor空间没有足够的空间存放上一次新生代收集下来的存活对象时，这些对象将直接通过分配担保机制进入老年代。关于新生代进行分配担保的内容，在后面介绍垃圾收集器执行规则的时候再细说。</p>
+<h4 id="2-3-算法缺点"><a href="#2-3-算法缺点" class="headerlink" title="2.3 算法缺点"></a><strong>2.3 算法缺点</strong></h4><ul>
+<li>在对象存活率较高时，就要进行较多的复制操作，效率将会变低。</li>
+<li>将内存缩小到原来的一半，消耗比较高。如果不想浪费50%的空间，就需要有额外的空间进行分配担保，以应对被使用的内存中所有对象都100%存活的极端情况，所以在老年代一般不能直接选择这中算法。</li>
+</ul>
+<h3 id="3-标记-整理算法"><a href="#3-标记-整理算法" class="headerlink" title="3. 标记-整理算法"></a><strong>3. 标记-整理算法</strong></h3><p>根据复制算法的不足之处，和老年代的特点，于是提出”标记-整理”算法(Mark-Compact)，标记过程和”标记-清除”算法一样，但是后面不是直接对可回收的对象进行清理，而是让所有存活的对象都向一端进行移动，然后直接清理掉端边界以外的内存，”标记-整理”算法执行示意图如下图:<br><img src="/picture/MarkXZhengLi.png" alt="&quot;标记-整理&quot;算法示意图"></p>
+<h3 id="4-分代收集算法"><a href="#4-分代收集算法" class="headerlink" title="4. 分代收集算法"></a><strong>4. 分代收集算法</strong></h3><p>当前的商业虚拟机的垃圾收集都是采用”分代收集”(Generational Collection)算法，这种并没有什么心的思想，只是根据对象存活的周期的不同将内存划分为几块，一般是把Java堆中分为新生代和老年代，这样就可以根据每个年代的特点采用最适当的收集算法。在新生代中，每次垃圾收集是都发现有大批对象的复制成本就可以完成收集，而老年代中因为对象存活率高、没有额外空间对他进行分配担保，就必须使用”标记-清理”或者”标记-整理”算法来进行回收。</p>
 
       
     </div>
@@ -369,7 +370,7 @@
           
             <a href="/tags/Java/" rel="tag">#Java</a>
           
-            <a href="/tags/Class字节码/" rel="tag">#Class字节码</a>
+            <a href="/tags/垃圾收集算法/" rel="tag">#垃圾收集算法</a>
           
         </div>
       
@@ -378,16 +379,16 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/07/25/hello-world/" rel="next" title="Hello World">
-                <i class="fa fa-chevron-left"></i> Hello World
+              <a href="/2016/08/14/Java的垃圾收集机制/" rel="next" title="Java的垃圾收集机制">
+                <i class="fa fa-chevron-left"></i> Java的垃圾收集机制
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/08/14/Java的垃圾收集机制/" rel="prev" title="Java的垃圾收集机制">
-                Java的垃圾收集机制 <i class="fa fa-chevron-right"></i>
+              <a href="/2016/08/20/HotSpot的垃圾收集机制算法实现/" rel="prev" title="HotSpot的垃圾收集机制算法实现">
+                HotSpot的垃圾收集机制算法实现 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -414,8 +415,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/08/09/字节码文件-Java虚拟机的平台无关性/"
-           data-title="字节码文件--Java虚拟机的平台无关性" data-url="http://yoursite.com/2016/08/09/字节码文件-Java虚拟机的平台无关性/">
+      <div class="ds-thread" data-thread-key="2016/08/19/Java垃圾收集算法/"
+           data-title="Java垃圾收集算法" data-url="http://yoursite.com/2016/08/19/Java垃圾收集算法/">
       </div>
     
   </div>
@@ -544,7 +545,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-概述"><span class="nav-number">1.</span> <span class="nav-text">1. 概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-无关性的基石"><span class="nav-number">2.</span> <span class="nav-text">2. 无关性的基石</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-标记-清除算法"><span class="nav-number">1.</span> <span class="nav-text">1. 标记-清除算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-算法思想"><span class="nav-number">1.1.</span> <span class="nav-text">1.1  算法思想</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-算法缺点"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 算法缺点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-复制算法"><span class="nav-number">2.</span> <span class="nav-text">2. 复制算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-算法思想"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 算法思想</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-算法优点"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 算法优点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-算法缺点"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 算法缺点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-标记-整理算法"><span class="nav-number">3.</span> <span class="nav-text">3. 标记-整理算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-分代收集算法"><span class="nav-number">4.</span> <span class="nav-text">4. 分代收集算法</span></a></li></ol></div>
             
           </div>
         </section>

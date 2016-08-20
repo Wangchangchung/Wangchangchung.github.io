@@ -92,7 +92,7 @@
 <meta property="og:description" content="1.垃圾收集的历史我们谈论起垃圾收集(Garbage Collection, 也就是常说的GC)，大部分的人都把这项技术当做Java语言的伴生产物，而且有很大一部分的人认为Java的垃圾收集机制是不能够完全做好”垃圾”的收集工作。这个对Java垃圾收集机制没有很好了解的人，是会有这样的误解。事实上是，GC的历史比Java久远">
 <meta property="og:image" content="http://yoursite.com/picture/CanFrenSunfa.png">
 <meta property="og:image" content="http://yoursite.com/picture/SaveSelf.png">
-<meta property="og:updated_time" content="2016-08-19T04:32:00.805Z">
+<meta property="og:updated_time" content="2016-08-20T08:27:30.499Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java的垃圾收集机制">
 <meta name="twitter:description" content="1.垃圾收集的历史我们谈论起垃圾收集(Garbage Collection, 也就是常说的GC)，大部分的人都把这项技术当做Java语言的伴生产物，而且有很大一部分的人认为Java的垃圾收集机制是不能够完全做好”垃圾”的收集工作。这个对Java垃圾收集机制没有很好了解的人，是会有这样的误解。事实上是，GC的历史比Java久远">
@@ -358,7 +358,7 @@
 </code></pre><p>上面的例子中通过 mObjA.mObject = mObjB和mObjA.mObject = mObjA将两个对象相互引用，所以他们的引用计数器都不为0，因此引用计数器无法通知GC收集器回收他们。</p>
 <h4 id="3-2可达性分析算法"><a href="#3-2可达性分析算法" class="headerlink" title="3.2可达性分析算法"></a>3.2可达性分析算法</h4><p>在主流的商用程序语言(Java、C#、甚至古老的Lisp)的主流实现中，都是通过可达性分析(Reachability Analysis)来判断对象是否存活的。</p>
 <p><strong>可达性分析算法的基本思路是:通过一些列的称为”GC Roots”的对象作为起始点，从这些搜索，搜索所走过的路径称之为引用链(Reference Chain)，当一个对象到GC Root没有任何引用链相连(用图论的话来讲，就是从GC Roots到这个对象不可达)时，则证明此对象是不可用的。如图所示:</strong></p>
-<p><img src="picture/CanFrenSunfa.png" alt="可达性分析算法判定对象是否回收"></p>
+<p><img src="/picture/CanFrenSunfa.png" alt="可达性分析算法判定对象是否回收"></p>
 <p>在GC Roots Set集合中，其中的一个GC Root与object1, object2, object3, object4是有引用链相连的，所以GC收集器将不会进行对象的回收，相反，object5, object6, object7与GC Roots Set中GC Roots 没有任何的引用链，所以对象将会被GC收集器回收。</p>
 <p>在Java语言中，可作为GC Roots对象包括下面几种:</p>
 <ul>
@@ -440,7 +440,7 @@ public class FinalizeEscapeGC {
         }
     }
 }
-</code></pre><p>上面代码的执行结果如下图:<br><img src="picture/SaveSelf.png" alt="对象的自我拯救运行结果截图"></p>
+</code></pre><p>上面代码的执行结果如下图:<br><img src="/picture/SaveSelf.png" alt="对象的自我拯救运行结果截图"></p>
 <p>从运行的结果来看，SAVE_SELF对象的finalize()确实是被GC收集器触发过，并且在被收集前成功逃脱了。<br>上面的代码中，两段完全一样的代码的执行完后的效果确不一样的，第一次成功逃脱GC,第二次自我拯救却失败了，这是因为任何一个对象的finalize( )方法都会只被系统自动调用一次，如果对象面临下一次回收，它的finalize()方法不会被再次执行，因此第二段代码的自救行动失败了。<br>上面的第一次自救成功，但是这个方法通常不建议使用来拯救对象。相反，应该尽量避免使用它，因为它运行代价高昂，不确定性大，无法保证各个对象的调用顺序。有些教材中描述他适合做”关闭外部资源”之类的工作，这个完全是对这个方法用途的一种自我安慰。finalize() 能做的所有工作，使用try-finally或者其他方式都可以做得更好、更及时。</p>
 <h3 id="6-回收方法区"><a href="#6-回收方法区" class="headerlink" title="6.回收方法区"></a>6.回收方法区</h3><p>很多人认为方法区(或者HotSpot虚拟机中的永久代)是没有垃圾收集的，Java虚拟机规范中确实说过可以不要求虚拟机在方法区实现垃圾收集，而且在方法区中进行垃圾收集的”性价比”一般比较低：在堆中，尤其是在新生代中，常规应用进行一次垃圾收集一般可以回收70%-95%的空间，而永久代的垃圾收集效率远低于此。<br>永久代的垃圾收集主要回收两部分内容：废弃常量和无用的类，回收废弃常量与回收Java堆中的对象非常类似。以常量池中字面量的回收为例，假如一个字符串“abc”已经进入了常量池中，但是当前系统没有任何一个String对象是叫做”abc”的，换句话说，就是没有任何String对象引用常量池中的“abc”常量，也没有其它地方引用了这个字面量，如果这时发生内存回收，而且必要的话，这个”bac”常量就会被系统清理出常量池。常量池中的其他类(接口)、方法、字段的符号引用也与此类似。</p>
 <p>判定一个常量是否是”废弃常量”比较简单，而要判断一个类是否是”无用的类”的条件则相对苛刻许多。类需要同时满足下面3个条件才能算是”无用的类”:</p>
