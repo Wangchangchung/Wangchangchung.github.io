@@ -84,18 +84,18 @@
 
 
 
-<meta name="description" content="1.垃圾收集的历史我们谈论起垃圾收集(Garbage Collection, 也就是常说的GC)，大部分的人都把这项技术当做Java语言的伴生产物，而且有很大一部分的人认为Java的垃圾收集机制是不能够完全做好”垃圾”的收集工作。这个对Java垃圾收集机制没有很好了解的人，是会有这样的误解。事实上是，GC的历史比Java久远，">
+<meta name="description" content="1.垃圾收集的历史我们谈论起垃圾收集(Garbage Collection, 也就是常说的GC)，大部分的人都把这项技术当做Java语言的伴生产物，而且有很大一部分的人认为Java的垃圾收集机制是不能够完全做好”垃圾”的收集工作。这个对Java垃圾收集机制没有很好了解的人，是会有这样的误解。事实上是，GC的历史比Java久远">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java的垃圾收集机制">
 <meta property="og:url" content="http://yoursite.com/2016/08/14/Java的垃圾收集机制/index.html">
 <meta property="og:site_name" content="Charse Wan's Blog">
-<meta property="og:description" content="1.垃圾收集的历史我们谈论起垃圾收集(Garbage Collection, 也就是常说的GC)，大部分的人都把这项技术当做Java语言的伴生产物，而且有很大一部分的人认为Java的垃圾收集机制是不能够完全做好”垃圾”的收集工作。这个对Java垃圾收集机制没有很好了解的人，是会有这样的误解。事实上是，GC的历史比Java久远，">
+<meta property="og:description" content="1.垃圾收集的历史我们谈论起垃圾收集(Garbage Collection, 也就是常说的GC)，大部分的人都把这项技术当做Java语言的伴生产物，而且有很大一部分的人认为Java的垃圾收集机制是不能够完全做好”垃圾”的收集工作。这个对Java垃圾收集机制没有很好了解的人，是会有这样的误解。事实上是，GC的历史比Java久远">
 <meta property="og:image" content="http://yoursite.com/picture/CanFrenSunfa.png">
 <meta property="og:image" content="http://yoursite.com/picture/SaveSelf.png">
-<meta property="og:updated_time" content="2016-08-14T12:21:12.031Z">
+<meta property="og:updated_time" content="2016-08-19T04:32:00.805Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java的垃圾收集机制">
-<meta name="twitter:description" content="1.垃圾收集的历史我们谈论起垃圾收集(Garbage Collection, 也就是常说的GC)，大部分的人都把这项技术当做Java语言的伴生产物，而且有很大一部分的人认为Java的垃圾收集机制是不能够完全做好”垃圾”的收集工作。这个对Java垃圾收集机制没有很好了解的人，是会有这样的误解。事实上是，GC的历史比Java久远，">
+<meta name="twitter:description" content="1.垃圾收集的历史我们谈论起垃圾收集(Garbage Collection, 也就是常说的GC)，大部分的人都把这项技术当做Java语言的伴生产物，而且有很大一部分的人认为Java的垃圾收集机制是不能够完全做好”垃圾”的收集工作。这个对Java垃圾收集机制没有很好了解的人，是会有这样的误解。事实上是，GC的历史比Java久远">
 <meta name="twitter:image" content="http://yoursite.com/picture/CanFrenSunfa.png">
 
 
@@ -325,7 +325,8 @@
       
 
       
-        <h3 id="1-垃圾收集的历史"><a href="#1-垃圾收集的历史" class="headerlink" title="1.垃圾收集的历史"></a>1.垃圾收集的历史</h3><p>我们谈论起垃圾收集(Garbage Collection, 也就是常说的GC)，大部分的人都把这项技术当做Java语言的伴生产物，而且有很大一部分的人认为Java的垃圾收集机制是不能够完全做好”垃圾”的收集工作。这个对Java垃圾收集机制没有很好了解的人，是会有这样的误解。事实上是，GC的历史比Java久远，<br><a id="more"></a><br>1960年诞生于MIT的Lisp是第一门真正的使用内存动态分配和垃圾收集技术的语言，当Lisp还在胚胎期时，人们就在思考GC需要完成的3件事情：</p>
+        <h3 id="1-垃圾收集的历史"><a href="#1-垃圾收集的历史" class="headerlink" title="1.垃圾收集的历史"></a>1.垃圾收集的历史</h3><p>我们谈论起垃圾收集(Garbage Collection, 也就是常说的GC)，大部分的人都把这项技术当做Java语言的伴生产物，而且有很大一部分的人认为Java的垃圾收集机制是不能够完全做好”垃圾”的收集工作。这个对Java垃圾收集机制没有很好了解的人，是会有这样的误解。事实上是，GC的历史比Java久远<a id="more"></a>，</p>
+<p>1960年诞生于MIT的Lisp是第一门真正的使用内存动态分配和垃圾收集技术的语言，当Lisp还在胚胎期时，人们就在思考GC需要完成的3件事情：</p>
 <ul>
 <li><strong>哪些内存需要回收？</strong></li>
 <li><strong>什么时候回收？</strong></li>
@@ -494,6 +495,10 @@ public class FinalizeEscapeGC {
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2016/08/19/Java垃圾收集算法/" rel="prev" title="Java垃圾收集算法">
+                Java垃圾收集算法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -564,7 +569,7 @@ public class FinalizeEscapeGC {
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-count">5</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -572,7 +577,7 @@ public class FinalizeEscapeGC {
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">2</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -581,7 +586,7 @@ public class FinalizeEscapeGC {
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
