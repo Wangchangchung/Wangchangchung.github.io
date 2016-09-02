@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="JVM,Java,HotSpot垃圾收集算法," />
+  <meta name="keywords" content="数据库,索引," />
 
 
 
@@ -84,16 +84,16 @@
 
 
 
-<meta name="description" content="1.  枚举根节点从可达性分析中从GC Rooots节点找引用链这个操作为例，可作为GC Roots的节点主要在全局的引用(例如常量和静态属性分)与执行上下文(例如栈帧中的本地变量表)中，现在很多应用仅仅方法区就有数百兆，如果要逐个检查这里面的引用，那么必然会消耗很多时间。">
+<meta name="description" content="索引是数据库对应用程序的设计和开发非常中要的一个方面。如果索引太多，应用程序的性能可能会受到影响。而索引太少，对查询性能有会产生影响。所以要找到一个合适的平衡点，这对应用程序的性能是至关重要的。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="HotSpot的垃圾收集机制算法实现">
-<meta property="og:url" content="http://yoursite.com/2016/08/20/HotSpot的垃圾收集机制算法实现/index.html">
+<meta property="og:title" content="数据库索引的工作原理">
+<meta property="og:url" content="http://yoursite.com/2016/09/02/数据库索引的工作原理/index.html">
 <meta property="og:site_name" content="Charse Wan's Blog">
-<meta property="og:description" content="1.  枚举根节点从可达性分析中从GC Rooots节点找引用链这个操作为例，可作为GC Roots的节点主要在全局的引用(例如常量和静态属性分)与执行上下文(例如栈帧中的本地变量表)中，现在很多应用仅仅方法区就有数百兆，如果要逐个检查这里面的引用，那么必然会消耗很多时间。">
-<meta property="og:updated_time" content="2016-08-19T04:40:09.593Z">
+<meta property="og:description" content="索引是数据库对应用程序的设计和开发非常中要的一个方面。如果索引太多，应用程序的性能可能会受到影响。而索引太少，对查询性能有会产生影响。所以要找到一个合适的平衡点，这对应用程序的性能是至关重要的。">
+<meta property="og:updated_time" content="2016-09-02T00:55:49.994Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="HotSpot的垃圾收集机制算法实现">
-<meta name="twitter:description" content="1.  枚举根节点从可达性分析中从GC Rooots节点找引用链这个操作为例，可作为GC Roots的节点主要在全局的引用(例如常量和静态属性分)与执行上下文(例如栈帧中的本地变量表)中，现在很多应用仅仅方法区就有数百兆，如果要逐个检查这里面的引用，那么必然会消耗很多时间。">
+<meta name="twitter:title" content="数据库索引的工作原理">
+<meta name="twitter:description" content="索引是数据库对应用程序的设计和开发非常中要的一个方面。如果索引太多，应用程序的性能可能会受到影响。而索引太少，对查询性能有会产生影响。所以要找到一个合适的平衡点，这对应用程序的性能是至关重要的。">
 
 
 
@@ -114,9 +114,9 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2016/08/20/HotSpot的垃圾收集机制算法实现/"/>
+  <link rel="canonical" href="http://yoursite.com/2016/09/02/数据库索引的工作原理/"/>
 
-  <title> HotSpot的垃圾收集机制算法实现 | Charse Wan's Blog </title>
+  <title> 数据库索引的工作原理 | Charse Wan's Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -256,7 +256,7 @@
             
             
               
-                HotSpot的垃圾收集机制算法实现
+                数据库索引的工作原理
               
             
           </h1>
@@ -268,8 +268,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-08-20T21:37:57+08:00" content="2016-08-20">
-              2016-08-20
+            <time itemprop="dateCreated" datetime="2016-09-02T08:45:54+08:00" content="2016-09-02">
+              2016-09-02
             </time>
           </span>
 
@@ -282,8 +282,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
+                  <a href="/categories/MySql/" itemprop="url" rel="index">
+                    <span itemprop="name">MySql</span>
                   </a>
                 </span>
 
@@ -298,8 +298,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/08/20/HotSpot的垃圾收集机制算法实现/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/20/HotSpot的垃圾收集机制算法实现/" itemprop="commentsCount"></span>
+                <a href="/2016/09/02/数据库索引的工作原理/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/02/数据库索引的工作原理/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -322,23 +322,40 @@
       
 
       
-        <h3 id="1-枚举根节点"><a href="#1-枚举根节点" class="headerlink" title="1.  枚举根节点"></a>1.  枚举根节点</h3><p>从可达性分析中从GC Rooots节点找引用链这个操作为例，可作为GC Roots的节点主要在全局的引用(例如常量和静态属性分)与执行上下文(例如栈帧中的本地变量表)中，现在很多应用仅仅方法区就有数百兆，如果要逐个检查这里面的引用，那么必然会消耗很多时间。<br><a id="more"></a></p>
-<p>另外，可达性分析对执行时间的敏感还体现在GC停顿上，因为这项分析工作必须在一个能确保一致性的快照中执行——这里的“一致性”的意思是指在整个分析期间整个执行系统看起来就像被冻结在某个时间点上，不可以出现分析过程中对象的引用还在不断的变化的情况，该点不满足的话分析结果的准确性就得不到保证。这点是导致GC进行是必须停顿所有Java执行线程(Sun 将这件事情称为“Stop The World”)的其中的一个重要原因，即使是在号称不会发生停顿的CMS收集器中，枚举根节点时也是必须要停顿的。</p>
-<p>由于目前的主流java虚拟机使用的都是准确式GC(这个概念在之前的文章中介绍Exact VM对Classic VM的改进时讲过),所以当执行系统停顿下来后，并不需要一个不漏的检查完所有执行上下文和全局的引用位置，虚拟机应当是有办法直接得知哪些方法存放着对象引用。在HotSpot的实现中，是使用一组称为OopMap的数据结构来达到这个目的的，在类加载完成的时候，HotSpot就把对象内什么偏移量上是什么数据计算出来，在JIT编译过程中，也会在特定的位置记录下栈和寄存器中哪些位置是引用。这样，GC在扫描的时候就可以直接得到这些消息了。</p>
-<h3 id="2-安全点"><a href="#2-安全点" class="headerlink" title="2. 安全点"></a>2. 安全点</h3><p>在OopMap的协助下，HotSpot可以快速且准确的完成GC Root枚举，但是一个很现实的问题随之而来:可能导致引用关系变化，或者说OopMap内容变化的指令非常多，如果为每一条指令都生成对应的OopMap,那么将会需要大量的额外空间，这样GC的空间成本将会变得非常高。</p>
-<p>实际上，HotSpot也的确没有为每条指令都生成OopMap,前面已经提到，只是在”特定的位置”记录这些信息，这些位置称为”安全点(Safepoint)”,即程序执行时并非在所有地方都能停顿下来开始GC,只有在到达安全点时才能暂停。Safepoint的选定既不能太少以至于让GC等待时间太长，也不能过于频繁以至于过分增大运行时的负荷。所以，安全点的选定基本上是以程序“是否有让程序长时间执行的特征”为标准进行选定的——因为每条指令执行的时间都是非常短暂，程序不太可能因为指令流长度太长这个原因而过长时间运行，”长时间执行”的最明显特征就是指令序列复用，例如方法调用，循环跳转、异常跳转等，所以具有这些功能的指令才会产生Safepoint.</p>
-<p>对于Safepoint,另一个需要考虑的问题是如何在GC发生时让所有线程(这里不包括执行JNI调用线程)都是“跑”到最近的安全点上在停顿下来，这里有两种方案可供选择</p>
-<ol>
-<li>抢先式中断(Preemptive Suspension) </li>
-</ol>
-<p>抢先式中断不需要线程的执行代码主动去配合，在GC发生时，首先把所有线程全部中断如果发现有线程中断的地方不在安全点上，就恢复线程，让它”跑”到安全点上，现在几乎没有虚拟机实现采用抢先式中断来暂停线程从而响应GC事件。</p>
-<p> 2..主动式中断(Voluntary Suspension)</p>
-<p>主动式中断的思想是当GC需要中断线程的时候，不直接对线程操作，仅仅简单地设置一个标志，各个线程执行时主动去轮询这个标志，发现中断标志位真时就自己中断挂起。轮询标志的地方和安全点是重合的，另外再加上创建对象需要分配内存的地方。</p>
-<h3 id="3-安全区域"><a href="#3-安全区域" class="headerlink" title="3. 安全区域"></a>3. 安全区域</h3><p>使用Safepoint似乎已经完美的解决了如何进入GC的问题，但是实际情况却并不一定，Safepoint机制保证了程序执行时，在不太长的时间内就会遇到可进入GC的Safepoint。但是，程序”不执行”的时候呢？所谓的程序不执行就是没有分配CPU时间，典型的例子就是程序处于Sleep状态或者Blocked状态，这时候线程无法响应JVM的中断请求，”走”到安全的地方去中断挂起，JVM也显然不太可能等待线程重新被分配CPU时间。对于这种情况，就需要安全区域(Safe Region)来解决。</p>
-<p>安全区域是指在一段代码片段中，引用关系不会发生变化。这个区域中的任意地方开始GC都是安全的，我们也可以把Safe Region看做是被扩展了的Safepoint。</p>
-<p>在线程执行到Safe Region 中的代码时，首先标识自己已经进入了Safe Region,那样，当这段时间里JVM要发起GC的时候。就不用管标识自己为Safe Region状态的线程了。在线程要离开Safe Region时，它要检查系统是否已经完成了根节点枚举(或者是整个GC过程)，如果完成了，那线程就继续执行，否则它就必须等待直到收到可以安全离开Safe Region的信号位置。</p>
-<p>在线程执行到Safepoint中的代码时，就不用管标识自己为Safe Region状态的线程了。在线程要离开Safe Region时，它要检查系统是否已经完成了根节点枚举(或者是整个GC过程)，如果完成了，那么线程就继续执行，否则它就必须等待直到收到可以安全离开Safe Region的信号为止。</p>
-<p>上面介绍了HotSpot虚拟机如何去发起内存回收的问题，但是虚拟机如何具体地进行回收动作任然为涉及，因为内存回收如何进行是由虚拟机所采用的GC收集器决定的，通常虚拟机中往往不止有一种GC收集器。那么请看下面的文章，了解HotSpot中有哪些GC收集器。</p>
+        <p>索引是数据库对应用程序的设计和开发非常中要的一个方面。如果索引太多，应用程序的性能可能会受到影响。而索引太少，对查询性能有会产生影响。所以要找到一个合适的平衡点，这对应用程序的性能是至关重要的。<br><a id="more"></a></p>
+<h3 id="1-为什么需要索引"><a href="#1-为什么需要索引" class="headerlink" title="1. 为什么需要索引"></a>1. 为什么需要索引</h3><p>数据在磁盘上是以块的形式存储的。为确保对磁盘操作的原子性，访问数据的时候会一并访问所有数据块。磁盘上的这些数据块与链表类似，即它们都包含一个数据段和一个指针，指针指向下一个节点（数据块）的内存地址，而且它们都不需要连续存储（即逻辑上相邻的数据块在物理上可以相隔很远）。</p>
+<p>鉴于很多记录只能做到按一个字段排序，所以要查询某个未经排序的字段，就需要使用线性查找，即要访问N/2个数据块，其中N指的是一个表所涵盖的所有数据块。如果该字段是非键字段（也就是说，不包含唯一值），那么就要搜索整个表空间，即要访问全部N个数据块。</p>
+<p>然而，对于经过排序的字段，可以使用二分查找，因此只要访问log2 N个数据块。同样，对于已经排过序的非键字段，只要找到更大的值，也就不用再搜索表中的其他数据块了。这样一来，性能就会有实质性的提升。</p>
+<h3 id="2-什么是索引"><a href="#2-什么是索引" class="headerlink" title="2.  什么是索引"></a>2.  什么是索引</h3><p>索引是对记录按照一个或多个字段进行排序的一种方式。对表中的某个字段建立索引会创建另一种数据结构，其中保存着字段的值，每个值又指向与它相关的记录。即这种种数据结构按照一定顺序建立了列值与记录行之间的对应关系。这种索引的数据结构是经过排序的，因而可以对其执行二分查找。</p>
+<h3 id="3-索引的原理"><a href="#3-索引的原理" class="headerlink" title="3. 索引的原理"></a>3. 索引的原理</h3><pre><code>字段名              数据类型          在磁盘上的大小
+id(Primary key)       int               4字节
+name                  char(20)          20字节
+age                   tinyint           1字节
+</code></pre><p>我们通过建立上面的表来比较在数据库中包含大数据量的情况下，分析两种查询情况:<br>1、查询经过排序的字段id<br>2、查询未经过排序的字段name</p>
+<h4 id="分析示例一"><a href="#分析示例一" class="headerlink" title="分析示例一"></a>分析示例一</h4><p>假设数据库表中有R = 1000万条记录，mysql数据库在磁盘上为每条记录分配的大小为B = 4 + 20 + 1 = 25字节，这样我们就可以计算这个表分块因数bfr = (B/R) = 1024/25 = 40， 也就是说，磁盘上的单位数据块上保存着40条记录，那么我们就可以得出这整个表所需要的数据块就是N =  (R/bfr) = 10000000/40 = 250000。</p>
+<p>1、使用id字段查找时的情况： 由于id字段是线性的(作为表的主键)，需要访问 N / 2 = 125000个数据块才能找到目标，但是这个字段是经过排序的，所以可以使用二分查找的方法，所以这样平均的访问log2 250000 = 17.9 = 18  个块，这很显然，是对数据库<br>2、使用name字段查找的情况：<br>由于name字段是为经过排序的，因此不可能使用二分查找，并且这个字段的值也不是唯一的，所以数据库要从表的开头查找到尾，即要访问 N = 250000个数据块。</p>
+<p>所以，通过这个比较得知，包含索引的查询效率是更高的，那数据库性能就可以得到很好的提升。</p>
+<p>如果一条索引记录只包含索引字段和一个指向原始记录的指针，那么这条记录肯定要比他所指向的包含更多的记录要更小，也就是所，索引本身占用的磁盘空间比原来的表更小，因此需要遍历的数据块也不搜索原来的表更少。如果下，以name字段建立索引的表模式:</p>
+<pre><code>字段名          数据类型            在磁盘上的大小
+name            char(20)            20字节
+记录指针         指针类型             4字节
+</code></pre><h4 id="分析示例二"><a href="#分析示例二" class="headerlink" title="分析示例二"></a>分析示例二</h4><p>数据库中有 r = 1000 000条记录，每条索引记录要占用 R = 24字节的空间大小，那么同样适用默认的数据块大小 B = 1024字节。 那么索引的分块因数就是bfr = (B/R) = 1024 / 24 = 5。最终建立索引所生成的表的大小为 N = (r / bfr) = 1000000 /5  = 2500000个数据块。</p>
+<p>现在，再搜索name字段就可以使用索引来提高性能，对索引使用二分查找，需要分为log2 2500000 = 18 个数据块，在加上为找到实际记录的地址还要访问一个数据块，总共要访问18 + 1 = 19 个数据块，这个与之前的250000 个数据块相比，是在是差别太大了。</p>
+<h3 id="4-什么时候用索引"><a href="#4-什么时候用索引" class="headerlink" title="4. 什么时候用索引"></a>4. 什么时候用索引</h3><p>创建索引要额外占用磁盘空间（比如，上面例子中要额外占用277 778个数据块），建立的索引太多可能导致磁盘空间不足。因此，在建立索引时，一定要慎重选择正确的字段。</p>
+<p>由于索引只能提高搜索记录中某个匹配字段的速度，因此在执行插入和删除操作的情况下，仅为输出结果而为字段建立索引，就纯粹是浪费磁盘空间和处理时间了；这种情况下不用建立索引。另外，由于二分查找的原因，数据的基数性（cardinality）或唯一性也非常重要。对基数性为2的字段建立索引，会将数据一分为二，而对基数性为1000的字段，则同样会返回大约1000条记录。在这么低的基数性下，索引的效率将减低至线性查找的水平，而查询优化器会在基数性小于记录数的30%时放弃索引，实际上等于索引纯粹只会浪费空间。</p>
+<pre><code>查询优化器的原理
+
+查询优化中最核心的问题就是精确估算不同查询计划的成本。优化器在估算查询计划的成本时，会使用一个数学模型，该模型又依赖于对每个查询计划中涉及的最大数据量的基数性（或者叫重数）的估算。而对基数性的估算又依赖于对查询中谓词选择因数（selection factor of predicates）的估算。过去，数据库系统在估算选择性时，要使用每个字段中值的分布情况的详尽统计信息，比如直方图。这种技术对于估算孤立谓词的选择符效果很好。然而，很多查询的谓词是相互关联的，例如 select count(*) from R where R.make=&apos;Honda&apos; and R.model=&apos;Accord&apos;。查询谓词经常会高度关联（比如，model=&apos;Accord&apos;的前提条件是make=&apos;Honda&apos;），而估计这种关联的选择性非常困难。查询优化器之所以会选择低劣的查询计划，一方面是因为对基数性估算不准，另一方面就是因为遗漏了很多关联性。而这也是为什么数据库管理员应该经常更新数据库统计信息（特别是在重要的数据加载和卸载之后）的原因。（译自维基百科：http://en.wikipedia.org/wiki/Query_optimizer。）
+</code></pre><h3 id="5-索引优缺点"><a href="#5-索引优缺点" class="headerlink" title="5. 索引优缺点"></a>5. 索引优缺点</h3><h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><ul>
+<li>快速存取数据，减少磁盘的I/O操作</li>
+<li>保证数据记录的唯一性</li>
+<li>实现表与表之间的参照完整性</li>
+<li>在是用order by、group by子句进行数据检索是。利用索引可以减少排序和分组时间</li>
+</ul>
+<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><ul>
+<li>索引创建太多查询的效率反而降低</li>
+<li>索引创建太多导致数据库和系统资源浪费太多，性能下降。</li>
+</ul>
 
       
     </div>
@@ -361,11 +378,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/JVM/" rel="tag">#JVM</a>
+            <a href="/tags/数据库/" rel="tag">#数据库</a>
           
-            <a href="/tags/Java/" rel="tag">#Java</a>
-          
-            <a href="/tags/HotSpot垃圾收集算法/" rel="tag">#HotSpot垃圾收集算法</a>
+            <a href="/tags/索引/" rel="tag">#索引</a>
           
         </div>
       
@@ -374,17 +389,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/08/19/Java垃圾收集算法/" rel="next" title="Java垃圾收集算法">
-                <i class="fa fa-chevron-left"></i> Java垃圾收集算法
+              <a href="/2016/08/20/HotSpot的垃圾收集机制算法实现/" rel="next" title="HotSpot的垃圾收集机制算法实现">
+                <i class="fa fa-chevron-left"></i> HotSpot的垃圾收集机制算法实现
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/09/02/数据库索引的工作原理/" rel="prev" title="数据库索引的工作原理">
-                数据库索引的工作原理 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -410,8 +421,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/08/20/HotSpot的垃圾收集机制算法实现/"
-           data-title="HotSpot的垃圾收集机制算法实现" data-url="http://yoursite.com/2016/08/20/HotSpot的垃圾收集机制算法实现/">
+      <div class="ds-thread" data-thread-key="2016/09/02/数据库索引的工作原理/"
+           data-title="数据库索引的工作原理" data-url="http://yoursite.com/2016/09/02/数据库索引的工作原理/">
       </div>
     
   </div>
@@ -540,7 +551,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-枚举根节点"><span class="nav-number">1.</span> <span class="nav-text">1.  枚举根节点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-安全点"><span class="nav-number">2.</span> <span class="nav-text">2. 安全点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-安全区域"><span class="nav-number">3.</span> <span class="nav-text">3. 安全区域</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-为什么需要索引"><span class="nav-number">1.</span> <span class="nav-text">1. 为什么需要索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-什么是索引"><span class="nav-number">2.</span> <span class="nav-text">2.  什么是索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-索引的原理"><span class="nav-number">3.</span> <span class="nav-text">3. 索引的原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#分析示例一"><span class="nav-number">3.1.</span> <span class="nav-text">分析示例一</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分析示例二"><span class="nav-number">3.2.</span> <span class="nav-text">分析示例二</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-什么时候用索引"><span class="nav-number">4.</span> <span class="nav-text">4. 什么时候用索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-索引优缺点"><span class="nav-number">5.</span> <span class="nav-text">5. 索引优缺点</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#优点"><span class="nav-number">5.1.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#缺点"><span class="nav-number">5.2.</span> <span class="nav-text">缺点</span></a></li></ol></li></ol></div>
             
           </div>
         </section>
