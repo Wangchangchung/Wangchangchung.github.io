@@ -84,38 +84,17 @@
 
 
 
-<meta name="description" content="本篇文章是参考《Web全栈工程师的自我修养》章节所做的记录，同时，也增加了些许内容。
-！webquanzhang
-前端视角前端工程师的职责之一是，让网站又快又好的展现在用户的浏览器中。
-所以通过浏览中的开发者界面中可以发现很多HTTP请求的信息。这些信息包括以下内容:
-
-发出的请求列表。
-每个请求的开始时间，每个请求从开始的到结束所花费的时间。
-请求类型(比如说是Img，JS，CSS，Media，">
+<meta name="description" content="本篇文章是参考《Web全栈工程师的自我修养》章节所做的记录，同时，也增加了些许内容。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="HTTP在前端,后端的角色">
 <meta property="og:url" content="http://yoursite.com/2016/09/03/HTTP在前端-后端的角色/index.html">
 <meta property="og:site_name" content="Charse Wan's Blog">
-<meta property="og:description" content="本篇文章是参考《Web全栈工程师的自我修养》章节所做的记录，同时，也增加了些许内容。
-！webquanzhang
-前端视角前端工程师的职责之一是，让网站又快又好的展现在用户的浏览器中。
-所以通过浏览中的开发者界面中可以发现很多HTTP请求的信息。这些信息包括以下内容:
-
-发出的请求列表。
-每个请求的开始时间，每个请求从开始的到结束所花费的时间。
-请求类型(比如说是Img，JS，CSS，Media，">
+<meta property="og:description" content="本篇文章是参考《Web全栈工程师的自我修养》章节所做的记录，同时，也增加了些许内容。">
 <meta property="og:image" content="http://yoursite.com/picture/http.png">
-<meta property="og:updated_time" content="2016-09-03T10:52:22.933Z">
+<meta property="og:updated_time" content="2016-09-03T11:28:54.612Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HTTP在前端,后端的角色">
-<meta name="twitter:description" content="本篇文章是参考《Web全栈工程师的自我修养》章节所做的记录，同时，也增加了些许内容。
-！webquanzhang
-前端视角前端工程师的职责之一是，让网站又快又好的展现在用户的浏览器中。
-所以通过浏览中的开发者界面中可以发现很多HTTP请求的信息。这些信息包括以下内容:
-
-发出的请求列表。
-每个请求的开始时间，每个请求从开始的到结束所花费的时间。
-请求类型(比如说是Img，JS，CSS，Media，">
+<meta name="twitter:description" content="本篇文章是参考《Web全栈工程师的自我修养》章节所做的记录，同时，也增加了些许内容。">
 <meta name="twitter:image" content="http://yoursite.com/picture/http.png">
 
 
@@ -348,7 +327,7 @@
           
             <div class="post-gallery-row">
               <a class="post-gallery-img fancybox"
-                 href="/picture/http.png" rel="gallery_cisn2mqbb00000kcnwait0fze"
+                 href="/picture/http.png" rel="gallery_cisn4m84n0003wkcntmawewgs"
                  itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
                 <img src="/picture/http.png" itemprop="contentUrl"/>
               </a>
@@ -362,14 +341,15 @@
 
       
         <p>本篇文章是参考《Web全栈工程师的自我修养》章节所做的记录，同时，也增加了些许内容。</p>
-<p>！<a href="/picture/webquanzhang.png">webquanzhang</a></p>
+<a id="more"></a>
+<p><img src="/picture/webquanzhang.png" alt="webquanzhang"></p>
 <h3 id="前端视角"><a href="#前端视角" class="headerlink" title="前端视角"></a><strong>前端视角</strong></h3><p>前端工程师的职责之一是，让网站又快又好的展现在用户的浏览器中。</p>
 <p>所以通过浏览中的开发者界面中可以发现很多HTTP请求的信息。这些信息包括以下内容:</p>
 <ul>
 <li>发出的请求列表。</li>
 <li>每个请求的开始时间，每个请求从开始的到结束所花费的时间。</li>
-<li>请求类型(比如说是Img，JS，CSS，Media，Font,Doc等等)</li>
-<li>请求的状态码(200：正常, 404：资源找不到，304：资源改变)</li>
+<li>请求类型(比如说是Img，JS，CSS，Media，Font，Doc等等)</li>
+<li>请求的状态码(200：正常， 404：资源找不到，304：资源改变)</li>
 <li>每个请求产生的流量消耗</li>
 <li>每个请求gzip压缩前的体积，以及在本地gzip解压之后的体积</li>
 </ul>
@@ -380,24 +360,38 @@
 <p>通过查看站点的HTTP请求信息，可以获得很多的优化信息。下面就是一些基本的优化方法：</p>
 <h4 id="尽量减少同一域下的HTTP请求"><a href="#尽量减少同一域下的HTTP请求" class="headerlink" title="尽量减少同一域下的HTTP请求"></a><strong>尽量减少同一域下的HTTP请求</strong></h4><p><strong>现在的浏览器对同一个域名发起的并发连接数都做了一些限制</strong>，IE6/7 和Firefox2 的设计规则是，同时只能对一个域名发起两个并发连接。新版本的浏览器普遍把这一上限设置为4至8个。所以，如果浏览需要对某个域进行更多的连接，则要在用完当前连接之后，重复使用或者重新建立TCP连接。</p>
 <p>由于浏览器针对资源的域名限制并发数，而不是针对浏览器地址栏中的页面域名，所以很多静态资源可以放在其他域名下(不同的子域名也被认为是不同的域名)，如果只有一台服务器，可以把这些不同的域名同时指向一个IP，也就提高了对这台服务器的并发数连接数限制(不过要小心服务器压力过大)。</p>
-<p><strong>把静态资源放在非主域名下，这种做法除了可以增加浏览器并发，还有一个好处是，减少HTTP请求中携带的不必要的 cookie 数据</strong>。cookie 是某些网站为了辨别用户身份而存储在用户浏览器中的数据。 cookie 的作用域是整个域名，也就是说某个 cookie 存放在 google.com 域名下，那么所有资源的请求都会带上 cookie 数据。<strong>对于静态资源来说，这是毫无必要的，因为这对宽带和链接速度都造成了影响，所以我们一般把静态资源放在单独的域名下。</strong></p>
-<h4 id="尽量减少每一个资源的体积"><a href="#尽量减少每一个资源的体积" class="headerlink" title="尽量减少每一个资源的体积"></a><strong>尽量减少每一个资源的体积</strong></h4><p>我们不仅要限制浏览器的请求数量，还要尽量减少每一个资源的体积，上面我们讲过http请求中有请求流量消耗着一项，所以如果你的资源体积越大，那么传输过程中消耗的流量就越多，等待的时间也越久。</p>
-<p>图片格式的选择</p>
+<p><strong>把静态资源放在非主域名下，这种做法除了可以增加浏览器并发，还有一个好处是，减少HTTP请求中携带的不必要的 cookie 数据</strong>。cookie 是某些网站为了辨别用户身份而存储在用户浏览器中的数据。 cookie 的作用域是整个域名，也就是说某个 cookie 存放在 google.com 域名下，那么所有资源的请求都会带上 cookie 数据。<strong>对于静态资源来说，这是毫无必要的，因为这对带宽和链接速度都造成了影响，所以我们一般把静态资源放在单独的域名下。</strong></p>
+<h4 id="尽量减少每一个资源的体积"><a href="#尽量减少每一个资源的体积" class="headerlink" title="尽量减少每一个资源的体积"></a><strong>尽量减少每一个资源的体积</strong></h4><p>我们不仅要限制浏览器的请求数量，还要尽量减少每一个资源的体积，上面我们讲过http请求中有请求流量消耗这一项，所以如果你的资源体积越大，那么传输过程中消耗的流量就越多，等待的时间也越久。</p>
+<p>图片格式的选择请参看文章<a href="http://www.cnblogs.com/wizcabbit/p/web-image-optimization.html" target="_blank" rel="external">Web性能优化：图片优化</a>，这里就不做过多的说明。</p>
 <p>对于比较大的文本资源。必须开启gzip压缩，因为gzip对于含有重复”单词”的文本文件，压缩率非常高，能有效提高传输过程。</p>
 <h3 id="后台视角"><a href="#后台视角" class="headerlink" title="后台视角"></a><strong>后台视角</strong></h3><p>后台工程师对于HTTP的关注在于让服务器尽快响应，以及减少请求对服务器的开销。</p>
 <p>浏览器限定对某个域的并发连接数，本身是对服务器的一种保护行为，这种善意的行为，保护了服务器不被大量的并发请求弄得崩溃，才限制了同一域的最大并发连接数。然而有一些下载软件，它作为一个HTTP协议客户端，不考虑服务器的压力，而发起大量的并发请求(虽然用户感到下载速度很快)，但是它违反了规则，所以经常被服务器屏蔽。</p>
-<p>为什么服务器对并发请求这么敏感？<br>因为如果发起多个请求的话，服务器操作系统要为每一个线程创建进程<br>、销毁进程、进程间的切换都是很消耗CPU和内存的，所以当请求数高时，服务器负载高，性能就会下降。</p>
-<h4 id="提高服务器的请求处理能力"><a href="#提高服务器的请求处理能力" class="headerlink" title="提高服务器的请求处理能力"></a><strong>提高服务器的请求处理能力</strong></h4><p>对于浏览器的请求，后端开发人员要提高拂去其的请求处理能力，这里我们介绍几种服务器，介绍各自的特点和性能。</p>
+<p>为什么服务器对并发请求这么敏感？<br>因为如果发起多个请求的话，服务器操作系统要为每一个线程创建进程、销毁进程、进程间的切换都是很消耗CPU和内存的，所以当请求数高时，服务器负载高，性能就会下降。</p>
+<h4 id="提高服务器的请求处理能力"><a href="#提高服务器的请求处理能力" class="headerlink" title="提高服务器的请求处理能力"></a><strong>提高服务器的请求处理能力</strong></h4><p>对于浏览器的请求，后端开发人员要提高服务器的请求处理能力，这里我们介绍几种服务器，介绍各自的特点和性能。</p>
 <h5 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a><strong>Linux</strong></h5><p><strong>在早期系统中(比如linux 2.4以前)，进程是基本的运作单位，在支持线程系统(Linux 2.6)中，线程才是最基本的运作单位，而进程只是线程的容器。由于线程开销明显小于进程，而且部分资源还可以共享，所以效率比较高。</strong></p>
-<h4 id="Apache"><a href="#Apache" class="headerlink" title="Apache"></a><strong>Apache</strong></h4><p>Apache是市场份额比较大的服务器，Apache通过模块化的设计好适应各种环境，其中有一个模块叫做多处理模块( MPM )，专门用来处理多请求的情况，Apache安装在不同系统上的时候会调用不同默认 MPM ,在Linux中默认使用的 MPM 是prefork。为了优化，可以改成worker模式。</p>
+<h4 id="Apache"><a href="#Apache" class="headerlink" title="Apache"></a><strong>Apache</strong></h4><p>Apache是市场份额比较大的服务器，Apache通过模块化的设计来适应各种环境，其中有一个模块叫做多处理模块( MPM )，专门用来处理多请求的情况，Apache安装在不同系统上的时候会调用不同默认 MPM ,在Linux中默认使用的 MPM 是prefork。为了优化，可以改成worker模式。</p>
 <blockquote>
-<p>prefork 与 worker 的区别<br>prefork的一个进程维持一个连接，而worker的一个线程维持一个连接。所以prefork更加稳定，但是内存消耗更加大，worker没有难么稳定，因为很多连接的线程共享一个进程，当一个线程崩溃的时候，整个进程和所有线程一起死掉。但是worker的内存使用要比prefork 低得多，所以很适合在高HTTP请求的服务器上。</p>
+<p>prefork 与 worker 的区别<br>prefork的一个进程维持一个连接，而worker的一个线程维持一个连接。所以prefork更加稳定，但是内存消耗更加大，worker没有那么稳定，因为很多连接的线程共享一个进程，当一个线程崩溃的时候，整个进程和所有线程一起死掉。但是worker的内存使用要比prefork 低得多，所以很适合在高HTTP请求的服务器上。</p>
 </blockquote>
 <h5 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a><strong>Nginx</strong></h5><p>在高并发的情况下，Nginx是Apache服务器不错的替代品或者补充：<br>1、Nginx 更加轻量级，占用更少的资源和内存。<br>2、Nginx 处理的是异步非阻塞的，而Apache是阻塞的，在高并发下Nginx能保持低资源，低消耗和高性能。</p>
-<p>由于Apache和Nginx各有所长，所以经常的搭配使 Nginx 处理前端并发，Apache处理后台请求。</p>
-<h5 id="Node-js"><a href="#Node-js" class="headerlink" title="Node.js"></a><strong>Node.js</strong></h5><p>这里需要补充</p>
+<p>由于Apache和Nginx各有所长，所以经常的搭配是 Nginx 处理前端并发，Apache处理后台请求。</p>
+<h5 id="Node-js"><a href="#Node-js" class="headerlink" title="Node.js"></a><strong>Node.js</strong></h5><p>V8引擎本身就是用于Chrome浏览器的JS解释部分，但是Ryan Dahl这哥们，鬼才般的，把这个V8搬到了服务器上，用于做服务器的软件。</p>
+<p>Node.js是一个专注于实现高性能Web服务器优化的专家，几经探索，几经挫折后，遇到V8而诞生的项目。</p>
+<p>Node.js是一个让JavaScript运行在服务器端的开发平台，它让JavaScript的触角伸到了服务器端，可以与PHP、JSP、Python、Ruby平起平坐。<br>但Node似乎有点不同：</p>
+<ul>
+<li><p>Node.js不是一种独立的语言，与PHP、JSP、Python、Perl、Ruby的“既是语言，也是平台”不同，Node.js的使用JavaScript进行编程，运行在JavaScript引擎上（V8）。</p>
+</li>
+<li><p>与PHP、JSP等相比（PHP、JSP、.net都需要运行在服务器程序上，Apache、Naginx、Tomcat、IIS。），Node.js跳过了Apache、Naginx、IIS等HTTP服务器，它自己不用建设在任何服务器软件之上。Node.js的许多设计理念与经典架构（LAMP = Linux + Apache + MySQL + PHP）有着很大的不同，可以提供强大的伸缩能力。一会儿我们就将看到，Node.js没有web容器。</p>
+</li>
+</ul>
+<p>Node.js自身哲学，是花最小的硬件成本，追求更高的并发，更高的处理性能。<br><strong>特点：</strong><br><strong>所谓的特点，就是Node.js是如何解决服务器高性能瓶颈问题的。</strong></p>
+<ul>
+<li><strong>单线程</strong></li>
+<li><strong>非阻塞IO</strong></li>
+<li><strong>事件驱动</strong></li>
+</ul>
 <h3 id="DDos攻击"><a href="#DDos攻击" class="headerlink" title="DDos攻击"></a><strong>DDos攻击</strong></h3><p>DDos 是Distributed Denial of Service 的缩写，DDoS攻击翻译成中文就是”分布式拒绝服务”攻击</p>
-<p>简单说，就是黑客入侵并控制了大量用户的计算机(俗称”肉鸡”)，然后在这些计算机上安转了DDos攻击软件。DDos攻击软件没有想浏览器那样对HTTP并发连接数进行限制，每一个DDos攻击客户端都可以自由设置TCP/IP并发连接数，并且连接上服务器之后，它不会马上断开连接，而是保持这个连接一段时间，知道同时连接的数量大于最大的连接数量，才断开之前的连接。</p>
+<p>简单说，就是黑客入侵并控制了大量用户的计算机(俗称”肉鸡”)，然后在这些计算机上安装了DDos攻击软件。DDos攻击软件没有想浏览器那样对HTTP并发连接数进行限制，每一个DDos攻击客户端都可以自由设置TCP/IP并发连接数，并且连接上服务器之后，它不会马上断开连接，而是保持这个连接一段时间，知道同时连接的数量大于最大的连接数量，才断开之前的连接。</p>
 <p>就这样，攻击者通过海量的请求，让目标服务器瘫痪，无法响应正常的用户请求，以此达到攻击效果。</p>
 <p>对于这样的攻击，几乎没有什么特别好的防护方法，除了增加带宽和提高服务器能同时接纳的客户数，另一种方法就是让首页静态化，DDos攻击者喜欢攻击的页面一般是会对数据库进行写操作的页面，这样的页面无法静态化，服务器更容易宕机，DDos攻击者一般不会攻击静态化的页面或者图片，因为静态资源对服务器压力小，而且能够部署在CDN上。</p>
 <p>这里介绍的只是最简单个的TCP/IP攻击，而DDos是一个概称，具体来说，有各种攻击方式，比如CC攻击，SYN攻击，NTP攻击，TCP攻击和DNS攻击等。</p>
@@ -409,7 +403,7 @@
 <p>所以浏览器就开始渲染这个” 不完整的HTML “,毛坯房页面很快出现在用户眼前，具体的页面模块都显示”正在加载”。</p>
 <p>接下来管道里源源不断的传输过来很多模块，这个时候最开始加载在服务器中的JS代码开始工作，它会负责把每一个模块依次渲染到页面上。</p>
 <p>在用户的感知上，页面非常快地出现在眼前，但是所有模块都显示正在加载中，然后主要的区域(比如重要的用户动态)优先出现，接下来是logo、边栏和各种挂件等。</p>
-<p>为什么BigPipe能够让服务器对浏览器说：”我这个请求还没有结束，我们保持这个连接不要断开”呢？答案是 HTTP1.1的分块传输编码。</p>
+<p><strong>为什么BigPipe能够让服务器对浏览器说：”我这个请求还没有结束，我们保持这个连接不要断开”呢？答案是 HTTP1.1的分块传输编码。</strong></p>
 <p>HTTP1.1引入分块传输编码，允许服务器为动态生成的内容维持HTTP持久链接，如果一个HTTP消息(请求消息或应答消息)的Transfer-Encoding消息头的值为chunked，那么消息体由数量不确定的块组成——也就是想发送多少块就发送多少块——并以最后一个大小为0的块为结束。</p>
 <p>实现这个架构需要深刻理解HTTP1.1的规则，而且要有前端的知识。Chrome，Opera，Safari已经支持HTTP/2并默认开启，它允许服务器向浏览器”推送”内容，也就是说，返回的条目数可以比请求的条目数多，这样服务器可以在一开始就推送它认为的浏览器”应该需要”的资源，而不是需要浏览器接受并解析王HTML页面才开始请求下载CSS，JavaScript等，而且，后面的请求可以复用之前已经建立的底层连接。</p>
 
