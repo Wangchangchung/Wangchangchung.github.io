@@ -1,0 +1,822 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="数据库," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="1、MySQL数据库语言SQL是 Structured Query Language(结构化查询语言)的缩写，最早是IBM的圣约瑟研究实验室为其关系数据库管理系统System R开发的一种查询语言，它的前身是Square语言。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL数据库操作基本语法">
+<meta property="og:url" content="http://yoursite.com/2016/08/30/MySQL数据库操作基本语法/index.html">
+<meta property="og:site_name" content="Charse Wan's Blog">
+<meta property="og:description" content="1、MySQL数据库语言SQL是 Structured Query Language(结构化查询语言)的缩写，最早是IBM的圣约瑟研究实验室为其关系数据库管理系统System R开发的一种查询语言，它的前身是Square语言。">
+<meta property="og:image" content="http://yoursite.com/picture/mysql.jpg">
+<meta property="og:updated_time" content="2016-09-10T05:00:30.863Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL数据库操作基本语法">
+<meta name="twitter:description" content="1、MySQL数据库语言SQL是 Structured Query Language(结构化查询语言)的缩写，最早是IBM的圣约瑟研究实验室为其关系数据库管理系统System R开发的一种查询语言，它的前身是Square语言。">
+<meta name="twitter:image" content="http://yoursite.com/picture/mysql.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6316850945409943000,
+      author: 'Author Chares Wan'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/08/30/MySQL数据库操作基本语法/"/>
+
+  <title> MySQL数据库操作基本语法 | Charse Wan's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Charse Wan's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                MySQL数据库操作基本语法
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-30T12:37:55+08:00" content="2016-08-30">
+              2016-08-30
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/MySQL/" itemprop="url" rel="index">
+                    <span itemprop="name">MySQL</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/30/MySQL数据库操作基本语法/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/30/MySQL数据库操作基本语法/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+        <div class="post-gallery" itemscope itemtype="http://schema.org/ImageGallery">
+          
+          
+            <div class="post-gallery-row">
+              <a class="post-gallery-img fancybox"
+                 href="/picture/mysql.jpg" rel="gallery_ciswq4hh60006tccnc4u381bt"
+                 itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
+                <img src="/picture/mysql.jpg" itemprop="contentUrl"/>
+              </a>
+            
+          
+
+          
+          </div>
+        </div>
+      
+
+      
+        <h3 id="1、MySQL数据库语言"><a href="#1、MySQL数据库语言" class="headerlink" title="1、MySQL数据库语言"></a><strong>1、MySQL数据库语言</strong></h3><p>SQL是 Structured Query Language(结构化查询语言)的缩写，最早是IBM的圣约瑟研究实验室为其关系数据库管理系统System R开发的一种查询语言，它的前身是Square语言。<br> <a id="more"></a><br>由于SQL语言的标准化，越来越多的关系型数据库都支持SQL语言，他已经发展成多种平台进行交互操作的底层会话语言。MySQL数据库语言包含若干MySQL语句、常量、函数、运算符和表达式。下面是有关MySQL数据库语言的几点说明：</p>
+<p>MySQL语句以分号结束，并且SQL处理器忽略空格、制表符和回车符。</p>
+<ul>
+<li>箭头(-&gt;)代表MySQL语句没有输入完成。</li>
+<li>取消MySQL语句使用( \C)。</li>
+<li>Windows下MySQL语句关键字和函数名不区分大小写，但是Linux区分。</li>
+<li>使用函数时，函数名与其后的括号之间不能有空格。</li>
+</ul>
+<h3 id="2、MySQL数据库操作"><a href="#2、MySQL数据库操作" class="headerlink" title="2、MySQL数据库操作"></a><strong>2、MySQL数据库操作</strong></h3><h4 id="2-1-创建数据库"><a href="#2-1-创建数据库" class="headerlink" title="2.1 创建数据库"></a><strong>2.1 创建数据库</strong></h4><blockquote>
+<p>CREATE {DATABASE | SCHEMA} [IF NOT EXISTS] db_name<br>[ Create_Specification [ , Create_Specification]…] ;</p>
+</blockquote>
+<p>其中 Create_Specification 的格式为:<br>[DEFFAULT] CHARACTER SET charset_name | [DEFAULL] COLLATE collation_name</p>
+<ul>
+<li>db_name : 数据库名，不区分大小写。</li>
+<li>IF NO EXISTS : 创建数据库前先判断，只有该数据库目前尚不存在时才执行CREATE DATABASE操作，如果数据库已经存在，就发生一个错误。</li>
+<li>DEFAULL : 指定默认值。</li>
+<li>CHARACTER SET : 指定数据库的字符集， charset_name为字符集名称。</li>
+<li>COLLATE : 指定字符集的校对规则，collation_name 为校对规则名称。</li>
+</ul>
+<p>例如：创建一个名为test的数据库：</p>
+<pre><code>mysql&gt; CREATE DATABASE test;
+Query OK, 1 Row Affected
+</code></pre><h4 id="2-2-查看数据库"><a href="#2-2-查看数据库" class="headerlink" title="2.2 查看数据库"></a><strong>2.2 查看数据库</strong></h4><p>要查看一个MySQL服务实例中有多少个数据库，可以用以下命令查看:</p>
+<blockquote>
+<p>SHOW DATABASE [LIKE Wild] ;</p>
+</blockquote>
+<p>其中，LIKE Wild中的 Wild 字符串可使用 SQL的 “ % “ 和 “_” 通配符。</p>
+<h4 id="2-3选择数据库"><a href="#2-3选择数据库" class="headerlink" title="2.3选择数据库"></a><strong>2.3选择数据库</strong></h4><p>如果想要进入某个数据库，进行对该数据库的操作，首先就要进入数据库 ，可以使用下面的命令进行操作:</p>
+<blockquote>
+<p>  USE db_name ;</p>
+</blockquote>
+<p>注意： 该语句也可以用来从一个数据库”跳转”到另外一个数据库。用CREATE DATABASE 创建的数据库不会自动成为当前数据库，需要使用 USE 语句指定当前数据库。<br>例如：</p>
+<pre><code>mysql&gt;USE test;
+Database Changed
+</code></pre><h4 id="2-4-删除数据库"><a href="#2-4-删除数据库" class="headerlink" title="2.4 删除数据库"></a><strong>2.4 删除数据库</strong></h4><p>删除数据是将数据库和数据库中的所有表删除，所以要谨慎使用:</p>
+<blockquote>
+<p>DROP DATABASE [IF EXISTS] db_name ;</p>
+</blockquote>
+<p>其中，IF EXISTS 子句可避免删除不存在的数据库时提醒 MySQL 错误信息。</p>
+<h4 id="2-5-修改数据库"><a href="#2-5-修改数据库" class="headerlink" title="2.5 修改数据库"></a><strong>2.5 修改数据库</strong></h4><p>命令格式：</p>
+<blockquote>
+<p>ALTER {DATABASE | SCHEMA } [db_name] alter_specification ; </p>
+</blockquote>
+<p>其中，alter database 用于更改数据库的全局特性，这个特性存储在数据库目录中的db.opt文件中。用户必须具有对数据库进行修改的权限，才可以使用该命令。如果语句中数据库名称忽略，则修改当前数据库。</p>
+<p>例如： 修改数据库test的默认字符集和校对规则</p>
+<pre><code>mysql&gt; ALTER DATABASE test Default Character Set Gb2312
+Default Collate Gb2312_Chinese_Ci;
+Query Ok, 1 row affected 
+</code></pre><h3 id="3-MySQL-数据表操作"><a href="#3-MySQL-数据表操作" class="headerlink" title="3. MySQL 数据表操作"></a><strong>3. MySQL 数据表操作</strong></h3><h4 id="3-1-创建数据表"><a href="#3-1-创建数据表" class="headerlink" title="3.1 创建数据表"></a><strong>3.1 创建数据表</strong></h4><p>命令格式：</p>
+<blockquote>
+<p>CREATE [ TEMPORARY ] TABLE [ IF NO EXISTS ] tble_name [ ( [ column_definition ] ,… | [ index_definition] ) ] [table_option ] [ select_statemment ) ] [ table_option ] [ select_statemment ];</p>
+</blockquote>
+<p>参数说明：</p>
+<ul>
+<li>TEMPORARY ： 创建临时表(不加 TEMPORARY 创建的表称为持久表，持久表一旦创建将一直存在，多个用户或者多个应用程序可以同时使用持久表)，临时表的生命周期短，而且只能对创建它的用户可见，当断开与该数据库的连接时，MySQL会自动删除临时表。</li>
+<li>IF NO EXISTS : 建表前先判断，用以避免出现表已经存在无法再新建的错误。</li>
+<li>table_name ： 要创建的表名。该表名必须符合标志规则，如果表名中包含MySQL保留字，则必须用单引号括起来。</li>
+<li>column_definition ：列定义，包括列名、数据类型，可能还有一个空值声明和一个完整性约束。</li>
+<li>index_definition：表索引定义，主要定义表的索引、主键和外键等。</li>
+<li>table_option ： 用于描述表的选项。</li>
+<li>select_statement ：可以在CREATE TABLE 语句的末尾添加一个SELECT 语句，在一个表的基础上创建表。</li>
+</ul>
+<p>数据库中的表是在数据库中，所以，在创建数据库表的时候，先使用语句 USE dataBaseName(数据库名)，指定在哪个数据库中创建数据库表。</p>
+<pre><code>mysql&gt;USE test;
+mysql&gt;CREATE TABLE student(
+     id   char(20)  not null primary key,
+     name char(8)   not null,
+     birth  date    not null,
+     sex    tinyint(1) not null default 1,
+     address char(60) not null,
+     phone  char(11)   not null,
+     picture longblob  not null
+) Engine = Innodb;
+</code></pre><p>上述student表中创建了id，name，birth，sex，address，phone，picture 字段，其中指定了MySQL的存储引擎是Innodb，MySQL中有多个存储引擎，如果想指定存储引擎，就必须在创建表的时候指定。在Windows平台上默认的是Innodb存储引擎。</p>
+<h4 id="3-2-修改数据表"><a href="#3-2-修改数据表" class="headerlink" title="3.2 修改数据表"></a><strong>3.2 修改数据表</strong></h4><p>用ALTER TABLE 语句更改数据表的结构。如增加或删减列，创建或取消索引，更改原字段的类型，重新命名列或表的评注和表的类型。</p>
+<p>命令格式:</p>
+<blockquote>
+<p>AlTER [ IGNORE ]  TABLE  tbl_name  alter_specifiction;</p>
+</blockquote>
+<p>参数说明:</p>
+<ul>
+<li>tbl_name ：表名。</li>
+<li>IGNORE :是MySQL相对于标准SQL的扩展。若在修改后的新表中存在重复关键字，如果没有指定 IGNORE，当重复关键字错误发生时操作失败。如果指定了IGNORE，则对于有重复关键字的行只使用第一行，其他有冲突的行被删除。</li>
+<li>alter_specification ：用于指定修改的内容，其格式如下:<blockquote>
+<p>ADD [ COLUMN ] column_definition [ FIRST | AFTER col_name ]     (新增加列)<br> | ALTER [ COLUMN ] col_name  {SET DEFAULT  literal | DROP DEFAULT}  (修改表中指定列的默认值)<br> | CHANGE [ COLUMN ] old_col_name  column_definition （修改列的名称）<br> | MODOFY [ COLUMN ] column_definition  [ FIRST | AFTER col_name ] （修改指定列的类型）<br> | DROP [ COLUMN ] column_name (删除列)<br> | RENAME [ TO ] new_tabl_name (重命名该表)<br> | ORDER BY col_name     (排序)<br> | CONVERT TO CHARACTER SET charset_name [ COLLATE collation_name ]<br> | [ DEFAULT ] CHARACTER SET charset_name [ COLLATE collation_name ]<br> | table_options </p>
+</blockquote>
+</li>
+</ul>
+<p>在MySQL中，可以在一个ALTER TABLE 语句中写入多个ADD、ALTER、DROP和CHANGE 子句，中间用逗号分开。</p>
+<p>例如：<br>向test数据库中的studnet 表中增加一个新列 “magor”.</p>
+<pre><code>mysql&gt;ALTER TABLE student ADD COLUMN magor char(20) NULL;
+</code></pre><p>将数据库test中student表的列名 name 名称修改为 home_name</p>
+<pre><code>mysql&gt;ALTER TABLE student CHANGE name home_name char（20）
+</code></pre><p>将数据库test中student表列birth的数据类型改为char类型</p>
+<pre><code>mysql&gt;ALTER TABLE student MODIFY  birth char(10) NOT NULL;
+</code></pre><p>值得注意的是，对列的任何修改，都是要指定列的数据类型。不然会报出错误，和修改不成功的。</p>
+<h4 id="3-3查看表结构"><a href="#3-3查看表结构" class="headerlink" title="3.3查看表结构"></a><strong>3.3查看表结构</strong></h4><p>在创建数据表之后，可以用DESCRIBE（简写 DESC 也行） 和SHOW CREATE TABLE语句查看表结构。<br>DESCRIBE 的命令格式：</p>
+<blockquote>
+<p>DESCRIBE tbl_name [ col_name ];</p>
+</blockquote>
+<p>其中，参数col<em>name可以是单列的名称，也可以是包含 “ % ” 和“ </em> ”通配符的字符串。</p>
+<p>例如查看student的表：</p>
+<p><img src="/picture/showstudent.png" alt="显示sudent表"></p>
+<h4 id="3-4-删除数据表"><a href="#3-4-删除数据表" class="headerlink" title="3.4 删除数据表"></a><strong>3.4 删除数据表</strong></h4><p>删除数据表就是将数据库中已经存在的表从数据库中删除，注意，在删除之前，最好对数据做一个备份，以免造成无法挽回的后果。删除数据库表的命令格式:</p>
+<blockquote>
+<p>DROP [ TEMPORAARY ] TABLE [ IF EXISTS ] tbl_name [, tabl_name ]…;</p>
+</blockquote>
+<p>其中，tbl_name是要被删除的表名， IF EXISTS 短语可以避免要删除的表不存在时出现错误信息。这个命令将表的描述、表的完整性约束、索引及和表相关的权限等都全部删除。</p>
+<p>例如：删除test 数据库的表 scoure。</p>
+<pre><code>mysql&gt;USE test;
+Database Changed;
+mysql&gt;DROP TABLE IF EXISTS test;
+</code></pre><h4 id="3-5-复制数据库"><a href="#3-5-复制数据库" class="headerlink" title="3.5 复制数据库"></a><strong>3.5 复制数据库</strong></h4><p>命令格式：</p>
+<blockquote>
+<p>CREATE [ TEMPORARY ] TABLE [ IF NOT EXISTS ] tb1_name [ ( )   LIKE  old_tabl_name ]  | [ AS (select_statement ) ];</p>
+</blockquote>
+<p><strong>说明 ： 使用LIKE关键字创建一个与old_tabel_name 表相同结构 的新表、列名、数据类型、空指定和索引也将复制，但是表的内容不会复制，因此创建的新表是一个空表。使用AS关键字可以复制表内容。但索引和完整性约束是不会复制的。</strong></p>
+<p>select_statement 表示一个表达式，例如，可以是一条 SELECT 语句。</p>
+<p>例如：</p>
+<p>复制数据库test的表student，新表的名字为 stu;</p>
+<pre><code>mysql&gt;  CREATE TABLE student LIKE  student;
+</code></pre><p>创建表student的一个名为stu2的拷贝，并且复制其内容；</p>
+<pre><code>mysql&gt; CREATE TABLE student AS (SELECT * FROM student);
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据库/" rel="tag">#数据库</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/08/20/HotSpot的垃圾收集机制算法实现/" rel="next" title="HotSpot的垃圾收集机制算法实现">
+                <i class="fa fa-chevron-left"></i> HotSpot的垃圾收集机制算法实现
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/02/数据库索引的工作原理/" rel="prev" title="数据库索引的工作原理">
+                数据库索引的工作原理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/08/30/MySQL数据库操作基本语法/"
+           data-title="MySQL数据库操作基本语法" data-url="http://yoursite.com/2016/08/30/MySQL数据库操作基本语法/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="Charse Wang" />
+          <p class="site-author-name" itemprop="name">Charse Wang</p>
+          <p class="site-description motion-element" itemprop="description">黑夜给了我黑色的眼睛,我却用它寻找光明.</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">10</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="CharesWan@gmail.com" target="_blank" title="Emial">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Emial
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Wangchangchung" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/5470218610" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/wang-chang-chun-84" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、MySQL数据库语言"><span class="nav-number">1.</span> <span class="nav-text">1、MySQL数据库语言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、MySQL数据库操作"><span class="nav-number">2.</span> <span class="nav-text">2、MySQL数据库操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-创建数据库"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 创建数据库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-查看数据库"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 查看数据库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3选择数据库"><span class="nav-number">2.3.</span> <span class="nav-text">2.3选择数据库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-删除数据库"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 删除数据库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-5-修改数据库"><span class="nav-number">2.5.</span> <span class="nav-text">2.5 修改数据库</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-MySQL-数据表操作"><span class="nav-number">3.</span> <span class="nav-text">3. MySQL 数据表操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-创建数据表"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 创建数据表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-修改数据表"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 修改数据表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3查看表结构"><span class="nav-number">3.3.</span> <span class="nav-text">3.3查看表结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-删除数据表"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 删除数据表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-5-复制数据库"><span class="nav-number">3.5.</span> <span class="nav-text">3.5 复制数据库</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Charse Wang</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"charsewan"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
