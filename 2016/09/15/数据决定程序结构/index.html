@@ -1,0 +1,748 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="数据结构,程序," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="共鸣今近日一直在阅读《编程珠玑》这一本书，阅读后，非常惊艳作者在基于多年程序员工作上，而积累的对编程的真知灼见。同时对于作者的一些感触，自己也不禁产生共鸣。例如在第三章中的《数据决定程序结构》这一章节中共鸣异常强烈，故因写下此篇博文，与诸君共赏。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据决定程序结构">
+<meta property="og:url" content="http://yoursite.com/2016/09/15/数据决定程序结构/index.html">
+<meta property="og:site_name" content="Charse Wan's Blog">
+<meta property="og:description" content="共鸣今近日一直在阅读《编程珠玑》这一本书，阅读后，非常惊艳作者在基于多年程序员工作上，而积累的对编程的真知灼见。同时对于作者的一些感触，自己也不禁产生共鸣。例如在第三章中的《数据决定程序结构》这一章节中共鸣异常强烈，故因写下此篇博文，与诸君共赏。">
+<meta property="og:image" content="http://yoursite.com/picture/20140911040620548.jpg">
+<meta property="og:updated_time" content="2016-09-15T09:21:04.475Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据决定程序结构">
+<meta name="twitter:description" content="共鸣今近日一直在阅读《编程珠玑》这一本书，阅读后，非常惊艳作者在基于多年程序员工作上，而积累的对编程的真知灼见。同时对于作者的一些感触，自己也不禁产生共鸣。例如在第三章中的《数据决定程序结构》这一章节中共鸣异常强烈，故因写下此篇博文，与诸君共赏。">
+<meta name="twitter:image" content="http://yoursite.com/picture/20140911040620548.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6316850945409943000,
+      author: 'Author Chares Wan'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/09/15/数据决定程序结构/"/>
+
+  <title> 数据决定程序结构 | Charse Wan's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Charse Wan's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                数据决定程序结构
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-15T17:03:49+08:00" content="2016-09-15">
+              2016-09-15
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/数据结构/" itemprop="url" rel="index">
+                    <span itemprop="name">数据结构</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/15/数据决定程序结构/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/15/数据决定程序结构/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+        <div class="post-gallery" itemscope itemtype="http://schema.org/ImageGallery">
+          
+          
+            <div class="post-gallery-row">
+              <a class="post-gallery-img fancybox"
+                 href="/picture/20140911040620548.jpg" rel="gallery_cit44mrsq0009fscnod77ny7j"
+                 itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
+                <img src="/picture/20140911040620548.jpg" itemprop="contentUrl"/>
+              </a>
+            
+          
+
+          
+          </div>
+        </div>
+      
+
+      
+        <h3 id="共鸣"><a href="#共鸣" class="headerlink" title="共鸣"></a><strong>共鸣</strong></h3><p>今近日一直在阅读《编程珠玑》这一本书，阅读后，非常惊艳作者在基于多年程序员工作上，而积累的对编程的真知灼见。同时对于作者的一些感触，自己也不禁产生共鸣。例如在第三章中的《数据决定程序结构》这一章节中共鸣异常强烈，故因写下此篇博文，与诸君共赏。</p>
+<a id="more"></a>
+<p>我在大一的第一个学期，就开始学习编程了，第一门语言是令人喜爱的 C 语言, 有人说C语言很难，我一开始也是这么觉得的，在学习的第一门语言的时候，的确是非常艰难的，因为自己的计算机知识还不足够(例如对于内存，地址、操作系统一些概念)，所以在我第一个学期学完之后，C语言的基础知识是有了，但是还有些概念没有完全的弄清楚，面对一个问题，还不能够转换成程序的准确描述。所以要说怎么编写一个漂亮，能够让人入眼的程序，我是说不出的。</p>
+<p>但是在第二学期的时候我学习了Java语言的同时，还学习了数据结构与算法（C语言实现），在学习数据结构与算法的时候，自己就知道了对于程序的如何写好有了慢慢的体会了————在后面的学习中，自己也越加强烈的体会到 <strong>数据决定程序的结构</strong>， 作者的真的观点真的是太对了，对这种看法我是深有共鸣。</p>
+<h3 id="案例-1"><a href="#案例-1" class="headerlink" title="案例 1"></a><strong>案例 1</strong></h3><p>在大一暑假期间，在西安微易码计算机科技有限公司的项目实训中，我接到的任务是，完成公司管理信息信系统中，主界面菜单根据用户类型动态的显示菜单(不同用户具有不同的使用权限)，在后期，可以灵活的增加和减少菜单，设置用户权限。</p>
+<h5 id="任务要求"><a href="#任务要求" class="headerlink" title="任务要求"></a><strong>任务要求</strong></h5><p>所有的菜单项都从数据库中取得，取得的是一个字符串，成序分菜单，一级菜单，二级菜单和以下的菜单</p>
+<ul>
+<li><p>菜单权限设置   </p>
+<p>1、如果需要对不同的用户采取权限设置，可以建立相关的数据库表，进行设置，程序可以提取数据，自动生成<br>设置有权限的菜单。（本例子中代码有从权限数据库表中取 得相关用户的菜单权限）。</p>
+<p>2、菜单可见和不可见。<br>3、菜单可用和不可用（灰色状态）。</p>
+</li>
+<li><p>自动生成菜单<br>1、数据库表中所包含的字段有：菜单编号，菜单名字，菜单所对应类名字，父菜单编号，菜单类型。<br>2、若用户想增加或减少菜单，只需改变数据库表，而程序不需要更改。</p>
+</li>
+<li><p>多级菜单的生成<br>1、生成多级菜单只需更改数据库表，在数据库表中填写清楚菜单类型，和子菜单编号，父菜单的编号。<br>2、多级菜单的寻找方案为递归寻找。</p>
+</li>
+</ul>
+<h5 id="主要技术点"><a href="#主要技术点" class="headerlink" title="主要技术点"></a><strong>主要技术点</strong></h5><ul>
+<li>数据库</li>
+<li>Java反射技术</li>
+</ul>
+<h5 id="数据库数据"><a href="#数据库数据" class="headerlink" title="数据库数据"></a><strong>数据库数据</strong></h5><p>根据要求，数据库以Access为例，我对数据库表的设计是这样的，字段有：</p>
+<blockquote>
+<p>Menu_Id（菜单编号 ，短文本）、Menu_Name(菜单名，短文本)、Class_Name(菜单项对应的类名，短文本)、Father_Id(父菜单的编号、短文本)、Menu_Type(菜单类型、数字)</p>
+</blockquote>
+<p>对于主菜单项，没有父菜单的编号，那么对于后面的菜单来说，每一个菜单都记录着自己的父菜单编号，所以一遇到拥有子菜单的菜单项，就去后面寻找属于他的子菜单，所有等到所有主菜单遍历完了之后，所有菜单也就按部就班的”归位”了。所以根据这个思路设计数据库表，然后根据设计的表数据机构，编写实现的程序。</p>
+<p>如下图：<br><img src="/picture/20150821201803533.png" alt="数据库表"></p>
+<blockquote>
+<p>注意：数据库表是怎么设计的，那么就在编写程序的时候，围绕数据进行编写，所以数据结构决定程序。</p>
+</blockquote>
+<p>那么说道第到底是要实现什么样的效果来呢？直接放图吧。就是要实现下面的这个效果：<br><img src="/picture/20150821201513009.png" alt="要实现的效果图"></p>
+<p>针对于这个项目的要求，我整体的实现是如下：</p>
+<ul>
+<li>连接数据库类</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> java.sql.Connection;  </div><div class="line"><span class="keyword">import</span> java.sql.DriverManager;  </div><div class="line"><span class="keyword">import</span> java.sql.ResultSet;  </div><div class="line"><span class="keyword">import</span> java.sql.SQLException;  </div><div class="line"><span class="keyword">import</span> java.sql.Statement;  </div><div class="line">  </div><div class="line"><span class="comment">/**  </span></div><div class="line"> * 此类供调用者完成对数据库的链接，并对数据进行操作的工作  </div><div class="line"> * <span class="doctag">@author</span> Administrator  </div><div class="line"> *  </div><div class="line"> */  </div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MECDatabase</span> </span>&#123;  </div><div class="line">      </div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> databaseType;   <span class="comment">/*要链接的数据库类型*/</span>  </div><div class="line">  </div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String[] DB_DRIVER = &#123;<span class="string">"oracle.jdbc.OracleDriver"</span>,      <span class="comment">/*链接数据库的驱动*/</span>  </div><div class="line">                                                <span class="string">"sun.jdbc.odbc.JdbcOdbcDriver"</span>,  </div><div class="line">                                                <span class="string">"com.mysql.jdbc.Driver"</span>&#125;;  </div><div class="line">      </div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String[] URL = &#123;<span class="string">"jdbc:oracle:thin:@"</span>,<span class="string">"jdbc:odbc:"</span>,<span class="string">"jdbc:mysql://"</span>&#125;;    <span class="comment">/*链接数据库的ＵＲＬ*/</span>  </div><div class="line">      </div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> ORACLE = <span class="number">0</span>;    <span class="comment">/*数据库类型*/</span>  </div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> ACCESS = <span class="number">1</span>;  </div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MYSQL = <span class="number">2</span>;  </div><div class="line">      </div><div class="line">    <span class="keyword">private</span> Statement stmt;  </div><div class="line">    <span class="keyword">private</span> Connection con;  </div><div class="line">    <span class="keyword">private</span> ResultSet rst;  </div><div class="line">  </div><div class="line">    <span class="comment">/**  </span></div><div class="line">     * 带参的构造方法  </div><div class="line">     * <span class="doctag">@param</span> databaseType 传入要链接的数据库类型(int 类型)  </div><div class="line">     *                      0表示链接Oracle数据库  </div><div class="line">     *                      1表示链接Access数据库  </div><div class="line">     *                      2表示链接MySql数据库  </div><div class="line">     */  </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MECDatabase</span><span class="params">(<span class="keyword">int</span> databaseType)</span></span>&#123;  </div><div class="line">          </div><div class="line">        <span class="keyword">this</span>.databaseType = databaseType;  </div><div class="line">        stmt = <span class="keyword">null</span>;  </div><div class="line">        con = <span class="keyword">null</span>;  </div><div class="line">        rst = <span class="keyword">null</span>;  </div><div class="line">    &#125;  </div><div class="line">      </div><div class="line">    <span class="comment">/**  </span></div><div class="line">     * 获得数据库类型  </div><div class="line">     * <span class="doctag">@return</span> 返回数据库类型  </div><div class="line">     */  </div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">getDatabaseType</span><span class="params">()</span> </span>&#123;  </div><div class="line">        <span class="keyword">return</span> databaseType;  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">    <span class="comment">/**  </span></div><div class="line">     * 链接不需要IP和端口号的数据库  </div><div class="line">     * <span class="doctag">@param</span> databaseName 数据源名称  </div><div class="line">     * <span class="doctag">@throws</span> Exception    链接数据库时遇到的异常  </div><div class="line">     */  </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">connection</span><span class="params">(String databaseName)</span> <span class="keyword">throws</span> Exception</span>&#123;  </div><div class="line">          </div><div class="line">        <span class="keyword">try</span> &#123;  </div><div class="line">                Class.forName(DB_DRIVER[ACCESS]);  </div><div class="line">                con = DriverManager.getConnection(URL[ACCESS]+databaseName);  </div><div class="line">                stmt = con.createStatement();  </div><div class="line">        &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;  </div><div class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"错误："</span> + e.getMessage() + <span class="string">"\n"</span> +  </div><div class="line">                    <span class="string">"类：MECDatabase\n方法：public void connection() throws Exception\n\n"</span> +  </div><div class="line">                    <span class="string">"请咨询微易码开发技术人员，解决这个问题！"</span>);  </div><div class="line">          </div><div class="line">        &#125;  </div><div class="line">    &#125;  </div><div class="line">      </div><div class="line">    <span class="comment">/**  </span></div><div class="line">     * 链接数据库  </div><div class="line">     * <span class="doctag">@param</span> hostIp        主机IP地址  </div><div class="line">     * <span class="doctag">@param</span> port          端口号  </div><div class="line">     * <span class="doctag">@param</span> databaseName  数据源名称  </div><div class="line">     * <span class="doctag">@param</span> userName      用户名  </div><div class="line">     * <span class="doctag">@param</span> password      密码  </div><div class="line">     * <span class="doctag">@throws</span> Exception    连接数据库是遇到的异常  </div><div class="line">     */  </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">connection</span><span class="params">(String hostIp,<span class="keyword">int</span> port,String databaseName,String userName,String password)</span> <span class="keyword">throws</span> Exception </span>&#123;  </div><div class="line">          </div><div class="line">          </div><div class="line">        <span class="keyword">try</span> &#123;  </div><div class="line">                <span class="keyword">if</span>(<span class="keyword">this</span>.getDatabaseType() == ORACLE)&#123;  </div><div class="line">                    Class.forName(DB_DRIVER[ORACLE]);  </div><div class="line">                    con = DriverManager.getConnection(URL[ORACLE]+hostIp+<span class="string">":"</span>+port+<span class="string">"/"</span>+databaseName,userName,password);  </div><div class="line">              </div><div class="line">                &#125;<span class="keyword">else</span>&#123;  </div><div class="line">                    Class.forName(DB_DRIVER[MYSQL]);  </div><div class="line">                    con = DriverManager.getConnection(URL[MYSQL]+hostIp+<span class="string">":"</span>+port+<span class="string">"/"</span>+databaseName,userName,password);  </div><div class="line">                &#125;  </div><div class="line">                stmt = con.createStatement();  </div><div class="line">                  </div><div class="line">          </div><div class="line">        &#125; <span class="keyword">catch</span> (ClassNotFoundException e1) &#123;  </div><div class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"错误："</span> + e1.getMessage() + <span class="string">"\n"</span> +  </div><div class="line">                    <span class="string">"类：MECDatabase\n方法：public void connection() throws Exception\n\n"</span> +  </div><div class="line">                    <span class="string">"请咨询微易码开发技术人员，解决这个问题！"</span>);  </div><div class="line">              </div><div class="line">        &#125; <span class="keyword">catch</span> (SQLException e2) &#123;  </div><div class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"错误："</span> + e2.getMessage() + <span class="string">"\n"</span> +  </div><div class="line">                    <span class="string">"类：MECDatabase\n方法：public void connection() throws Exception\n\n"</span> +  </div><div class="line">                    <span class="string">"请咨询微易码开发技术人员，解决这个问题！"</span>);      </div><div class="line">        &#125;  </div><div class="line">    &#125;     </div><div class="line">      </div><div class="line">    <span class="comment">/**  </span></div><div class="line">     * 关闭与当前数据库的链接  </div><div class="line">     * <span class="doctag">@throws</span> Exception 关闭数据库链接时遇到的异常  </div><div class="line">     */  </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">disConnection</span><span class="params">()</span><span class="keyword">throws</span> Exception</span>&#123;  </div><div class="line">          </div><div class="line">        <span class="keyword">try</span>  </div><div class="line">        &#123;  </div><div class="line">            <span class="keyword">if</span>(rst != <span class="keyword">null</span>)  </div><div class="line">                rst.close();  </div><div class="line">            <span class="keyword">if</span>(stmt != <span class="keyword">null</span>)  </div><div class="line">                stmt.close();  </div><div class="line">            <span class="keyword">if</span>(con != <span class="keyword">null</span>)  </div><div class="line">                con.close();  </div><div class="line">        &#125;<span class="keyword">catch</span>(SQLException sqle)  </div><div class="line">        &#123;  </div><div class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"错误："</span> + sqle.getMessage() + <span class="string">"\n"</span> +  </div><div class="line">                    <span class="string">"类：MECDatabase\n方法：public void disConnection() throws Exception\n"</span>);  </div><div class="line">        &#125;  </div><div class="line">    &#125;  </div><div class="line">      </div><div class="line">    <span class="comment">/**  </span></div><div class="line">     * 执行SQL语句，doSql方法只能完成查询功能  </div><div class="line">     * <span class="doctag">@param</span> sqlSwing 传入的SQL语句  </div><div class="line">     * <span class="doctag">@return</span> 返回查询的对象  </div><div class="line">     * <span class="doctag">@throws</span> Exception 执行SQL语句时遇到的异常  </div><div class="line">     */  </div><div class="line">    <span class="function"><span class="keyword">public</span> ResultSet <span class="title">doSql</span><span class="params">(String sql)</span><span class="keyword">throws</span> Exception</span>&#123;  </div><div class="line">          </div><div class="line">        <span class="keyword">if</span>(stmt != <span class="keyword">null</span>)&#123;  </div><div class="line">            <span class="keyword">try</span>&#123;  </div><div class="line">                rst = stmt.executeQuery(sql);  </div><div class="line">            &#125;<span class="keyword">catch</span>(SQLException sqlE)&#123;  </div><div class="line">                  </div><div class="line">                sqlE.printStackTrace();  </div><div class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"错误："</span> + sqlE.getMessage() + <span class="string">"\n"</span> +  </div><div class="line">                        <span class="string">"类：MECDatabase\n"</span> +  </div><div class="line">                        <span class="string">"方法：public ResultSet doSql(String SQL) throws Exception\n"</span>);  </div><div class="line">            &#125;  </div><div class="line">        &#125;  </div><div class="line">        <span class="keyword">return</span> rst;  </div><div class="line">    &#125;  </div><div class="line">      </div><div class="line">    <span class="comment">/**  </span></div><div class="line">     * 执行SQL语句，doSql方法只能完成查询功能,并将查询的内部指针最后指向首位  </div><div class="line">     * <span class="doctag">@param</span> sqlSwing 传入的SQL语句  </div><div class="line">     * <span class="doctag">@return</span> 返回查询的对象  </div><div class="line">     * <span class="doctag">@throws</span> Exception 执行SQL语句时遇到的异常  </div><div class="line">     */  </div><div class="line">    <span class="function"><span class="keyword">public</span> ResultSet <span class="title">select</span><span class="params">(String sql)</span><span class="keyword">throws</span> Exception</span>&#123;  </div><div class="line">        <span class="keyword">if</span>(stmt != <span class="keyword">null</span>)&#123;  </div><div class="line">            <span class="keyword">try</span>&#123;  </div><div class="line">                <span class="comment">//默认的ResultSet对象不可更新，仅有一个向前移动的光标，因此只能迭代它一次，并且只能按从第一行到  </span></div><div class="line">                <span class="comment">//最后一行的顺序进行，可以生成可以滚动的/或可更新的ResultSet对象，以下这句话就是实现该功能，  </span></div><div class="line">                <span class="comment">//不然主程序中result的执行就会出错  </span></div><div class="line">                stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);  </div><div class="line">                rst = stmt.executeQuery(sql);  </div><div class="line">            &#125;<span class="keyword">catch</span>(SQLException sqlE)&#123;  </div><div class="line">                  </div><div class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"错误："</span> + sqlE.getMessage() + <span class="string">"\n"</span> +  </div><div class="line">                        <span class="string">"类：MECDatabase\n"</span> +  </div><div class="line">                        <span class="string">"方法：public ResultSet select(String SQL) throws Exception\n"</span>);  </div><div class="line">            &#125;  </div><div class="line">        &#125;  </div><div class="line">        <span class="keyword">return</span> rst;  </div><div class="line">    &#125;  </div><div class="line">    <span class="comment">/**  </span></div><div class="line">     * 执行SQL语句，upDate方法可以完成创建，修改，插入，删除等功能  </div><div class="line">     * <span class="doctag">@param</span> sqlSwing 传入的SQL语句  </div><div class="line">     * <span class="doctag">@return</span> 返回该操作是否成功  </div><div class="line">     * <span class="doctag">@throws</span> Exception 执行SQL语句时遇到的异常  </div><div class="line">     */  </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">update</span><span class="params">(String sql)</span><span class="keyword">throws</span> Exception</span>&#123;  </div><div class="line">          </div><div class="line">        <span class="keyword">boolean</span> flag = <span class="keyword">false</span>;  </div><div class="line">          </div><div class="line">        <span class="keyword">if</span>(stmt != <span class="keyword">null</span>)&#123;  </div><div class="line">            <span class="keyword">try</span>&#123;  </div><div class="line">                flag = stmt.execute(sql);  </div><div class="line">            &#125;<span class="keyword">catch</span>(SQLException sqlE)&#123;  </div><div class="line">                  </div><div class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"错误："</span> + sqlE.getMessage() + <span class="string">"\n"</span> +  </div><div class="line">                        <span class="string">"类：MECDatabase\n"</span> +  </div><div class="line">                        <span class="string">"方法：public ResultSet update(String SQL) throws Exception\n"</span>);  </div><div class="line">            &#125;  </div><div class="line">        &#125;  </div><div class="line">        <span class="keyword">return</span> flag;  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>生成菜单代码</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div><div class="line">216</div><div class="line">217</div><div class="line">218</div><div class="line">219</div><div class="line">220</div><div class="line">221</div><div class="line">222</div><div class="line">223</div><div class="line">224</div><div class="line">225</div><div class="line">226</div><div class="line">227</div><div class="line">228</div><div class="line">229</div><div class="line">230</div><div class="line">231</div><div class="line">232</div><div class="line">233</div><div class="line">234</div><div class="line">235</div><div class="line">236</div><div class="line">237</div><div class="line">238</div><div class="line">239</div><div class="line">240</div><div class="line">241</div><div class="line">242</div><div class="line">243</div><div class="line">244</div><div class="line">245</div><div class="line">246</div><div class="line">247</div><div class="line">248</div><div class="line">249</div><div class="line">250</div><div class="line">251</div><div class="line">252</div><div class="line">253</div><div class="line">254</div><div class="line">255</div><div class="line">256</div><div class="line">257</div><div class="line">258</div><div class="line">259</div><div class="line">260</div><div class="line">261</div><div class="line">262</div><div class="line">263</div><div class="line">264</div><div class="line">265</div><div class="line">266</div><div class="line">267</div><div class="line">268</div><div class="line">269</div><div class="line">270</div><div class="line">271</div><div class="line">272</div><div class="line">273</div><div class="line">274</div><div class="line">275</div><div class="line">276</div><div class="line">277</div><div class="line">278</div><div class="line">279</div><div class="line">280</div><div class="line">281</div><div class="line">282</div><div class="line">283</div><div class="line">284</div><div class="line">285</div><div class="line">286</div><div class="line">287</div><div class="line">288</div><div class="line">289</div><div class="line">290</div><div class="line">291</div><div class="line">292</div><div class="line">293</div><div class="line">294</div><div class="line">295</div><div class="line">296</div><div class="line">297</div><div class="line">298</div><div class="line">299</div><div class="line">300</div><div class="line">301</div><div class="line">302</div><div class="line">303</div><div class="line">304</div><div class="line">305</div><div class="line">306</div><div class="line">307</div><div class="line">308</div><div class="line">309</div><div class="line">310</div><div class="line">311</div><div class="line">312</div><div class="line">313</div><div class="line">314</div><div class="line">315</div><div class="line">316</div><div class="line">317</div><div class="line">318</div><div class="line">319</div><div class="line">320</div><div class="line">321</div><div class="line">322</div><div class="line">323</div><div class="line">324</div><div class="line">325</div><div class="line">326</div><div class="line">327</div><div class="line">328</div><div class="line">329</div><div class="line">330</div><div class="line">331</div><div class="line">332</div><div class="line">333</div><div class="line">334</div><div class="line">335</div><div class="line">336</div><div class="line">337</div><div class="line">338</div><div class="line">339</div><div class="line">340</div><div class="line">341</div><div class="line">342</div><div class="line">343</div><div class="line">344</div><div class="line">345</div><div class="line">346</div><div class="line">347</div><div class="line">348</div><div class="line">349</div><div class="line">350</div><div class="line">351</div><div class="line">352</div><div class="line">353</div><div class="line">354</div><div class="line">355</div><div class="line">356</div><div class="line">357</div><div class="line">358</div><div class="line">359</div><div class="line">360</div><div class="line">361</div><div class="line">362</div><div class="line">363</div><div class="line">364</div><div class="line">365</div><div class="line">366</div><div class="line">367</div><div class="line">368</div><div class="line">369</div><div class="line">370</div><div class="line">371</div><div class="line">372</div><div class="line">373</div><div class="line">374</div><div class="line">375</div><div class="line">376</div><div class="line">377</div><div class="line">378</div><div class="line">379</div><div class="line">380</div><div class="line">381</div><div class="line">382</div><div class="line">383</div><div class="line">384</div><div class="line">385</div><div class="line">386</div><div class="line">387</div><div class="line">388</div><div class="line">389</div><div class="line">390</div><div class="line">391</div><div class="line">392</div><div class="line">393</div><div class="line">394</div><div class="line">395</div><div class="line">396</div><div class="line">397</div><div class="line">398</div><div class="line">399</div><div class="line">400</div><div class="line">401</div><div class="line">402</div><div class="line">403</div><div class="line">404</div><div class="line">405</div><div class="line">406</div><div class="line">407</div><div class="line">408</div><div class="line">409</div><div class="line">410</div><div class="line">411</div><div class="line">412</div><div class="line">413</div><div class="line">414</div><div class="line">415</div><div class="line">416</div><div class="line">417</div><div class="line">418</div><div class="line">419</div><div class="line">420</div><div class="line">421</div><div class="line">422</div><div class="line">423</div><div class="line">424</div><div class="line">425</div><div class="line">426</div><div class="line">427</div><div class="line">428</div><div class="line">429</div><div class="line">430</div><div class="line">431</div><div class="line">432</div><div class="line">433</div><div class="line">434</div><div class="line">435</div><div class="line">436</div><div class="line">437</div><div class="line">438</div><div class="line">439</div><div class="line">440</div><div class="line">441</div><div class="line">442</div><div class="line">443</div><div class="line">444</div><div class="line">445</div><div class="line">446</div><div class="line">447</div><div class="line">448</div><div class="line">449</div><div class="line">450</div><div class="line">451</div><div class="line">452</div><div class="line">453</div><div class="line">454</div><div class="line">455</div><div class="line">456</div><div class="line">457</div><div class="line">458</div><div class="line">459</div><div class="line">460</div><div class="line">461</div><div class="line">462</div><div class="line">463</div><div class="line">464</div><div class="line">465</div><div class="line">466</div><div class="line">467</div><div class="line">468</div><div class="line">469</div><div class="line">470</div><div class="line">471</div><div class="line">472</div><div class="line">473</div><div class="line">474</div><div class="line">475</div><div class="line">476</div><div class="line">477</div><div class="line">478</div><div class="line">479</div><div class="line">480</div><div class="line">481</div><div class="line">482</div><div class="line">483</div><div class="line">484</div><div class="line">485</div></pre></td><td class="code"><pre><div class="line">import java.awt.Container;  </div><div class="line">import java.awt.Dimension;  </div><div class="line">import java.awt.Font;  </div><div class="line">import java.awt.Toolkit;  </div><div class="line">import java.awt.event.ActionEvent;  </div><div class="line">import java.awt.event.ActionListener;  </div><div class="line">import java.lang.reflect.Constructor;  </div><div class="line">import java.lang.reflect.InvocationTargetException;  </div><div class="line">import java.lang.reflect.Method;  </div><div class="line">import java.sql.Connection;  </div><div class="line">import java.sql.ResultSet;  </div><div class="line">import java.sql.SQLException;  </div><div class="line">import java.util.ArrayList;  </div><div class="line">import javax.swing.JButton;  </div><div class="line">import javax.swing.JFrame;  </div><div class="line">import javax.swing.JInternalFrame;  </div><div class="line">import javax.swing.JMenu;  </div><div class="line">import javax.swing.JMenuBar;  </div><div class="line">import javax.swing.JMenuItem;  </div><div class="line">import javax.swing.JToolBar;  </div><div class="line">import javax.swing.event.InternalFrameEvent;  </div><div class="line">import javax.swing.event.InternalFrameListener;  </div><div class="line">  </div><div class="line">public class myWindowsDate2   </div><div class="line">&#123;  </div><div class="line">    /** 创建窗口的基本组件  */  </div><div class="line">    private JFrame jfrmMain;  </div><div class="line">    private Container con;  </div><div class="line">      </div><div class="line">    private JMenuBar jmenbTopBar = new JMenuBar();  </div><div class="line">    private JInternalFrame jInternalFrame;  </div><div class="line">    private DesktopPane  DesktopPane ;  </div><div class="line">    private JToolBar toolBar ;  </div><div class="line">      </div><div class="line">    /** 分别用来存储SQL语句，取出的结果集，菜单类名字 */  </div><div class="line">    String SQlString;  </div><div class="line">    ResultSet  ResString ;  </div><div class="line">    ResultSet result;  </div><div class="line">    String className;  </div><div class="line">      </div><div class="line">    /** 连接数据库 */  </div><div class="line">    Connection connection ;  </div><div class="line">      </div><div class="line">    /** 存储从数据库中取出的菜单的类型（类型有0、1、2）  */  </div><div class="line">    int type;  </div><div class="line">      </div><div class="line">    /** 接收登入界面传入的用户姓名和ID*/  </div><div class="line">    private String userId;  </div><div class="line">    private String userName;  </div><div class="line">      </div><div class="line">    /** 存放已点击的菜单所调用的相对应的类名 */  </div><div class="line">    private ArrayList&lt;String&gt; arrayListWindowCanSee  = new ArrayList&lt;String&gt;();  </div><div class="line">    /** 存放可见和可用的的菜单项 */  </div><div class="line">    private ArrayList&lt;String&gt; arrayListDo = new ArrayList&lt;String&gt;();  </div><div class="line">    private ArrayList&lt;String&gt; arrayListIsCanUse = new ArrayList&lt;String&gt;();   </div><div class="line">      </div><div class="line">    /**  </div><div class="line">     * 建立基本的窗体 </div><div class="line">     * @author            王长春 </div><div class="line">     * @param            void </div><div class="line">     * @return           void </div><div class="line">     * @exception        void </div><div class="line">     * */  </div><div class="line">    public void creatJFram()  </div><div class="line">    &#123;  </div><div class="line">        jfrmMain = new JFrame("微易码科技管理信息系统");   </div><div class="line">        con = jfrmMain.getContentPane();  </div><div class="line">        jfrmMain.setVisible(true);  </div><div class="line">        jfrmMain.setExtendedState(jfrmMain.MAXIMIZED_BOTH);  </div><div class="line">          </div><div class="line">        Dimension don =Toolkit.getDefaultToolkit().getScreenSize();  </div><div class="line">        jfrmMain.setSize(don.width,don.height);  </div><div class="line">        jfrmMain.setLocation(0, 0);  </div><div class="line">          </div><div class="line">        DesktopPane = new DesktopPane(jfrmMain.getWidth(),jfrmMain.getHeight());  </div><div class="line">      </div><div class="line">        toolBar = new JToolBar();  </div><div class="line">        con.add("North",toolBar);  </div><div class="line">        con.add(DesktopPane);  </div><div class="line">      </div><div class="line">        jfrmMain.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);  </div><div class="line">        jfrmMain.setVisible(true);  </div><div class="line">                  </div><div class="line">    &#125;  </div><div class="line">      </div><div class="line">    /**  </div><div class="line">     * 从数据库中取得菜单信息 </div><div class="line">     * @author          王长春 </div><div class="line">     * @param           void </div><div class="line">     * @return          void </div><div class="line">     * @exception       连接数据库和执行SQL语句，断开数据库时会出现异常 </div><div class="line">     * */  </div><div class="line">    public void DateFromDateBase()  </div><div class="line">    &#123;  </div><div class="line">         SQlString = "SELECT Menu_Id, Menu_Name, Class_Name, Father_Id, Menu_Type " +  </div><div class="line">                            "FROM SYS_INF_MAINMENU ";  </div><div class="line">           </div><div class="line">        MECDatabase date = new MECDatabase(1);  </div><div class="line">        try   </div><div class="line">        &#123;  </div><div class="line">            //连接数据库  </div><div class="line">            date.connection("SYS_MEC_INFOTABLE");  </div><div class="line">            result = date.select(SQlString);  </div><div class="line">            //调用获得权限的方法  </div><div class="line">            getPowerState();  </div><div class="line">            //调用区分区分菜单项的方法  </div><div class="line">            soutJMenu();  </div><div class="line">            //断开数据库  </div><div class="line">            date.disConnection();;  </div><div class="line">        &#125; catch (Exception e) &#123;  </div><div class="line">            e.printStackTrace();  </div><div class="line">        &#125;  </div><div class="line">    &#125;  </div><div class="line">    /**  </div><div class="line">     * 从数据库中取得用户对应的菜单应有的菜单权限 </div><div class="line">     * @author          王长春 </div><div class="line">     * @param           void </div><div class="line">     * @return          void </div><div class="line">     * @exception        连接数据库和执行SQL语句，断开数据库时会出现异常 </div><div class="line">     * */  </div><div class="line">    public void getPowerState()  </div><div class="line">    &#123;  </div><div class="line">          </div><div class="line">        String   sqlString;  </div><div class="line">        String menuIdString;  </div><div class="line">        int state;  </div><div class="line">        //这里为简化操作（应该从登入界面传入的id号区别用户身份，直接从权限表中取得编号为02用户的权限  </div><div class="line">        sqlString = "SELECT MenuId, MenuState FROM SYS_INF_POWER WHERE PostId = '02'";  </div><div class="line">        MECDatabase  date1 = new MECDatabase(1);  </div><div class="line">          </div><div class="line">        try   </div><div class="line">        &#123;  </div><div class="line">            date1.connection("SYS_MEC_INFOTABLE");  </div><div class="line">            ResString = date1.select(sqlString);  </div><div class="line">              </div><div class="line">        &#125; catch (Exception e)  </div><div class="line">        &#123;  </div><div class="line">            e.printStackTrace();  </div><div class="line">        &#125;  </div><div class="line">          </div><div class="line">        try   </div><div class="line">        &#123;  //将用户可见和可用的挑出，并存放起来  </div><div class="line">            while (ResString.next())   </div><div class="line">            &#123;  </div><div class="line">                menuIdString = ResString.getString("MenuId");  </div><div class="line">                state = ResString.getInt("MenuState");  </div><div class="line">                  </div><div class="line">                if(state != 0)  </div><div class="line">                    arrayListDo.add(menuIdString);  </div><div class="line">                if (state == 2 )  </div><div class="line">                    arrayListIsCanUse.add(menuIdString);  </div><div class="line">            &#125;  </div><div class="line">            date1.disConnection();  </div><div class="line">        &#125; catch (SQLException e)   </div><div class="line">        &#123;  </div><div class="line">            e.printStackTrace();  </div><div class="line">        &#125; catch (Exception e) &#123;  </div><div class="line">            e.printStackTrace();  </div><div class="line">        &#125;  </div><div class="line">    &#125;  </div><div class="line">      </div><div class="line">    /** 区分菜单项所属的属性 </div><div class="line">     * @author          王长春 </div><div class="line">     * @param           void </div><div class="line">     * @return          void </div><div class="line">     * @exception       ClassNotFoundException,InstantiationException, </div><div class="line">     *                  IllegalAccessException,SQLException </div><div class="line">     *  </div><div class="line">     * */  </div><div class="line">    public void soutJMenu()  </div><div class="line">    &#123;  </div><div class="line">        int  Finger_Move = 1;  </div><div class="line">        try   </div><div class="line">        &#123;  </div><div class="line">            while (result.next())  </div><div class="line">            &#123;     </div><div class="line">                String idString =result.getString("Menu_Id");  </div><div class="line">                String name = result.getString("Menu_Name");  </div><div class="line">                 className = result.getString("Class_Name");  </div><div class="line">                String fatherIdString = result.getString("Father_Id");  </div><div class="line">                int type = result.getInt("Menu_Type");  </div><div class="line">                  </div><div class="line">                if (0 == type &amp;&amp; fatherIdString.equals("0000"))  </div><div class="line">                &#123;//建立主菜单项  </div><div class="line">                    JMenu tempJmenu = new JMenu(name);  </div><div class="line">                    setJMenuItem(name, idString, fatherIdString, tempJmenu);  </div><div class="line">                &#125;else if(2 == type)  </div><div class="line">                &#123;//建立工具栏  </div><div class="line">                    final JButton tempjButton = new JButton(name);  </div><div class="line">                    tempjButton.setName(className);  </div><div class="line">                    tempjButton.setFont(new Font("隶书",Font.BOLD,20));  </div><div class="line">                    toolBar.add(tempjButton);  </div><div class="line">                    tempjButton.addActionListener  </div><div class="line">                    (  </div><div class="line">                            new ActionListener()   </div><div class="line">                            &#123;  </div><div class="line">                                public void actionPerformed(ActionEvent arg0)   </div><div class="line">                                &#123;  </div><div class="line">                                    try &#123;//调用反射机制的方法  </div><div class="line">                                        creatNewWindow(tempjButton.getName(), userId, userName);  </div><div class="line">                                    &#125; catch (ClassNotFoundException e) &#123;  </div><div class="line">                                        e.printStackTrace();  </div><div class="line">                                    &#125; catch (InstantiationException e) &#123;  </div><div class="line">                                        e.printStackTrace();  </div><div class="line">                                    &#125; catch (IllegalAccessException e) &#123;  </div><div class="line">                                        e.printStackTrace();  </div><div class="line">                                    &#125;   </div><div class="line">                                &#125;  </div><div class="line">                            &#125;  </div><div class="line">                    );  </div><div class="line">                &#125;  </div><div class="line">                Finger_Move++;  </div><div class="line">                result.absolute(Finger_Move);  </div><div class="line">            &#125;  </div><div class="line">        &#125;catch (SQLException e) &#123;  </div><div class="line">            e.printStackTrace();  </div><div class="line">        &#125;  </div><div class="line">    &#125;  </div><div class="line">          </div><div class="line">    /** </div><div class="line">     * 建立菜单项并且实现多级菜单的建立 </div><div class="line">     * @author          王长春 </div><div class="line">     * @return          Cycle_Index  int类型，记录的是result.next的执行次数，为返回result的指向做准备 </div><div class="line">     * @param           nameString(String)  idstString(String)  fathetidString(String)  jmenu(String)   </div><div class="line">     *                   传入soutJMenu()中的菜单名称，菜单编号，父菜单编号，和建立的JMenu </div><div class="line">     * @exception       ClassNotFoundException， InstantiationException，IllegalAccessException </div><div class="line">     * */  </div><div class="line">    public int  setJMenuItem(String nameString, String idstString, String fathetidString, JMenu jmenu) throws SQLException  </div><div class="line">    &#123;  </div><div class="line">        int Cycle_Index = 0;  </div><div class="line">        boolean isSetSeparator = false;  </div><div class="line">        boolean ifHeadhasItem = false;  </div><div class="line">          </div><div class="line">            if (fathetidString.equals("0000"))   </div><div class="line">                jmenbTopBar.add(jmenu);  </div><div class="line">            while (result.next())   </div><div class="line">             &#123;  </div><div class="line">                    Cycle_Index++;  </div><div class="line">                      </div><div class="line">                    String id = result.getString("Menu_Id");  </div><div class="line">                    String Name = result.getString("Menu_Name");  </div><div class="line">                    className = result.getString("Class_Name");  </div><div class="line">                    String fatherIdString = result.getString("Father_Id");  </div><div class="line">                    int type = result.getInt("Menu_Type");  </div><div class="line">                      </div><div class="line">                    if (fatherIdString.equals(idstString))  </div><div class="line">                    &#123;  </div><div class="line">                        if (0 == type)  </div><div class="line">                        &#123;  </div><div class="line">                            if(ifHeadhasItem &amp;&amp; isSetSeparator)  </div><div class="line">                            &#123;  </div><div class="line">                                    jmenu.addSeparator();  </div><div class="line">                                    isSetSeparator = false;  </div><div class="line">                            &#125;  </div><div class="line">                              </div><div class="line">                            if (arrayListDo.contains(id))   </div><div class="line">                            &#123;  </div><div class="line">                                  </div><div class="line">                                JMenu  tempjmenu = new JMenu(Name);  </div><div class="line">                                //递归调用  </div><div class="line">                                int count = setJMenuItem(Name, id,  fatherIdString, tempjmenu);  </div><div class="line">                                jmenu.add(tempjmenu);  </div><div class="line">                                //将 result的游标往回指  </div><div class="line">                                result.absolute(-count);  </div><div class="line">                            &#125;  </div><div class="line">                        &#125;  </div><div class="line">                        else   </div><div class="line">                        &#123;  </div><div class="line">                            if(Name.equals("-"))  </div><div class="line">                                isSetSeparator = true;  </div><div class="line">                            else  </div><div class="line">                            &#123;   //添加分隔线，因为根据不同用户的权限不同，出现多根分隔线时只能添加一条，这里保证了  </div><div class="line">                                //既不多添加，也不少添加  </div><div class="line">                                if(ifHeadhasItem &amp;&amp; isSetSeparator)  </div><div class="line">                                &#123;  </div><div class="line">                                        jmenu.addSeparator();  </div><div class="line">                                        isSetSeparator = false;  </div><div class="line">                                        ifHeadhasItem = false;  </div><div class="line">                                &#125;  </div><div class="line">                                  </div><div class="line">                                if (arrayListDo.contains(id))  </div><div class="line">                                &#123;  </div><div class="line">                                    //建立菜单项  </div><div class="line">                                    final JMenuItem tempJMenuItem = new JMenuItem(Name);  </div><div class="line">                                    tempJMenuItem.setName(className);  </div><div class="line">                                    jmenu.add(tempJMenuItem);  </div><div class="line">                                    ifHeadhasItem = true;  </div><div class="line">                                    //判断是否可用  </div><div class="line">                                    if (arrayListIsCanUse.contains(id))   </div><div class="line">                                        tempJMenuItem.setEnabled(false);  </div><div class="line">                                    tempJMenuItem.addActionListener  </div><div class="line">                                    (  </div><div class="line">                                      new ActionListener()  </div><div class="line">                                     &#123;  </div><div class="line">                                     &lt;span style="white-space:pre"&gt;   &lt;/span&gt;public void actionPerformed(ActionEvent arg0)   </div><div class="line">                                        &#123;  </div><div class="line">                                        &lt;span style="white-space:pre"&gt;    &lt;/span&gt;String ItemName = tempJMenuItem.getName();  </div><div class="line">                                            try &#123;  </div><div class="line">                                                      </div><div class="line">                                                 if (!(arrayListWindowCanSee.contains(ItemName)))   </div><div class="line">                                                &#123;//计算器和万年历窗口要依附在我的主窗口中，两个是特殊处理  </div><div class="line">                                                 if (!ItemName.equals("MECCalender") &amp;&amp; !ItemName.equals("Calculator"))                                                 &#123;                                                               &lt;span style="white-space:pre"&gt;                &lt;/span&gt; &lt;span style="white-space:pre"&gt;      &lt;/span&gt;creatNewWindow(ItemName, userId, userName);  </div><div class="line">                                                        arrayListWindowCanSee.add(ItemName);  </div><div class="line">                                                        DealAction(tempJMenuItem);  </div><div class="line">                                                    &#125;  </div><div class="line">                                                    else   </div><div class="line">                                                    creatSpecliWindow(ItemName, userId, userName);  </div><div class="line">                                                &#125;  </div><div class="line">                                                          </div><div class="line">                                                 &#125; catch (ClassNotFoundException e) &#123;  </div><div class="line">                                                    e.printStackTrace();  </div><div class="line">                                                 &#125; catch (InstantiationException e) &#123;  </div><div class="line">                                                    e.printStackTrace();  </div><div class="line">                                                 &#125; catch (IllegalAccessException e) &#123;  </div><div class="line">                                                    e.printStackTrace();  </div><div class="line">                                                &#125;  </div><div class="line">                                            &#125;  </div><div class="line">                                        &#125;  </div><div class="line">                                    );  </div><div class="line">                                &#125;  </div><div class="line">                                      </div><div class="line">                            &#125;  </div><div class="line">                          </div><div class="line">                        &#125;     </div><div class="line">                    &#125;  </div><div class="line">             &#125;   </div><div class="line">    return Cycle_Index + 1;  </div><div class="line">&#125;  </div><div class="line">      </div><div class="line">    /** </div><div class="line">     * 调用用户所点击的菜单项对应的类，弹出各个模块 </div><div class="line">     * @author          王长春 </div><div class="line">     * @param           string(String)类名字，id(String)用户编号， iString(String)用户名字 </div><div class="line">     * @return          void </div><div class="line">     * @exception       ClassNotFoundException，InstantiationException，IllegalAccessException </div><div class="line">     *  &lt;span style="white-space:pre"&gt;    &lt;/span&gt;    NoSuchMethodException，SecurityException，InvocationTargetException </div><div class="line">     * */  </div><div class="line">    public void creatNewWindow(String string, String  id ,String name) throws ClassNotFoundException, Instantia&lt;span style="white-space:pre"&gt;                                 &lt;/span&gt;tionException, IllegalAccessException  </div><div class="line">    &#123;  </div><div class="line">            try &#123;  </div><div class="line">                Class class1 = Class.forName(string);  </div><div class="line">                //要调用的方法的参数类型  </div><div class="line">                Class[]  paramType = &#123;String.class, String.class&#125;;  </div><div class="line">                //实际传入的参数  </div><div class="line">                Object[]  param  = &#123;id , name&#125;;   </div><div class="line">                //得到参数类型相同的构造方法  </div><div class="line">                Constructor constructor =class1.getConstructor(paramType);  </div><div class="line">                //传入参数，并执行构造方法  </div><div class="line">                Object  object = constructor.newInstance(param);  </div><div class="line">                  </div><div class="line">                //调用getJframe的方法（各个模块统一留出一致的方法，），传入的参数为空  </div><div class="line">                Method method = class1.getMethod("getJframe", new Class[] &#123;&#125;);  </div><div class="line">                //执行该方法  </div><div class="line">                Object mObject  =method.invoke(object, new Object[] &#123;&#125;);  </div><div class="line">                jInternalFrame = (JInternalFrame) mObject;  </div><div class="line">                //将反回的窗体加入到我的窗体里面，成为我的子窗口  </div><div class="line">                DesktopPane.add(jInternalFrame);  </div><div class="line">            &#125; catch (NoSuchMethodException e) &#123;  </div><div class="line">                e.printStackTrace();  </div><div class="line">            &#125; catch (SecurityException e) &#123;  </div><div class="line">                e.printStackTrace();  </div><div class="line">            &#125; catch (IllegalArgumentException e) &#123;  </div><div class="line">                e.printStackTrace();  </div><div class="line">            &#125; catch (InvocationTargetException e) &#123;  </div><div class="line">                e.printStackTrace();  </div><div class="line">            &#125;  </div><div class="line">    &#125;  </div><div class="line">      </div><div class="line">      </div><div class="line">    /** </div><div class="line">     * 调用用户所点击的菜单项中工具对应的类，弹出各个模块 </div><div class="line">     * @author        王长春 </div><div class="line">     * @param         string(String) 类名字，id(String)用户编号， iString(String)用户姓名 </div><div class="line">     * @return        void </div><div class="line">     * @exception     ClassNotFoundException，InstantiationException，IllegalAccessException </div><div class="line">     *  &lt;span style="white-space:pre"&gt;    &lt;/span&gt;NoSuchMethodException，SecurityException，InvocationTargetException，NoSuchMethodException </div><div class="line">     * */  </div><div class="line">    public void creatSpecliWindow(String ClassName,String userIdString, String userNameString )  </div><div class="line">    &#123;  </div><div class="line">        try &#123;  </div><div class="line">            Class  clas2 = Class.forName(ClassName);  </div><div class="line">            //要调用的方法的参数类型  </div><div class="line">            Class[]  patrem = &#123;JFrame.class, String.class, String.class&#125;;  </div><div class="line">            //实际要传入的参数  </div><div class="line">            Object[]  valueObjects =  &#123;jfrmMain,  userIdString, userNameString&#125;;  </div><div class="line">            //得到参数类型相同的构造方法  </div><div class="line">            Constructor  constructor1 = clas2.getConstructor(patrem);  </div><div class="line">            //传入参数，并执行构造方法  </div><div class="line">            Object pObject = constructor1.newInstance(valueObjects);  </div><div class="line">              </div><div class="line">        &#125; catch (ClassNotFoundException e)  </div><div class="line">        &#123;  </div><div class="line">            e.printStackTrace();  </div><div class="line">        &#125; catch (NoSuchMethodException e) &#123;  </div><div class="line">            e.printStackTrace();  </div><div class="line">        &#125; catch (SecurityException e) &#123;  </div><div class="line">            e.printStackTrace();  </div><div class="line">        &#125; catch (InstantiationException e) &#123;  </div><div class="line">            e.printStackTrace();  </div><div class="line">        &#125; catch (IllegalAccessException e) &#123;  </div><div class="line">            e.printStackTrace();  </div><div class="line">        &#125; catch (IllegalArgumentException e) &#123;  </div><div class="line">            e.printStackTrace();  </div><div class="line">        &#125; catch (InvocationTargetException e) &#123;  </div><div class="line">            e.printStackTrace();  </div><div class="line">        &#125;  </div><div class="line">    &#125;  </div><div class="line">      </div><div class="line">    /** </div><div class="line">     * 对添加的JInterNalFream窗口进行事件监听 </div><div class="line">     * @author       王长春 </div><div class="line">     * @param        tempString(String) 事件监听时的菜单对象 </div><div class="line">     * @return       void </div><div class="line">     * @exception    void </div><div class="line">     *  </div><div class="line">     * */  </div><div class="line">    public void DealAction(final JMenuItem tempItem)  </div><div class="line">    &#123;  </div><div class="line">          </div><div class="line">        jInternalFrame.addInternalFrameListener  </div><div class="line">        (//对子窗体进行事件监听，子窗体没有关闭，再点击该菜单项不能在弹出该窗体  </div><div class="line">                new InternalFrameListener() &#123;  </div><div class="line">                    public void internalFrameOpened(InternalFrameEvent e) &#123;  </div><div class="line">                    &#125;  </div><div class="line">                    public void internalFrameIconified(InternalFrameEvent e) &#123;&#125;  </div><div class="line">                    public void internalFrameDeiconified(InternalFrameEvent e) &#123;&#125;  </div><div class="line">                    public void internalFrameDeactivated(InternalFrameEvent e) &#123;  </div><div class="line">                    &#125;  </div><div class="line">                    public void internalFrameClosing(InternalFrameEvent e) &#123;&#125;  </div><div class="line">                    public void internalFrameClosed(InternalFrameEvent e)&#123;  </div><div class="line">                        arrayListWindowCanSee.remove(tempItem.getName());  </div><div class="line">                    &#125;  </div><div class="line">                    public void internalFrameActivated(InternalFrameEvent e)&#123;&#125;  </div><div class="line">                &#125;  </div><div class="line">        );  </div><div class="line">      </div><div class="line">    &#125;  </div><div class="line">      </div><div class="line">    /**初始化界面 </div><div class="line">     * 构造方法 </div><div class="line">     * @author       王长春 </div><div class="line">     * @param        void </div><div class="line">     * @return       void </div><div class="line">     * @exception    void </div><div class="line">     *   */  </div><div class="line">    public  myWindowsDate2()  </div><div class="line">    &#123;  </div><div class="line">        creatJFram();  </div><div class="line">        jfrmMain.setJMenuBar(jmenbTopBar);  </div><div class="line">        DateFromDateBase();  </div><div class="line">        jfrmMain.setVisible(true);  </div><div class="line">    &#125;  </div><div class="line">      </div><div class="line">      </div><div class="line">    /** </div><div class="line">     * 带两个参数的构造方法，登入界面传入参数 </div><div class="line">     * @author      王长春 </div><div class="line">     * @param      String  userId 登入界面传入的用户编号, String  userName 登入界面传入的用户姓名 </div><div class="line">     * @return      void </div><div class="line">     * @exception   void </div><div class="line">     * */  </div><div class="line">    public myWindowsDate2(String userId, String userName)  </div><div class="line">    &#123;  </div><div class="line">        this.userId = userId;  </div><div class="line">        this.userName = userName;  </div><div class="line">        creatJFram();  </div><div class="line">        jfrmMain.setJMenuBar(jmenbTopBar);  </div><div class="line">        DateFromDateBase();  </div><div class="line">        jfrmMain.setVisible(true);  </div><div class="line">          </div><div class="line">    &#125;  </div><div class="line">      </div><div class="line">    /** </div><div class="line">     * 主函数 </div><div class="line">     * @author          王长春 </div><div class="line">     * @param           void </div><div class="line">     * @return          void </div><div class="line">     * @exception       void  </div><div class="line">     * */  </div><div class="line">    public static void main(String[] args)   </div><div class="line">    &#123;  </div><div class="line">        new myWindowsDate2();  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>最后实现的效果就是是如下的图：<br><img src="/picture/20150821213341674.png" alt="运行截图"></p>
+<p>点击一个菜单项的时候，调用相应的模块（本文章中没有列出相应的代码），显示的效果如下图：<br><img src="/picture/20150821213629041.png" alt="点击菜单项截图"></p>
+<h3 id="再次重申"><a href="#再次重申" class="headerlink" title="再次重申"></a><strong>再次重申</strong></h3><p>在我上面的项目案例中，使用数据库和我现在认为的比较合理的数据结构与算法，所实现的需求的要求，并且大大节省了冗杂重复的代码，而且灵活性也更加高，但是也是有局限性的，因为我这个程序的数据源是来自数据库，数据库中的表设计中的数据规范限制了数据(对数据进行要求)，才能够完成，所以说数据结构决定了程序结构。</p>
+<p>最后，再总结《编程珠玑》中的几点:</p>
+<ul>
+<li>将大程序缩减为小程序。数据结构设计还有很多其他正面影响，包括节省时间和空间，提高可移植性和维护性。</li>
+<li>程序员在节省空间方面无计可施的时候，将自己从代码中国解脱出来，退回起点并集中心力研究数据，常常能有奇效，(数据的)表示形式是程序设计的根本。(后面的几点是退回起点进行思考时的几条原则。)</li>
+<li><strong>使用数组重新编写重复的代码。</strong>冗长的相似代码常常可以使用最简单的数据结构———数组来更好地表述。</li>
+<li><strong>封装复杂结构。</strong>当需要非常复杂的数据结构时，使用抽象语进行定义，并将操作表示为类。</li>
+<li><strong>尽可能使用高级工具。</strong>超文本，名字–值对，电子表格，数据库，编程语言等都是特定问题领域中的强大工具。</li>
+<li><strong>从数据得出程序的结构。</strong>在动手编写代码之前，优秀的程序员会彻底的理解输入、输出和中间数据结构，并围绕这些结构创建程序。</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据结构/" rel="tag">#数据结构</a>
+          
+            <a href="/tags/程序/" rel="tag">#程序</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/03/HTTP在前端-后端的角色/" rel="next" title="HTTP在前端,后端的角色">
+                <i class="fa fa-chevron-left"></i> HTTP在前端,后端的角色
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/15/数据决定程序结构/"
+           data-title="数据决定程序结构" data-url="http://yoursite.com/2016/09/15/数据决定程序结构/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="Charse Wang" />
+          <p class="site-author-name" itemprop="name">Charse Wang</p>
+          <p class="site-description motion-element" itemprop="description">黑夜给了我黑色的眼睛,我却用它寻找光明.</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">11</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="CharesWan@gmail.com" target="_blank" title="Emial">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Emial
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Wangchangchung" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/5470218610" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/wang-chang-chun-84" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#共鸣"><span class="nav-number">1.</span> <span class="nav-text">共鸣</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#案例-1"><span class="nav-number">2.</span> <span class="nav-text">案例 1</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#任务要求"><span class="nav-number">2.0.1.</span> <span class="nav-text">任务要求</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#主要技术点"><span class="nav-number">2.0.2.</span> <span class="nav-text">主要技术点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#数据库数据"><span class="nav-number">2.0.3.</span> <span class="nav-text">数据库数据</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#再次重申"><span class="nav-number">3.</span> <span class="nav-text">再次重申</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Charse Wang</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"charsewan"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
