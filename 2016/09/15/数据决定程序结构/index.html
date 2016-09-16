@@ -91,7 +91,7 @@
 <meta property="og:site_name" content="Charse Wan's Blog">
 <meta property="og:description" content="共鸣今近日一直在阅读《编程珠玑》这一本书，阅读后，非常惊艳作者在基于多年程序员工作上，而积累的对编程的真知灼见。同时对于作者的一些感触，自己也不禁产生共鸣。例如在第三章中的《数据决定程序结构》这一章节中共鸣异常强烈，故因写下此篇博文，与诸君共赏。">
 <meta property="og:image" content="http://yoursite.com/picture/20140911040620548.jpg">
-<meta property="og:updated_time" content="2016-09-15T09:21:04.475Z">
+<meta property="og:updated_time" content="2016-09-15T09:37:59.564Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据决定程序结构">
 <meta name="twitter:description" content="共鸣今近日一直在阅读《编程珠玑》这一本书，阅读后，非常惊艳作者在基于多年程序员工作上，而积累的对编程的真知灼见。同时对于作者的一些感触，自己也不禁产生共鸣。例如在第三章中的《数据决定程序结构》这一章节中共鸣异常强烈，故因写下此篇博文，与诸君共赏。">
@@ -327,7 +327,7 @@
           
             <div class="post-gallery-row">
               <a class="post-gallery-img fancybox"
-                 href="/picture/20140911040620548.jpg" rel="gallery_cit44mrsq0009fscnod77ny7j"
+                 href="/picture/20140911040620548.jpg" rel="gallery_cit5g4f32000jtccnmu8cuu5l"
                  itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
                 <img src="/picture/20140911040620548.jpg" itemprop="contentUrl"/>
               </a>
@@ -344,8 +344,8 @@
 <a id="more"></a>
 <p>我在大一的第一个学期，就开始学习编程了，第一门语言是令人喜爱的 C 语言, 有人说C语言很难，我一开始也是这么觉得的，在学习的第一门语言的时候，的确是非常艰难的，因为自己的计算机知识还不足够(例如对于内存，地址、操作系统一些概念)，所以在我第一个学期学完之后，C语言的基础知识是有了，但是还有些概念没有完全的弄清楚，面对一个问题，还不能够转换成程序的准确描述。所以要说怎么编写一个漂亮，能够让人入眼的程序，我是说不出的。</p>
 <p>但是在第二学期的时候我学习了Java语言的同时，还学习了数据结构与算法（C语言实现），在学习数据结构与算法的时候，自己就知道了对于程序的如何写好有了慢慢的体会了————在后面的学习中，自己也越加强烈的体会到 <strong>数据决定程序的结构</strong>， 作者的真的观点真的是太对了，对这种看法我是深有共鸣。</p>
-<h3 id="案例-1"><a href="#案例-1" class="headerlink" title="案例 1"></a><strong>案例 1</strong></h3><p>在大一暑假期间，在西安微易码计算机科技有限公司的项目实训中，我接到的任务是，完成公司管理信息信系统中，主界面菜单根据用户类型动态的显示菜单(不同用户具有不同的使用权限)，在后期，可以灵活的增加和减少菜单，设置用户权限。</p>
-<h5 id="任务要求"><a href="#任务要求" class="headerlink" title="任务要求"></a><strong>任务要求</strong></h5><p>所有的菜单项都从数据库中取得，取得的是一个字符串，成序分菜单，一级菜单，二级菜单和以下的菜单</p>
+<h3 id="案例"><a href="#案例" class="headerlink" title="案例"></a><strong>案例</strong></h3><p>在大一暑假期间，在西安微易码计算机科技有限公司的项目实训中，我接到的任务是，完成公司管理信息信系统中，主界面菜单根据用户类型动态的显示菜单(不同用户具有不同的使用权限)，在后期，可以灵活的增加和减少菜单，设置用户权限。</p>
+<h4 id="任务要求"><a href="#任务要求" class="headerlink" title="任务要求"></a><strong>任务要求</strong></h4><p>所有的菜单项都从数据库中取得，取得的是一个字符串，成序分菜单，一级菜单，二级菜单和以下的菜单</p>
 <ul>
 <li><p>菜单权限设置   </p>
 <p>1、如果需要对不同的用户采取权限设置，可以建立相关的数据库表，进行设置，程序可以提取数据，自动生成<br>设置有权限的菜单。（本例子中代码有从权限数据库表中取 得相关用户的菜单权限）。</p>
@@ -356,11 +356,11 @@
 <li><p>多级菜单的生成<br>1、生成多级菜单只需更改数据库表，在数据库表中填写清楚菜单类型，和子菜单编号，父菜单的编号。<br>2、多级菜单的寻找方案为递归寻找。</p>
 </li>
 </ul>
-<h5 id="主要技术点"><a href="#主要技术点" class="headerlink" title="主要技术点"></a><strong>主要技术点</strong></h5><ul>
+<h4 id="主要技术点"><a href="#主要技术点" class="headerlink" title="主要技术点"></a><strong>主要技术点</strong></h4><ul>
 <li>数据库</li>
 <li>Java反射技术</li>
 </ul>
-<h5 id="数据库数据"><a href="#数据库数据" class="headerlink" title="数据库数据"></a><strong>数据库数据</strong></h5><p>根据要求，数据库以Access为例，我对数据库表的设计是这样的，字段有：</p>
+<h4 id="数据库数据"><a href="#数据库数据" class="headerlink" title="数据库数据"></a><strong>数据库数据</strong></h4><p>根据要求，数据库以Access为例，我对数据库表的设计是这样的，字段有：</p>
 <blockquote>
 <p>Menu_Id（菜单编号 ，短文本）、Menu_Name(菜单名，短文本)、Class_Name(菜单项对应的类名，短文本)、Father_Id(父菜单的编号、短文本)、Menu_Type(菜单类型、数字)</p>
 </blockquote>
@@ -586,7 +586,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#共鸣"><span class="nav-number">1.</span> <span class="nav-text">共鸣</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#案例-1"><span class="nav-number">2.</span> <span class="nav-text">案例 1</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#任务要求"><span class="nav-number">2.0.1.</span> <span class="nav-text">任务要求</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#主要技术点"><span class="nav-number">2.0.2.</span> <span class="nav-text">主要技术点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#数据库数据"><span class="nav-number">2.0.3.</span> <span class="nav-text">数据库数据</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#再次重申"><span class="nav-number">3.</span> <span class="nav-text">再次重申</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#共鸣"><span class="nav-number">1.</span> <span class="nav-text">共鸣</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#案例"><span class="nav-number">2.</span> <span class="nav-text">案例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#任务要求"><span class="nav-number">2.1.</span> <span class="nav-text">任务要求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#主要技术点"><span class="nav-number">2.2.</span> <span class="nav-text">主要技术点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据库数据"><span class="nav-number">2.3.</span> <span class="nav-text">数据库数据</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#再次重申"><span class="nav-number">3.</span> <span class="nav-text">再次重申</span></a></li></ol></div>
             
           </div>
         </section>
