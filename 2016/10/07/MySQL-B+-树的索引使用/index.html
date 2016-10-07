@@ -1,0 +1,816 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="数据库,MySQL," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="不同应用中的B+树索引的使用在了解了B+树索引的本质和实现了后，那么后面就是要考虑怎么正确的使用B+树索引。但是这个肯定不是一个简单的问题，实际的应用肯定是要考虑多方面的问题。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL B+ 树的索引使用">
+<meta property="og:url" content="http://yoursite.com/2016/10/07/MySQL-B+-树的索引使用/index.html">
+<meta property="og:site_name" content="Charse Wan's Blog">
+<meta property="og:description" content="不同应用中的B+树索引的使用在了解了B+树索引的本质和实现了后，那么后面就是要考虑怎么正确的使用B+树索引。但是这个肯定不是一个简单的问题，实际的应用肯定是要考虑多方面的问题。">
+<meta property="og:image" content="http://yoursite.com/picture/create_tb_two_key.png">
+<meta property="og:image" content="http://yoursite.com/picture/mutil_key_B+_tree.png">
+<meta property="og:image" content="http://yoursite.com/picture/buy_table.png">
+<meta property="og:image" content="http://yoursite.com/picture/insert_data_alter.png">
+<meta property="og:image" content="http://yoursite.com/picture/explain_buy_select.png">
+<meta property="og:image" content="http://yoursite.com/picture/explain_find_userid.png">
+<meta property="og:image" content="http://yoursite.com/picture/find_limt_2.png">
+<meta property="og:image" content="http://yoursite.com/picture/find_limt_2_sort.png">
+<meta property="og:image" content="http://yoursite.com/picture/tongji_buy.png">
+<meta property="og:image" content="http://yoursite.com/picture/tongji_buy_date.png">
+<meta property="og:image" content="http://yoursite.com/picture/show_score_index.png">
+<meta property="og:image" content="http://yoursite.com/picture/nouseindex.png">
+<meta property="og:image" content="http://yoursite.com/picture/tabel_bot.png">
+<meta property="og:image" content="http://yoursite.com/picture/useindexajiaocha.png">
+<meta property="og:image" content="http://yoursite.com/picture/use_indexa.png">
+<meta property="og:image" content="http://yoursite.com/picture/valuesid.png">
+<meta property="og:image" content="http://yoursite.com/picture/MRRTable.png">
+<meta property="og:image" content="http://yoursite.com/picture/MRRTableUsing.png">
+<meta property="og:image" content="http://yoursite.com/picture/MRR.png">
+<meta property="og:image" content="http://yoursite.com/picture/indexConditionTable.png">
+<meta property="og:image" content="http://yoursite.com/picture/indexCondition.png">
+<meta property="og:image" content="http://yoursite.com/picture/indexConditionOff.png">
+<meta property="og:updated_time" content="2016-10-07T14:03:18.880Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL B+ 树的索引使用">
+<meta name="twitter:description" content="不同应用中的B+树索引的使用在了解了B+树索引的本质和实现了后，那么后面就是要考虑怎么正确的使用B+树索引。但是这个肯定不是一个简单的问题，实际的应用肯定是要考虑多方面的问题。">
+<meta name="twitter:image" content="http://yoursite.com/picture/create_tb_two_key.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6316850945409943000,
+      author: 'Author Chares Wan'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/10/07/MySQL-B+-树的索引使用/"/>
+
+  <title> MySQL B+ 树的索引使用 | Charse Wan's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Charse Wan's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                MySQL B+ 树的索引使用
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-10-07T17:17:16+08:00" content="2016-10-07">
+              2016-10-07
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/MySQL/" itemprop="url" rel="index">
+                    <span itemprop="name">MySQL</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/10/07/MySQL-B+-树的索引使用/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/07/MySQL-B+-树的索引使用/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="不同应用中的B-树索引的使用"><a href="#不同应用中的B-树索引的使用" class="headerlink" title="不同应用中的B+树索引的使用"></a><strong>不同应用中的B+树索引的使用</strong></h3><p>在了解了B+树索引的本质和实现了后，那么后面就是要考虑怎么正确的使用B+树索引。但是这个肯定不是一个简单的问题，实际的应用肯定是要考虑多方面的问题。<br> <a id="more"></a><br>我们知道数据处理大致分为类:OLTP（传统的关系型数据库的主要应用，主要是基本的、日常的事务处理，例如银行交易）和OLAP（数据仓库系统的主要应用，支持复杂的分析操作，侧重决策支持，并且提供直观易懂的查询结果）。在OLTP应用中，查询操只从数据库中取得一小部分数据。一般可能都在10条记录以下，甚至在很多时候只取的一小部分数据，一般可能都在10条记录以下，甚至在很多的时候只取一条记录，如：根据主键值来获取用户信息，根据订单号取得订单的详细信息，这都是典型OLTP应用查询语句。在这种情况下，B+数索引才是有意义的，否则即使建立了，优化器也可能不使用索引。</p>
+<p>对于OLAP应用，情况可能稍显复杂了，不过概括来说，在OLAP应用中，都需要访问表中大量的数据，根据这些数据来产生查询的结果，这些查询多是面向分析的查询，目的是为决策者提供大量的数据，根据这些数据来产生查询的结果。如果这个月每个用户的消费情况，销售额同比、环比增长的情况。因此在OLAP中索引的添加根据的应该是宏观的信息，而不是微观，因为最终要得到的结果是提供给决策者的。例如，不需要在OLAP中对姓名字段进行索引，因为很少要对单个用户进行查询，但是对于OLAP中的复杂查询，要涉及的多张表之间的连接操作，因此索引的添加依然是有意义的，但是，如果连接操作使用的是Hash Join，那么索引可能又变得不是非常重要的了，所以需要DBA或开发人员认真并仔细的研究自己的应用，不过在OLAP应用中，通常会对时间字段进行索引，这是因为大多数统计需要根据时间维度来进行数据的筛选。</p>
+<h3 id="联合索引"><a href="#联合索引" class="headerlink" title="联合索引"></a><strong>联合索引</strong></h3><blockquote>
+<p>联合索引是指对表上的多个列进行索引。联合索引的创建方法与单个索引创建的方法一样，不同之处是有多个索引列。</p>
+</blockquote>
+<p>如下图： 创建一个two_key 表，并且id_fid是联合索引，联合的列是（id, fid）<br><img src="/picture/create_tb_two_key.png" alt="创建two_key表"></p>
+<p>那么联合索引的内部是什么样的呢?<br>从本质上来说，联合索引也是一颗B+树，不同的是联合索引的键值的数量和不是1，而是大于等于2。接着来讨论两个整数型列组成的联合索引，假设两个键值的名称为id， fid 如图 [多个键值的B+树]：<img src="/picture/mutil_key_B+_tree.png" alt="多个键值的B+树"></p>
+<p>从图中可以看到多个键值的B+树情况，<strong>键值都是排序的</strong>。通过叶子节点可以逻辑上顺序读取所有数据，就上面图中所示，即为(1，1)、(1、2)、(2、1)、(2、4)、(3、1)、(3、2)，数据是按照(id, fid)的顺序进行存放。</p>
+<p>所以，对于查询 <strong>select * from table two_key where id = XXX and fid = XXX</strong>, 像这样的操作显然是可以使用（id, fid）这联合索引的。对于单个列id的查询 <strong>select *  from two_key where  id = XXX</strong> 也是可以使用这个联合索引，但是对于fid列的查询 <strong>select * from  two_key where fid = XXX</strong> 则是不能使用这个B+树的联合索引，因为 叶子节点中的fid的值为：1、2、1、4、1、2 显然不是排序的，因此对于fid的查询是使用不到(id， fid )这个联合索引的。</p>
+<p><strong>使用联合索引的第二个好处是对已经对第二个键值进行了排序处理。</strong> 这里的情况是确定了第一个键，这种情况，对于第一个键相同的记录来说，查询的结果是第二个键是已经进行了排序。我们举一个栗子吧！ 例如：有些应用程序都需要查询某个用户的购物情况，并按照时间进行排序，最后取出最近三次的购买记录，这时使用联合索引就可以避免多一次排序操作，因为索引本身在叶子节点已经排序了。<br>那么来看一个栗子吧：<br>创建一个buy 表，里面的字段如下，<img src="/picture/buy_table.png" alt="创建buy表"></p>
+<p>向表中插入数据，并且修改表，将创建userid索引和(userid, buy_date)联合索引。<img src="/picture/insert_data_alter.png" alt="向buy表中插入数据"></p>
+<p>如果执行userid进行查询 <strong>select * from buy where userid  = 2</strong><br>在这里使用explain对这条语句进行分析，如图 [ 使用explain分析select查询 ]：<img src="/picture/explain_buy_select.png" alt="使用explain分析select"></p>
+<p>从分析中可以看出在possible_keys中有两个索引可以使用，分别是userid 和 userid_2（即为(userid， buy_date)联合索引），但是优化器最终选择的是userid_2.</p>
+<p>但是选择对单列userid进行查询的时候，查询优化器使用的索引是userid,因为查询userid，userid本身就是索引，那么就没有必要使用联合索引了。如下图 [ 单独查询userid使用的索引 ]：<img src="/picture/explain_find_userid.png" alt="单独查询userid列"></p>
+<p>继续看，如果查询userid为2的最近2次的购买记录，那么执行的效果是什么呢？ 看下图 [ 查询userid=2最近两次购买请求使用的索引 ]：<img src="/picture/find_limt_2.png" alt="查询userid=2最近两次购买请求使用的索引"></p>
+<p>对于上述SQL语句既可以使用userid索引，也可以使用联合索引(userid，buy_date)，但是优化器使用的是userid_2 （（userid, buy_date）），因为在这个联合索引中buy_date是已经排序好的了，根据这个索引取出的数据，无须再进行第二次的排序操作了。</p>
+<p>再来看一个操作，这次是查询所有的信息，并且根据buy_date进行排序，那么我们看是什么执行结果呢？马上放图 [ 不使用联合索引，进行再次排序 ]：<img src="/picture/find_limt_2_sort.png" alt="不使用联合索引，进行再次排序"><br>从上图可以知道，在possible_key中并没有可选择的索引，但是优化器最红选择了userid_2 ，因为毕竟有些记录是已经排好序的，但是全部数据并不是有序的，所以从Extra中可以看出多出了一个 Using filesort, 说明使用了第二次排序，即对索引userid_2查询出来的结果进行再次排序。</p>
+<blockquote>
+<p>小小的总结: 联合索引(a, b)其实是根据a、b列进行排序，因此下列语句可以直接使用联索引得到结果：<br><strong>select * from table where a= XXX  order by b</strong></p>
+<p>然而对于联合索引(a， b，c)来说，下列语句同样可以直接通过联合索引得到结果:</p>
+<p><strong>select … from table where a=XXX order by b</strong></p>
+<p><strong>select … from table where a=XXX and b =XXX order by c</strong></p>
+<p>但是对于下面的语句。联合索引不能直接得到结果，其中还需要执行一次filesort排序操作，因为(a， c)并未排序。</p>
+<p><strong>select … from tabel where a=XXX order by c</strong></p>
+</blockquote>
+<h3 id="覆盖索引"><a href="#覆盖索引" class="headerlink" title="覆盖索引"></a><strong>覆盖索引</strong></h3><blockquote>
+<p>InnoDB存储引擎支持覆盖索引(covering index, 或者称索引覆盖) ，即从辅助索引中就可以得到查询的记录，而不需要查询聚集索引中的记录。使用覆盖索引的一个好处是辅助索引不包含整行记录的所有信息，故其大小要远小于聚集索引，因此可以减少大量的I/O操作。</p>
+</blockquote>
+<p>对于InnoDB存储引擎的辅助索引而言，由于其中包含了主键信息，因此叶子节点存放的数据为(primary key1, primary key2, …， key1， key2，…)。例如，下面的语句都是可以使用一次联合索引来完成查询:<br>select key2 from table where key1=xxx;<br>select primary key2, key2 from table where key1=xxx;<br>select primary key1, key2 from table where key =xxx;<br>select primary key1, primary key2, key2 from table where key1 = xxx;<br>覆盖索引的另一个好处是某些统计问题而言的，还是对于上面建立的buy 表。进行查询 :select count（<em>） from buy;  结果如下图 [ 统计查询 ]：<br><img src="/picture/tongji_buy.png" alt="统计查询"><br>Extra中出现了” select tables optimized away “ 并且前面的一些信息出现的值是 null , 出现这种的情况是: 优化器对于select 语句已经没有再优化的了,根本没有去扫描表就直接得到了。官方的解释是:
+</em>For explains on simple count queries (i.e. explain select count(<em>) from people) the extra section will read “Select tables optimized away.” This is due to the fact that MySQL can read the result directly from the table internals and therefore does not need to perform the select.</em></p>
+<p>对于(a，b)的联合索引，一般是不可以选择列b中所谓的查询条件。但是如果是统计操作，并且是覆盖索引，则优化器会进行选择。如下操作：select count（*） from buy where buy_date &gt;= ‘2015-01-01’ and buy_date &lt; ‘2017-01-01’ ；<br>如下图 [ 对于统计的优化查询 ]：<img src="/picture/tongji_buy_date.png" alt="对于统计的优化查询"></p>
+<p>这里只是根据 b 列进行条件查询，一般情况下是不能进行该联合查询的，但是这句SQL查询结果是统计操作，并且可以利用到覆盖索引的信息，因此优化器会选择该联合索引。表中有userid_2索引，possible_keys 中为 null,但是 key 为 userid_2，所以还是使用了覆盖索引。</p>
+<h3 id="优化器不使用索引的情况"><a href="#优化器不使用索引的情况" class="headerlink" title="优化器不使用索引的情况"></a><strong>优化器不使用索引的情况</strong></h3><p>有些时候，当执行explain命令进行SQL语句的分析时，会发现优化器并没有选择索引去查找数据，而是通过扫描聚集索引，也就是直接进行全表的扫描来得到数据。这种情况多发生于范围查找、JOIN 链接操作等情况。</p>
+<p>例如： 在score表中，通过show index from score 可以查看score表中的所有索引，如下图[ score表中的所有索引 ]：<img src="/picture/show_score_index.png" alt="score表中的所有索引"></p>
+<p>执行select * from  score where id &gt; 0 and id &lt;=10;查询分析的结果是什么呢？那么继续看下图：<img src="/picture/nouseindex.png" alt="没有使用索引，使用where"></p>
+<p>在possible_keys一列中可以看到查询是可以使用primary key（id） 也可以使用联合索引(id， fid),但是在最后的索引使用中，优化器没有使用任何的索引。</p>
+<p>这个是为什么呢？原因在于用户要选取的数据是整行的信息，而id索引不能覆盖到我们要查询的信息，因此在对id 索引查询到指定数据后，还需要一次书签访问来查找整行数据的信息，虽然id索引中数据是顺序存放的，但是再一次进行书签查找的数据是无序的，因此变为了磁盘上的离散读操作。如果要求访问的数据量很小，则优化器还是会选择辅助索引，但是当访问的数占整个表中数据的蛮大一部分的时候，优化器会选择聚集索引来查找数据，因为顺序读取要远远快于离散读取。</p>
+<h3 id="索引提示"><a href="#索引提示" class="headerlink" title="索引提示"></a>索引提示</h3><p>MySQL数据库支持索引提示(index hint)，显示地告诉优化器使用哪个索引。总结有以下两种情况可以使用到index hint:</p>
+<ul>
+<li>MySQL数据库的优化器错误的选择了某个索引，导致SQL语句运行非常慢，这时有经验的DBA或开发人员可以强制优化器使用某一个索引，以此来提高SQL运行的速度。</li>
+<li>某SQL语句可以选择的索引非常多，这时优化器选择执行计划时间的开销可能会大于SQL语句本身。例如，优化器分析Range查询本身就是比较耗时的操作。这时DBA或开发人员分析最优的索引选择，通过index hint 来强制使优化器不进行各个执行路径的成本分析，直接选择指定的索引来完成查询。</li>
+</ul>
+<p>接下来，我们再来看一个例子，创建表 bot，并填充数据。<img src="/picture/tabel_bot.png" alt="创建bot表"></p>
+<p>然后执行select * from bot where a = 1 and b = 4；<br>通过explain 命令可以得到如下图的执行计划：<img src="/picture/useindexajiaocha.png" alt=""></p>
+<p>从图中可以看到，possible_keys中显示了SQL语句可以使用的索引为a，b,而实际使用的索引为列key所示，同样是a，b。也就是MySQL数据库使用两个索引来完成一个查询，列Extra提示Using intersect（b，a）表示根据两个索引得到的结果进行求交数学运算，最后得到结果。<br>如果我们使用use index 的索引提示来使用 a 这个索引，将会得到如下的结果：<img src="/picture/use_indexa.png" alt="use index（a）强制使用索引"></p>
+<p>我们可以看到，虽然我们指定使用a索引，但是优化器实际选择的是通过表扫描的方式。因此，use index 只是告诉优化器可以选择该索引，实际上优化器还是会根据自己的判断进行选择。而如果使用force index 的索引提示，又会是什么样的呢？ 如下图 [ 强制使用索引 force ]：<img src="/picture/valuesid.png" alt="强制使用索引"></p>
+<p>可以看到，这时优化器最终选择和用户指定的索引是一致的。因此，<strong>如果用户确定指定某一个索引来完成查询，那么最可靠的是使用froce index ，而不是使用 use index.</strong></p>
+<h3 id="Multi-Range-Read（MRR）优化"><a href="#Multi-Range-Read（MRR）优化" class="headerlink" title="Multi-Range Read（MRR）优化"></a><strong>Multi-Range Read（MRR）优化</strong></h3><blockquote>
+<p>MySQL5.6版本开始支持Multi-Range Read(MRR)优化。Multi-Range Read优化的目的就是为了减少磁盘的随机访问，并且将随机访问转化为较为顺序的数据访问，这对于IO-bound类型的SQL查询语句可能带来性能极大的提升。Multi-Range Read 优化可适用于rang， ref，eq_ref类型的查询。</p>
+</blockquote>
+<p>MRR优化有以下几个好处：</p>
+<ul>
+<li>MRR使得数据库访问变得较为顺序。在查询辅助索引时，首先根据得到的查询结果，按照主键排序的顺序进行书签查找。</li>
+<li>减少缓冲池中页替被代的次数。</li>
+<li>批量处理对键值的查询操作。</li>
+</ul>
+<p>对于InnoDB和MyISAM存储引擎的范围查询和JOIN查询操作，MRR优化的工作方式是：</p>
+<ul>
+<li>将查询得到的辅助索引键值存放于一个缓存中，这时缓存中的数据是根据辅助索引键值排序的。</li>
+<li>将缓存中的键值根据RowID进行排序。</li>
+<li>根据RowID的排序顺序来访问实际的数据文件。</li>
+</ul>
+<p>此外，若InnoDBc存储引擎或者MyISAM存储引擎的缓冲池不是足够大，即不能存放一张表的所有数据，此时频繁的离散读写操作还会导致缓冲池中的页被替换出缓冲池，然后又不断的被读入缓冲池中。如果是按照主键顺序进行访问，则可以将此重复行为降为最低。</p>
+<p>是否采用Mutil-Range Read 优化可以通过参数optimizer_switch 中的标记(flag)来控制。当 mrr 为 on 时，表示启用Multi-Rang Read 优化。mrr_cost_based 标记表示是否通过cost based 的方式来选择是否启用mrr。若将mrr设为 on ，mrr_cost_based设置为off，则总是启用Mutil-Range Read优化。例如：<br>下述语句可以将Multi-Range Read优化总是设为开启状态：</p>
+<blockquote>
+<p>set @optimizer_switch=’mrr=on,mrr_cost_base=off’</p>
+</blockquote>
+<p>例如： 建立下面的表t1，同时创建索引，如图：<img src="/picture/MRRTable.png" alt="创建表t1"></p>
+<p>执行查询语句：selcet * from t1 where （a between 1 and 10 ) and (c between 9 and 10);<br>查询结果如下图[ 使用MRR优化查询结果分析 ] <img src="/picture/MRRTableUsing.png" alt="使用MRR优化查询结果分析">：<br>从上面，我们可以看到，在使用索引中使用的是 xx 索引，然后 Extra 列中，出现了Using index Condition(ICP优化，后面会讲到) , Using Where, Using MRR。说明查询优化中使用了MRR优化的。</p>
+<p>如果没有使用MRR优化查询的话情况是那样的呢！如下图[ 没有使用MRR查询优化 ]：<img src="/picture/MRR.png" alt="没有使用MRR查询优化"></p>
+<p>此外，Multi-Range Read 还可以将某些范围查询，拆分为键值对，以此来进行批量的数据查询。这样做的好处是可以在拆分的过程中，直接过滤一些不符合查询条件的数据。例如：</p>
+<blockquote>
+<p>select * from t where key_part1 &gt;= 1000 and key_part1 &lt; 2000 and key_part2 =1000;</p>
+</blockquote>
+<p>表t中有（key_part1， key_part2）的联合索引，因此索引根据key_part1, key_part2的位置关系进行排序。若没有 Multi-Read Range，此时查询类型为Range， SQL优化器会先将key_part1大于 1000 且小于2000 的数据都取出来，即使key_part2不等于1000.待取出行数据后再根据key_part2 的条件进行过滤，这会导致无用数据被取出。如果有大量的数据且其key_part2不等于1000， 则启用Multi-Range Read优化会使性能有巨大的提升。</p>
+<p>如果使用了Multi_Range Read 优化，优化器会先将查询条件进行拆分，然后再进行数据查询。就上述查询语句而言，优化器会先将查询条件进行拆分为(1000, 1000)，（1001, 1000），…，（1999，1000），最后再根据这些拆分的条件进行数据查询。 </p>
+<h3 id="Index-Condition-Pushdown（ICP-优化"><a href="#Index-Condition-Pushdown（ICP-优化" class="headerlink" title="Index Condition Pushdown（ICP)优化"></a><strong>Index Condition Pushdown（ICP)优化</strong></h3><p>和Multi-Range Read一样，Index Condition Pushdown同样是MySQL 5.6开始支持的一种根据索引进行查询优化的方式，<strong>之前的MySQL数据库版本不支持Index Condition Pushdown，当进行索引查询时，首先根据索引来查找记录，然后在根据 where 条件来过滤记录，在支持 Index Condition Pushdown 后，MySQL数据库会在取出索引的同时，判断是否可以进行 where 条件的过滤，也是将where 的部分过滤操作放在了存储引擎层。在某些查询条件下，可以大大减少上层SQL层对记录的索取(fetch)，从而提高效率。</strong></p>
+<p>Index Condition Pushdown 优化支持rang、ref、eq_ref、ref_or_null 类型的查询，当前支持MyISAM和InnoDB存储引擎，当优化器选择Index Condtion Pushdown优化时，可在执行计划的列Extra看到Using index condition提示。</p>
+<p>假设有表为联合索引(zip_code, last_name, first_name), 并且查询语句如下：</p>
+<blockquote>
+<p>select * from people where zipcode = ‘95054’,<br>and lastname like ‘%ertrunia%’<br>and address like ‘%Main  Street%’;</p>
+</blockquote>
+<p>对于上述语句，MySQL 数据库可以通过索引来定位 zipcode 等于95054的记录，但是索引对于 where  条件的 lastname like ‘%ertrunia%’ and address like ‘%Main Street%’ 没有任何帮助，若不支持 Index Condition Pushdown 优化，则数据库需要先通过索引取出所有 zipcode 等于95054的记录，然后再过滤 where 之后的两个条件。</p>
+<p>若支持Index Condition Pushdown优化，则在索引取出时，就会进行where条件的过滤，然后再去获取记录，这将极大地提高查询效率，当然。where可以过滤的条件是要该索引可以覆盖到的范围，有下表，如图 [ 表person ]：<img src="/picture/indexConditionTable.png" alt="表person"></p>
+<p>然后进行如下的查询（MySQL 5.7默认是开启Index Condition Pushdown优化的），查询过程如下 [ 使用ICP优化进行查询 ]：<img src="/picture/indexCondition.png" alt="使用ICP优化进行查询"></p>
+<p>可以看到列Extra有Using index Condition 的提示.如果不使用ICP优化的化，查询过程又是不一样的，首先将ICP优化查询关闭，然后在进行如下的查询，如下图 [ 关闭ICP优化后进行查询 ]：<br><img src="/picture/indexConditionOff.png" alt="关闭ICP优化后进行查询"><br>从中可以看到是，在列Extra 中使用的是where，并没有出现了Using index condition .</p>
+<p>另外，从收集的资料中对比了MySQL 5.5 和MySQL 5.6 中上述SQL语句的执行时间，并且同时比较开启MRR后的执行时间：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align:right">执行时间</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MySQL5.5</td>
+<td style="text-align:right">46.738</td>
+</tr>
+<tr>
+<td>MySQL5.6 whith ICP</td>
+<td style="text-align:right">37.924</td>
+</tr>
+<tr>
+<td>MySQL5.6 with ICP&amp;MRR</td>
+<td style="text-align:right">7.816</td>
+</tr>
+</tbody>
+</table>
+<p>上述的执行时间的比较同样是不对缓冲池做任何的预热操作，可见Index Condition Pushdown 优化可以将查询效率在原有MySQL 5.5 版本的技术上提高23%，而再同时启用 Multi-Range Read 优化后，性能还能有400%的提高。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据库/" rel="tag">#数据库</a>
+          
+            <a href="/tags/MySQL/" rel="tag">#MySQL</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/15/数据决定程序结构/" rel="next" title="数据决定程序结构">
+                <i class="fa fa-chevron-left"></i> 数据决定程序结构
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/10/07/高性能场景下-HashMap的优化使用建议/" rel="prev" title="高性能场景下,HashMap的优化使用建议">
+                高性能场景下,HashMap的优化使用建议 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/10/07/MySQL-B+-树的索引使用/"
+           data-title="MySQL B+ 树的索引使用" data-url="http://yoursite.com/2016/10/07/MySQL-B+-树的索引使用/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="Charse Wang" />
+          <p class="site-author-name" itemprop="name">Charse Wang</p>
+          <p class="site-description motion-element" itemprop="description">黑夜给了我黑色的眼睛,我却用它寻找光明.</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="CharesWan@gmail.com" target="_blank" title="Emial">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Emial
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Wangchangchung" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/5470218610" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/wang-chang-chun-84" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#不同应用中的B-树索引的使用"><span class="nav-number">1.</span> <span class="nav-text">不同应用中的B+树索引的使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#联合索引"><span class="nav-number">2.</span> <span class="nav-text">联合索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#覆盖索引"><span class="nav-number">3.</span> <span class="nav-text">覆盖索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优化器不使用索引的情况"><span class="nav-number">4.</span> <span class="nav-text">优化器不使用索引的情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#索引提示"><span class="nav-number">5.</span> <span class="nav-text">索引提示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Multi-Range-Read（MRR）优化"><span class="nav-number">6.</span> <span class="nav-text">Multi-Range Read（MRR）优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Index-Condition-Pushdown（ICP-优化"><span class="nav-number">7.</span> <span class="nav-text">Index Condition Pushdown（ICP)优化</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Charse Wang</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"charsewan"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
