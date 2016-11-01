@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="hibernate,Java," />
 
 
 
@@ -84,15 +84,24 @@
 
 
 
-<meta name="description" content="黑夜给了我黑色的眼睛,我却用它寻找光明.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Charse Wan's Blog">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="Hibernate对象的状态应用的场景假设一个班的所有学生要把考试的成绩同步到数据库表中，如果每一个学生和数据库交互一次，那么有60个学生，则需要更数据库交互60次，但是这样的效率是特别的低，那么怎么处理更加高效呢？ 在hibernate中是用什么解决的呢？为了这个问题Hibernate就有了对象状态的这个概念。下面就以我们熟悉的Person表。来进行介绍关于hibernate中对象状态的一些原理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hibernate框架——对象状态、缓存(二)">
+<meta property="og:url" content="http://yoursite.com/2016/11/01/Hibernate框架——对象状态(二)/index.html">
 <meta property="og:site_name" content="Charse Wan's Blog">
-<meta property="og:description" content="黑夜给了我黑色的眼睛,我却用它寻找光明.">
+<meta property="og:description" content="Hibernate对象的状态应用的场景假设一个班的所有学生要把考试的成绩同步到数据库表中，如果每一个学生和数据库交互一次，那么有60个学生，则需要更数据库交互60次，但是这样的效率是特别的低，那么怎么处理更加高效呢？ 在hibernate中是用什么解决的呢？为了这个问题Hibernate就有了对象状态的这个概念。下面就以我们熟悉的Person表。来进行介绍关于hibernate中对象状态的一些原理">
+<meta property="og:image" content="http://yoursite.com/picture/hibernate2/hibernate_sate.png">
+<meta property="og:image" content="http://yoursite.com/picture/hibernate2/copy_state.png">
+<meta property="og:image" content="http://yoursite.com/picture/hibernate2/state_change.png">
+<meta property="og:image" content="http://yoursite.com/picture/hibernate2/select_same.png">
+<meta property="og:image" content="http://yoursite.com/picture/hibernate2/hibernate.session.getSessionSattic.getEnrtyCount.png">
+<meta property="og:image" content="http://yoursite.com/picture/hibernate2/hibernateevic.session.getSessionSattic.getEnrtyCount.png">
+<meta property="og:image" content="http://yoursite.com/picture/hibernate2/hibernate.flush.png">
+<meta property="og:updated_time" content="2016-11-01T10:26:17.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Charse Wan's Blog">
-<meta name="twitter:description" content="黑夜给了我黑色的眼睛,我却用它寻找光明.">
+<meta name="twitter:title" content="Hibernate框架——对象状态、缓存(二)">
+<meta name="twitter:description" content="Hibernate对象的状态应用的场景假设一个班的所有学生要把考试的成绩同步到数据库表中，如果每一个学生和数据库交互一次，那么有60个学生，则需要更数据库交互60次，但是这样的效率是特别的低，那么怎么处理更加高效呢？ 在hibernate中是用什么解决的呢？为了这个问题Hibernate就有了对象状态的这个概念。下面就以我们熟悉的Person表。来进行介绍关于hibernate中对象状态的一些原理">
+<meta name="twitter:image" content="http://yoursite.com/picture/hibernate2/hibernate_sate.png">
 
 
 
@@ -113,9 +122,9 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2016/11/01/Hibernate框架——对象状态(二)/"/>
 
-  <title> Charse Wan's Blog </title>
+  <title> Hibernate框架——对象状态、缓存(二) | Charse Wan's Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -136,9 +145,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left 
-   page-home 
- ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -235,9 +242,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
   
@@ -257,10 +264,7 @@
             
             
               
-                
-                <a class="post-title-link" href="/2016/11/01/Hibernate框架——对象状态(二)/" itemprop="url">
-                  Hibernate框架——对象状态、缓存(二)
-                </a>
+                Hibernate框架——对象状态、缓存(二)
               
             
           </h1>
@@ -335,9 +339,7 @@
       
 
       
-        
-          
-            <h2 id="Hibernate对象的状态"><a href="#Hibernate对象的状态" class="headerlink" title="Hibernate对象的状态"></a><strong>Hibernate对象的状态</strong></h2><h3 id="应用的场景"><a href="#应用的场景" class="headerlink" title="应用的场景"></a><strong>应用的场景</strong></h3><p>假设一个班的所有学生要把考试的成绩同步到数据库表中，如果每一个学生和数据库交互一次，那么有60个学生，则需要更数据库交互60次，但是这样的效率是特别的低，那么怎么处理更加高效呢？ 在hibernate中是用什么解决的呢？为了这个问题Hibernate就有了对象状态的这个概念。下面就以我们熟悉的Person表。来进行介绍关于hibernate中对象状态的一些原理。</p>
+        <h2 id="Hibernate对象的状态"><a href="#Hibernate对象的状态" class="headerlink" title="Hibernate对象的状态"></a><strong>Hibernate对象的状态</strong></h2><h3 id="应用的场景"><a href="#应用的场景" class="headerlink" title="应用的场景"></a><strong>应用的场景</strong></h3><p>假设一个班的所有学生要把考试的成绩同步到数据库表中，如果每一个学生和数据库交互一次，那么有60个学生，则需要更数据库交互60次，但是这样的效率是特别的低，那么怎么处理更加高效呢？ 在hibernate中是用什么解决的呢？为了这个问题Hibernate就有了对象状态的这个概念。下面就以我们熟悉的Person表。来进行介绍关于hibernate中对象状态的一些原理。</p>
 <h3 id="对象的状态值"><a href="#对象的状态值" class="headerlink" title="对象的状态值"></a><strong>对象的状态值</strong></h3><p>在Hibernate中，对象的状态主要由以下几种状态：</p>
 <ul>
 <li>临时状态<br> 刚刚创建的对象</li>
@@ -442,433 +444,61 @@
 <p>说明：<br><strong>1. CRUD操作必须在事务的环境下运行(所以，上述的代码中，必须有session.beginTransaction())。</strong><br><strong>2. 事务提交，session自动关闭（如果手动再session.close()则会报出“session已经关闭的错误”）。</strong><br><strong>3. 这种方式强制把事务和session绑定在一起了。</strong></p>
 </blockquote>
 
-          
+      
+    </div>
+
+    <div>
+      
         
+
       
     </div>
 
     <div>
       
-    </div>
+        
 
-    <div>
       
     </div>
 
     <footer class="post-footer">
       
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/10/05/Hibernate框架——基本操作(一)/" itemprop="url">
-                  Hibernate框架（一）
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-10-05T19:36:02+08:00" content="2016-10-05">
-              2016-10-05
-            </time>
-          </span>
-
+        <div class="post-tags">
           
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Hibernate-Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Hibernate Java</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
+            <a href="/tags/hibernate/" rel="tag">#hibernate</a>
           
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/10/05/Hibernate框架——基本操作(一)/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/05/Hibernate框架——基本操作(一)/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-             <span id="/2016/10/05/Hibernate框架——基本操作(一)/" class="leancloud_visitors" data-flag-title="Hibernate框架（一）">
-               &nbsp; | &nbsp;
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               <span class="post-meta-item-text">阅读次数 </span>
-               <span class="leancloud-visitors-count"></span>
-              </span>
-          
-
+            <a href="/tags/Java/" rel="tag">#Java</a>
           
         </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          <p>在Java Web的后台开发中，对数据持久化操作是非常重要的一步，数据持久化，简单来说是将程序的数据保存在数据库中，将数据写入磁盘。JDBC是一种持久化机制，是我们最经常使用的，但是，有许多开源的框架有更好的操作性，例如Hibernate.<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/10/05/Hibernate框架——基本操作(一)/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/10/05/Hibernate框架——基本操作(一)/" rel="next" title="Hibernate框架（一）">
+                <i class="fa fa-chevron-left"></i> Hibernate框架（一）
+              </a>
+            
           </div>
-        
-      
-    </div>
 
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
+          <div class="post-nav-prev post-nav-item">
             
-            
-              
-                
-                <a class="post-title-link" href="/2016/10/02/高性能场景下-HashMap的优化使用建议/" itemprop="url">
-                  高性能场景下,HashMap的优化使用建议
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-10-02T22:11:12+08:00" content="2016-10-02">
-              2016-10-02
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/10/02/高性能场景下-HashMap的优化使用建议/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/02/高性能场景下-HashMap的优化使用建议/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-             <span id="/2016/10/02/高性能场景下-HashMap的优化使用建议/" class="leancloud_visitors" data-flag-title="高性能场景下,HashMap的优化使用建议">
-               &nbsp; | &nbsp;
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               <span class="post-meta-item-text">阅读次数 </span>
-               <span class="leancloud-visitors-count"></span>
-              </span>
-          
-
-          
+          </div>
         </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          <p>最近在技术博客中看到一篇关于 HashMap 的优化使用建议，觉得非常有意思，于是转载该篇博文，和大家一起分享技术。<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/10/02/高性能场景下-HashMap的优化使用建议/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </article>
 
 
-    
-      
 
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/22/MySQL-B+-树的索引使用/" itemprop="url">
-                  MySQL B+ 树的索引使用
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-22T17:17:16+08:00" content="2016-09-22">
-              2016-09-22
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/MySQL/" itemprop="url" rel="index">
-                    <span itemprop="name">MySQL</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/09/22/MySQL-B+-树的索引使用/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/22/MySQL-B+-树的索引使用/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-             <span id="/2016/09/22/MySQL-B+-树的索引使用/" class="leancloud_visitors" data-flag-title="MySQL B+ 树的索引使用">
-               &nbsp; | &nbsp;
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               <span class="post-meta-item-text">阅读次数 </span>
-               <span class="leancloud-visitors-count"></span>
-              </span>
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="不同应用中的B-树索引的使用"><a href="#不同应用中的B-树索引的使用" class="headerlink" title="不同应用中的B+树索引的使用"></a><strong>不同应用中的B+树索引的使用</strong></h3><p>在了解了B+树索引的本质和实现了后，那么后面就是要考虑怎么正确的使用B+树索引。但是这个肯定不是一个简单的问题，实际的应用肯定是要考虑多方面的问题。<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/09/22/MySQL-B+-树的索引使用/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
+    <div class="post-spread">
       
     </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-  </section>
-
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
-  </nav>
-
+  </div>
 
 
           </div>
@@ -876,6 +506,14 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/11/01/Hibernate框架——对象状态(二)/"
+           data-title="Hibernate框架——对象状态、缓存(二)" data-url="http://yoursite.com/2016/11/01/Hibernate框架——对象状态(二)/">
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -895,8 +533,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/uploads/avatar.png"
@@ -984,6 +631,17 @@
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hibernate对象的状态"><span class="nav-number">1.</span> <span class="nav-text">Hibernate对象的状态</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#应用的场景"><span class="nav-number">1.1.</span> <span class="nav-text">应用的场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对象的状态值"><span class="nav-number">1.2.</span> <span class="nav-text">对象的状态值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#案例一"><span class="nav-number">1.3.</span> <span class="nav-text">案例一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#案例二"><span class="nav-number">1.4.</span> <span class="nav-text">案例二</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#案例三"><span class="nav-number">1.5.</span> <span class="nav-text">案例三</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#案例四"><span class="nav-number">1.6.</span> <span class="nav-text">案例四</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对象转化图"><span class="nav-number">1.7.</span> <span class="nav-text">对象转化图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">1.8.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hibernate的缓存"><span class="nav-number">2.</span> <span class="nav-text">Hibernate的缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存研究的内容"><span class="nav-number">2.1.</span> <span class="nav-text">缓存研究的内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据缓存"><span class="nav-number">2.2.</span> <span class="nav-text">数据缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对象缓存"><span class="nav-number">2.3.</span> <span class="nav-text">对象缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一级缓存"><span class="nav-number">2.4.</span> <span class="nav-text">一级缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#操作"><span class="nav-number">2.5.</span> <span class="nav-text">操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#将对象放入一级缓存"><span class="nav-number">2.5.1.</span> <span class="nav-text">将对象放入一级缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#get方法"><span class="nav-number">2.5.1.1.</span> <span class="nav-text">get方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#statictis方法：统计方法"><span class="nav-number">2.5.1.2.</span> <span class="nav-text">statictis方法：统计方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#save方法"><span class="nav-number">2.5.1.3.</span> <span class="nav-text">save方法</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#把一个对象从一级缓存中清除"><span class="nav-number">2.5.2.</span> <span class="nav-text">把一个对象从一级缓存中清除</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#evict方法"><span class="nav-number">2.5.2.1.</span> <span class="nav-text">evict方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#clear方法"><span class="nav-number">2.5.2.2.</span> <span class="nav-text">clear方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#close方法"><span class="nav-number">2.5.2.3.</span> <span class="nav-text">close方法</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#把数据库的数据同步到缓存中"><span class="nav-number">2.5.3.</span> <span class="nav-text">把数据库的数据同步到缓存中</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#refresh方法"><span class="nav-number">2.5.3.1.</span> <span class="nav-text">refresh方法</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#把缓存中的数据同步到数据库中"><span class="nav-number">2.5.4.</span> <span class="nav-text">把缓存中的数据同步到数据库中</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#flush方法"><span class="nav-number">2.5.4.1.</span> <span class="nav-text">flush方法</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结-1"><span class="nav-number">2.5.5.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Session的产生方式"><span class="nav-number">3.</span> <span class="nav-text">Session的产生方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#需求"><span class="nav-number">3.1.</span> <span class="nav-text">需求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sessionFaactory-openSession"><span class="nav-number">3.2.</span> <span class="nav-text">sessionFaactory.openSession</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sessionFactory-getCurrentSession"><span class="nav-number">3.3.</span> <span class="nav-text">sessionFactory.getCurrentSession</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#原理"><span class="nav-number">3.3.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#优点"><span class="nav-number">3.3.2.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#步骤"><span class="nav-number">3.3.3.</span> <span class="nav-text">步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#在Hibernate-cfg-xml文件中"><span class="nav-number">3.3.3.1.</span> <span class="nav-text">在Hibernate.cfg.xml文件中</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#在客户端"><span class="nav-number">3.3.3.2.</span> <span class="nav-text">在客户端</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -1087,6 +745,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
 
   
 
