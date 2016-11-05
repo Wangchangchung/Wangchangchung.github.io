@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="数据库,索引," />
+  <meta name="keywords" content="hibernate,Java," />
 
 
 
@@ -84,16 +84,16 @@
 
 
 
-<meta name="description" content="索引是数据库对应用程序的设计和开发非常中要的一个方面。如果索引太多，应用程序的性能可能会受到影响。而索引太少，对查询性能有会产生影响。所以要找到一个合适的平衡点，这对应用程序的性能是至关重要的。">
+<meta name="description" content="黑夜给了我黑色的眼睛,我却用它寻找光明.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="数据库索引的工作原理">
-<meta property="og:url" content="http://yoursite.com/2016/09/02/数据库索引的工作原理/index.html">
+<meta property="og:title" content="Hibernate框架——二级缓存、Hql语句">
+<meta property="og:url" content="http://yoursite.com/2016/11/05/Hibernate框架——二级缓存、Hql语句(四)/index.html">
 <meta property="og:site_name" content="Charse Wan's Blog">
-<meta property="og:description" content="索引是数据库对应用程序的设计和开发非常中要的一个方面。如果索引太多，应用程序的性能可能会受到影响。而索引太少，对查询性能有会产生影响。所以要找到一个合适的平衡点，这对应用程序的性能是至关重要的。">
-<meta property="og:updated_time" content="2016-09-10T04:54:22.000Z">
+<meta property="og:description" content="黑夜给了我黑色的眼睛,我却用它寻找光明.">
+<meta property="og:updated_time" content="2016-11-05T07:14:03.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="数据库索引的工作原理">
-<meta name="twitter:description" content="索引是数据库对应用程序的设计和开发非常中要的一个方面。如果索引太多，应用程序的性能可能会受到影响。而索引太少，对查询性能有会产生影响。所以要找到一个合适的平衡点，这对应用程序的性能是至关重要的。">
+<meta name="twitter:title" content="Hibernate框架——二级缓存、Hql语句">
+<meta name="twitter:description" content="黑夜给了我黑色的眼睛,我却用它寻找光明.">
 
 
 
@@ -114,9 +114,9 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2016/09/02/数据库索引的工作原理/"/>
+  <link rel="canonical" href="http://yoursite.com/2016/11/05/Hibernate框架——二级缓存、Hql语句(四)/"/>
 
-  <title> 数据库索引的工作原理 | Charse Wan's Blog </title>
+  <title> Hibernate框架——二级缓存、Hql语句 | Charse Wan's Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -256,7 +256,7 @@
             
             
               
-                数据库索引的工作原理
+                Hibernate框架——二级缓存、Hql语句
               
             
           </h1>
@@ -268,8 +268,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-02T08:45:54+08:00" content="2016-09-02">
-              2016-09-02
+            <time itemprop="dateCreated" datetime="2016-11-05T15:09:42+08:00" content="2016-11-05">
+              2016-11-05
             </time>
           </span>
 
@@ -282,8 +282,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/MySQL/" itemprop="url" rel="index">
-                    <span itemprop="name">MySQL</span>
+                  <a href="/categories/hibernate-Java/" itemprop="url" rel="index">
+                    <span itemprop="name">hibernate Java</span>
                   </a>
                 </span>
 
@@ -298,8 +298,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/09/02/数据库索引的工作原理/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/02/数据库索引的工作原理/" itemprop="commentsCount"></span>
+                <a href="/2016/11/05/Hibernate框架——二级缓存、Hql语句(四)/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/05/Hibernate框架——二级缓存、Hql语句(四)/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -309,7 +309,7 @@
 
           
           
-             <span id="/2016/09/02/数据库索引的工作原理/" class="leancloud_visitors" data-flag-title="数据库索引的工作原理">
+             <span id="/2016/11/05/Hibernate框架——二级缓存、Hql语句(四)/" class="leancloud_visitors" data-flag-title="Hibernate框架——二级缓存、Hql语句">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -331,41 +331,7 @@
       
 
       
-        <p>索引是数据库对应用程序的设计和开发非常中要的一个方面。如果索引太多，应用程序的性能可能会受到影响。而索引太少，对查询性能有会产生影响。所以要找到一个合适的平衡点，这对应用程序的性能是至关重要的。<br><a id="more"></a></p>
-<h3 id="1-为什么需要索引"><a href="#1-为什么需要索引" class="headerlink" title="1. 为什么需要索引"></a>1. 为什么需要索引</h3><p>数据在磁盘上是以块的形式存储的。为确保对磁盘操作的原子性，访问数据的时候会一并访问所有数据块。磁盘上的这些数据块与链表类似，即它们都包含一个数据段和一个指针，指针指向下一个节点（数据块）的内存地址，而且它们都不需要连续存储（即逻辑上相邻的数据块在物理上可以相隔很远）。</p>
-<p>鉴于很多记录只能做到按一个字段排序，所以要查询某个未经排序的字段，就需要使用线性查找，即要访问N/2个数据块，其中N指的是一个表所涵盖的所有数据块。如果该字段是非键字段（也就是说，不包含唯一值），那么就要搜索整个表空间，即要访问全部N个数据块。</p>
-<p>然而，对于经过排序的字段，可以使用二分查找，因此只要访问log2 N个数据块。同样，对于已经排过序的非键字段，只要找到更大的值，也就不用再搜索表中的其他数据块了。这样一来，性能就会有实质性的提升。</p>
-<h3 id="2-什么是索引"><a href="#2-什么是索引" class="headerlink" title="2.  什么是索引"></a>2.  什么是索引</h3><p>索引是对记录按照一个或多个字段进行排序的一种方式。对表中的某个字段建立索引会创建另一种数据结构，其中保存着字段的值，每个值又指向与它相关的记录。即这种种数据结构按照一定顺序建立了列值与记录行之间的对应关系。这种索引的数据结构是经过排序的，因而可以对其执行二分查找。</p>
-<h3 id="3-索引的原理"><a href="#3-索引的原理" class="headerlink" title="3. 索引的原理"></a>3. 索引的原理</h3><pre><code>字段名              数据类型          在磁盘上的大小
-id(Primary key)       int               4字节
-name                  char(20)          20字节
-age                   tinyint           1字节
-</code></pre><p>我们通过建立上面的表来比较在数据库中包含大数据量的情况下，分析两种查询情况:<br>1、查询经过排序的字段id<br>2、查询未经过排序的字段name</p>
-<h4 id="分析示例一"><a href="#分析示例一" class="headerlink" title="分析示例一"></a>分析示例一</h4><p>假设数据库表中有R = 1000万条记录，mysql数据库在磁盘上为每条记录分配的大小为B = 4 + 20 + 1 = 25字节，这样我们就可以计算这个表分块因数bfr = (B/R) = 1024/25 = 40， 也就是说，磁盘上的单位数据块上保存着40条记录，那么我们就可以得出这整个表所需要的数据块就是N =  (R/bfr) = 10000000/40 = 250000。</p>
-<p>1、使用id字段查找时的情况： 由于id字段是线性的(作为表的主键)，需要访问 N / 2 = 125000个数据块才能找到目标，但是这个字段是经过排序的，所以可以使用二分查找的方法，所以这样平均的访问log2 250000 = 17.9 = 18  个块，这很显然，是对数据库<br>2、使用name字段查找的情况：<br>由于name字段是为经过排序的，因此不可能使用二分查找，并且这个字段的值也不是唯一的，所以数据库要从表的开头查找到尾，即要访问 N = 250000个数据块。</p>
-<p>所以，通过这个比较得知，包含索引的查询效率是更高的，那数据库性能就可以得到很好的提升。</p>
-<p>如果一条索引记录只包含索引字段和一个指向原始记录的指针，那么这条记录肯定要比他所指向的包含更多的记录要更小，也就是所，索引本身占用的磁盘空间比原来的表更小，因此需要遍历的数据块也不搜索原来的表更少。如果下，以name字段建立索引的表模式:</p>
-<pre><code>字段名          数据类型            在磁盘上的大小
-name            char(20)            20字节
-记录指针         指针类型             4字节
-</code></pre><h4 id="分析示例二"><a href="#分析示例二" class="headerlink" title="分析示例二"></a>分析示例二</h4><p>数据库中有 r = 1000 000条记录，每条索引记录要占用 R = 24字节的空间大小，那么同样适用默认的数据块大小 B = 1024字节。 那么索引的分块因数就是bfr = (B/R) = 1024 / 24 = 5。最终建立索引所生成的表的大小为 N = (r / bfr) = 1000000 /5  = 2500000个数据块。</p>
-<p>现在，再搜索name字段就可以使用索引来提高性能，对索引使用二分查找，需要分为log2 2500000 = 18 个数据块，在加上为找到实际记录的地址还要访问一个数据块，总共要访问18 + 1 = 19 个数据块，这个与之前的250000 个数据块相比，是在是差别太大了。</p>
-<h3 id="4-什么时候用索引"><a href="#4-什么时候用索引" class="headerlink" title="4. 什么时候用索引"></a>4. 什么时候用索引</h3><p>创建索引要额外占用磁盘空间（比如，上面例子中要额外占用277 778个数据块），建立的索引太多可能导致磁盘空间不足。因此，在建立索引时，一定要慎重选择正确的字段。</p>
-<p>由于索引只能提高搜索记录中某个匹配字段的速度，因此在执行插入和删除操作的情况下，仅为输出结果而为字段建立索引，就纯粹是浪费磁盘空间和处理时间了；这种情况下不用建立索引。另外，由于二分查找的原因，数据的基数性（cardinality）或唯一性也非常重要。对基数性为2的字段建立索引，会将数据一分为二，而对基数性为1000的字段，则同样会返回大约1000条记录。在这么低的基数性下，索引的效率将减低至线性查找的水平，而查询优化器会在基数性小于记录数的30%时放弃索引，实际上等于索引纯粹只会浪费空间。</p>
-<pre><code>查询优化器的原理
-
-查询优化中最核心的问题就是精确估算不同查询计划的成本。优化器在估算查询计划的成本时，会使用一个数学模型，该模型又依赖于对每个查询计划中涉及的最大数据量的基数性（或者叫重数）的估算。而对基数性的估算又依赖于对查询中谓词选择因数（selection factor of predicates）的估算。过去，数据库系统在估算选择性时，要使用每个字段中值的分布情况的详尽统计信息，比如直方图。这种技术对于估算孤立谓词的选择符效果很好。然而，很多查询的谓词是相互关联的，例如 select count(*) from R where R.make=&apos;Honda&apos; and R.model=&apos;Accord&apos;。查询谓词经常会高度关联（比如，model=&apos;Accord&apos;的前提条件是make=&apos;Honda&apos;），而估计这种关联的选择性非常困难。查询优化器之所以会选择低劣的查询计划，一方面是因为对基数性估算不准，另一方面就是因为遗漏了很多关联性。而这也是为什么数据库管理员应该经常更新数据库统计信息（特别是在重要的数据加载和卸载之后）的原因。（译自维基百科：http://en.wikipedia.org/wiki/Query_optimizer。）
-</code></pre><h3 id="5-索引优缺点"><a href="#5-索引优缺点" class="headerlink" title="5. 索引优缺点"></a>5. 索引优缺点</h3><h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><ul>
-<li>快速存取数据，减少磁盘的I/O操作</li>
-<li>保证数据记录的唯一性</li>
-<li>实现表与表之间的参照完整性</li>
-<li>在是用order by、group by子句进行数据检索是。利用索引可以减少排序和分组时间</li>
-</ul>
-<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><ul>
-<li>索引创建太多查询的效率反而降低</li>
-<li>索引创建太多导致数据库和系统资源浪费太多，性能下降。</li>
-</ul>
-
+        
       
     </div>
 
@@ -387,9 +353,9 @@ name            char(20)            20字节
       
         <div class="post-tags">
           
-            <a href="/tags/数据库/" rel="tag">#数据库</a>
+            <a href="/tags/hibernate/" rel="tag">#hibernate</a>
           
-            <a href="/tags/索引/" rel="tag">#索引</a>
+            <a href="/tags/Java/" rel="tag">#Java</a>
           
         </div>
       
@@ -398,17 +364,13 @@ name            char(20)            20字节
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/08/30/MySQL数据库操作基本语法/" rel="next" title="MySQL数据库操作基本语法">
-                <i class="fa fa-chevron-left"></i> MySQL数据库操作基本语法
+              <a href="/2016/11/04/hibernate框架——关系操作(三)/" rel="next" title="hibernate框架——关系操作(三)">
+                <i class="fa fa-chevron-left"></i> hibernate框架——关系操作(三)
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/09/02/Android控件CheckBox中出现Error-inflating-class-android-widget-CheckBox问题解决/" rel="prev" title="Android控件CheckBox中出现Error inflating class android.widget.CheckBox问题解决">
-                Android控件CheckBox中出现Error inflating class android.widget.CheckBox问题解决 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -434,8 +396,8 @@ name            char(20)            20字节
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/09/02/数据库索引的工作原理/"
-           data-title="数据库索引的工作原理" data-url="http://yoursite.com/2016/09/02/数据库索引的工作原理/">
+      <div class="ds-thread" data-thread-key="2016/11/05/Hibernate框架——二级缓存、Hql语句(四)/"
+           data-title="Hibernate框架——二级缓存、Hql语句" data-url="http://yoursite.com/2016/11/05/Hibernate框架——二级缓存、Hql语句(四)/">
       </div>
     
   </div>
@@ -564,7 +526,7 @@ name            char(20)            20字节
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-为什么需要索引"><span class="nav-number">1.</span> <span class="nav-text">1. 为什么需要索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-什么是索引"><span class="nav-number">2.</span> <span class="nav-text">2.  什么是索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-索引的原理"><span class="nav-number">3.</span> <span class="nav-text">3. 索引的原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#分析示例一"><span class="nav-number">3.1.</span> <span class="nav-text">分析示例一</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分析示例二"><span class="nav-number">3.2.</span> <span class="nav-text">分析示例二</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-什么时候用索引"><span class="nav-number">4.</span> <span class="nav-text">4. 什么时候用索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-索引优缺点"><span class="nav-number">5.</span> <span class="nav-text">5. 索引优缺点</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#优点"><span class="nav-number">5.1.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#缺点"><span class="nav-number">5.2.</span> <span class="nav-text">缺点</span></a></li></ol></li></ol></div>
+              <p class="post-toc-empty">此文章未包含目录</p>
             
           </div>
         </section>
