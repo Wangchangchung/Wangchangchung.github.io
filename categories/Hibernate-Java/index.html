@@ -87,7 +87,7 @@
 <meta name="description" content="黑夜给了我黑色的眼睛,我却用它寻找光明.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Charse Wan's Blog">
-<meta property="og:url" content="http://yoursite.com/categories/Hibernate-Java/index.html">
+<meta property="og:url" content="http://yoursite.com/categories/hibernate-Java/index.html">
 <meta property="og:site_name" content="Charse Wan's Blog">
 <meta property="og:description" content="黑夜给了我黑色的眼睛,我却用它寻找光明.">
 <meta name="twitter:card" content="summary">
@@ -113,9 +113,9 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/categories/Hibernate-Java/"/>
+  <link rel="canonical" href="http://yoursite.com/categories/hibernate-Java/"/>
 
-  <title> 分类: Hibernate Java | Charse Wan's Blog </title>
+  <title> 分类: hibernate Java | Charse Wan's Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -237,7 +237,7 @@
   <section id="posts" class="posts-collapse">
     <div class="collection-title">
       <h2 >
-        Hibernate Java
+        hibernate Java
         <small>分类</small>
       </h2>
     </div>
@@ -250,9 +250,9 @@
 
       <h1 class="post-title">
         
-            <a class="post-title-link" href="/2016/10/05/Hibernate框架——基本操作(一)/" itemprop="url">
+            <a class="post-title-link" href="/2016/11/05/Hibernate框架——二级缓存、Hql语句(四)/" itemprop="url">
               
-                <span itemprop="name">Hibernate框架——基本操作(一)</span>
+                <span itemprop="name">Hibernate框架——二级缓存、Hql语句</span>
               
             </a>
         
@@ -260,9 +260,65 @@
 
       <div class="post-meta">
         <time class="post-time" itemprop="dateCreated"
-              datetime="2016-10-05T19:36:02+08:00"
-              content="2016-10-05" >
-          10-05
+              datetime="2016-11-05T15:09:42+08:00"
+              content="2016-11-05" >
+          11-05
+        </time>
+      </div>
+
+    </header>
+  </article>
+
+
+    
+      
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <h1 class="post-title">
+        
+            <a class="post-title-link" href="/2016/11/04/hibernate框架——关系操作(三)/" itemprop="url">
+              
+                <span itemprop="name">hibernate框架——关系操作(三)</span>
+              
+            </a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated"
+              datetime="2016-11-04T20:20:44+08:00"
+              content="2016-11-04" >
+          11-04
+        </time>
+      </div>
+
+    </header>
+  </article>
+
+
+    
+      
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <h1 class="post-title">
+        
+            <a class="post-title-link" href="/2016/11/01/Hibernate框架——对象状态(二)/" itemprop="url">
+              
+                <span itemprop="name">Hibernate框架——对象状态、缓存(二)</span>
+              
+            </a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated"
+              datetime="2016-11-01T10:20:09+08:00"
+              content="2016-11-01" >
+          11-01
         </time>
       </div>
 
@@ -600,56 +656,6 @@
               success: function(counter) {
                 var $element = $(document.getElementById(url));
                 $element.find('.leancloud-visitors-count').text(counter.get('time'));
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
-          } else {
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("title", title);
-            newcounter.set("url", url);
-            newcounter.set("time", 1);
-            newcounter.save(null, {
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    $(function() {
-      var Counter = AV.Object.extend("Counter");
-      if ($('.leancloud_visitors').length == 1) {
-        addCount(Counter);
-      } else if ($('.post-title-link').length > 1) {
-        showTime(Counter);
-      }
-    });
-  </script>
-
-
-
-  
-
-</body>
-</html>
-;
               },
               error: function(counter, error) {
                 console.log('Failed to save Visitor num, with error message: ' + error.message);
