@@ -258,6 +258,137 @@
             
               
                 
+                <a class="post-title-link" href="/2016/08/20/HotSpot的垃圾收集机制算法实现/" itemprop="url">
+                  HotSpot的垃圾收集机制算法实现
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-20T21:37:57+08:00" content="2016-08-20">
+              2016-08-20
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/20/HotSpot的垃圾收集机制算法实现/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/20/HotSpot的垃圾收集机制算法实现/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/08/20/HotSpot的垃圾收集机制算法实现/" class="leancloud_visitors" data-flag-title="HotSpot的垃圾收集机制算法实现">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="1-枚举根节点"><a href="#1-枚举根节点" class="headerlink" title="1.  枚举根节点"></a>1.  枚举根节点</h3><p>从可达性分析中从GC Rooots节点找引用链这个操作为例，可作为GC Roots的节点主要在全局的引用(例如常量和静态属性分)与执行上下文(例如栈帧中的本地变量表)中，现在很多应用仅仅方法区就有数百兆，如果要逐个检查这里面的引用，那么必然会消耗很多时间。<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/08/20/HotSpot的垃圾收集机制算法实现/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/08/19/Java垃圾收集算法/" itemprop="url">
                   Java垃圾收集算法
                 </a>
@@ -600,7 +731,7 @@
           
             <div class="post-gallery-row">
               <a class="post-gallery-img fancybox"
-                 href="/picture/JVM_Run_Data_Area.png" rel="gallery_civ4zkwa50011lkcnd9zextq4"
+                 href="/picture/JVM_Run_Data_Area.png" rel="gallery_civ86oq8l002frgcnwtjdtkii"
                  itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
                 <img src="/picture/JVM_Run_Data_Area.png" itemprop="contentUrl"/>
               </a>
@@ -618,153 +749,6 @@
 <p>对于Java程序员来说，在虚拟机自动的内存管理机制的帮助下，不用再为内存额分配与回收而操心了，但是，把内存的控制权交给Java虚拟机后，一旦出现内存溢出和泄漏的问题，我们如果不知道如何了解虚拟机怎么使用内存，那么排查错误将会成为一项异常艰难的工作。<br>
           <div class="post-more-link text-center">
             <a class="btn" href="/2016/08/10/Java内存区域/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/08/09/字节码文件-Java虚拟机的平台无关性/" itemprop="url">
-                  字节码文件--Java虚拟机的平台无关性
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-08-09T19:47:18+08:00" content="2016-08-09">
-              2016-08-09
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/08/09/字节码文件-Java虚拟机的平台无关性/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/09/字节码文件-Java虚拟机的平台无关性/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-             <span id="/2016/08/09/字节码文件-Java虚拟机的平台无关性/" class="leancloud_visitors" data-flag-title="字节码文件--Java虚拟机的平台无关性">
-               &nbsp; | &nbsp;
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               <span class="post-meta-item-text">阅读次数 </span>
-               <span class="leancloud-visitors-count"></span>
-              </span>
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-        <div class="post-gallery" itemscope itemtype="http://schema.org/ImageGallery">
-          
-          
-            <div class="post-gallery-row">
-              <a class="post-gallery-img fancybox"
-                 href="/picture/1.jpg" rel="gallery_civ4zkwey002flkcnkctzk1lp"
-                 itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
-                <img src="/picture/1.jpg" itemprop="contentUrl"/>
-              </a>
-            
-          
-
-          
-          </div>
-        </div>
-      
-
-      
-        
-          <p>代码编译的结果从本地机器码转变为字节码，是存储格式发展的一小步，却是编程语言的一大步。<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/08/09/字节码文件-Java虚拟机的平台无关性/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -839,7 +823,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-count">18</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -847,7 +831,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -856,7 +840,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-count">21</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
