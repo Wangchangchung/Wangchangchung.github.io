@@ -92,7 +92,7 @@
 <meta property="og:description" content="1.垃圾收集的历史我们谈论起垃圾收集(Garbage Collection, 也就是常说的GC)，大部分的人都把这项技术当做Java语言的伴生产物，而且有很大一部分的人认为Java的垃圾收集机制是不能够完全做好”垃圾”的收集工作。这个对Java垃圾收集机制没有很好了解的人，是会有这样的误解。事实上是，GC的历史比Java久远">
 <meta property="og:image" content="http://yoursite.com/picture/CanFrenSunfa.png">
 <meta property="og:image" content="http://yoursite.com/picture/SaveSelf.png">
-<meta property="og:updated_time" content="2016-08-20T08:27:30.000Z">
+<meta property="og:updated_time" content="2016-11-14T09:16:29.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java的垃圾收集机制">
 <meta name="twitter:description" content="1.垃圾收集的历史我们谈论起垃圾收集(Garbage Collection, 也就是常说的GC)，大部分的人都把这项技术当做Java语言的伴生产物，而且有很大一部分的人认为Java的垃圾收集机制是不能够完全做好”垃圾”的收集工作。这个对Java垃圾收集机制没有很好了解的人，是会有这样的误解。事实上是，GC的历史比Java久远">
@@ -460,7 +460,7 @@ public class FinalizeEscapeGC {
 </ul>
 <p>虚拟机可以对满足上述要求的无用类进行回收这里说的仅仅是”可以”，而不是和对象一样，不使用了就必然会回收。是否对类进行回收，HotSpot虚拟机提供了-Xnoclassgc参数进行控制，还可以使用-verbose:class以及-XX:+TraceClassLoading、-XX：+TraceClassUnLoading查看类加载写卸载信息，其中-verbose:calss和-XX:+TraceClassLoading可以在Product班的虚拟机中使用，-XX:+TraceClassUnLoading参数需要FastDebug版的虚拟机支持。</p>
 <p>在大量使用反射、动态代理、GCLib等ByteCode框架、动态生成JSP以及OSGi这类频繁自定义ClassLoader的场景都需要虚拟机具备类卸载的功能，以保证永久代不会溢出。</p>
-<p>以上就是自己阅读《深入理解Java虚拟机的额读书笔记》，敬请期待更多关于Java虚拟机的知识</p>
+<p>以上就是自己阅读《深入理解Java虚拟机》的读书笔记，敬请期待更多关于Java虚拟机的知识</p>
 
       
     </div>
