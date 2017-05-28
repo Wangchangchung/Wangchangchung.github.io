@@ -1,0 +1,856 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java,Java源码,ArrayList," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="ArrayList  ArrayList是我们经常使用的一个类了，是属于List接口的那一块,那么，我们就来看这个类的源码吧！ ArrayList签名12public class ArrayList&amp;lt;E&amp;gt; extends AbstractList&amp;lt;E&amp;gt;       implements List&amp;lt;E&amp;gt;, RandomAccess, Cloneable, java">
+<meta name="keywords" content="Java,Java源码,ArrayList">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java常用类源码——ArrayList源码解析">
+<meta property="og:url" content="http://yoursite.com/2016/11/20/Java常用类源码——ArrayList源码解析/index.html">
+<meta property="og:site_name" content="Charse&#39;s Blog">
+<meta property="og:description" content="ArrayList  ArrayList是我们经常使用的一个类了，是属于List接口的那一块,那么，我们就来看这个类的源码吧！ ArrayList签名12public class ArrayList&amp;lt;E&amp;gt; extends AbstractList&amp;lt;E&amp;gt;       implements List&amp;lt;E&amp;gt;, RandomAccess, Cloneable, java">
+<meta property="og:updated_time" content="2017-03-12T02:32:28.383Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java常用类源码——ArrayList源码解析">
+<meta name="twitter:description" content="ArrayList  ArrayList是我们经常使用的一个类了，是属于List接口的那一块,那么，我们就来看这个类的源码吧！ ArrayList签名12public class ArrayList&amp;lt;E&amp;gt; extends AbstractList&amp;lt;E&amp;gt;       implements List&amp;lt;E&amp;gt;, RandomAccess, Cloneable, java">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/11/20/Java常用类源码——ArrayList源码解析/"/>
+
+
+
+
+
+  <title>Java常用类源码——ArrayList源码解析 | Charse's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Charse's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/20/Java常用类源码——ArrayList源码解析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charse">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Charse's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java常用类源码——ArrayList源码解析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-11-20T16:47:45+08:00">
+                2016-11-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="ArrayList"><a href="#ArrayList" class="headerlink" title="ArrayList"></a><strong>ArrayList</strong></h1><p>  ArrayList是我们经常使用的一个类了，是属于List接口的那一块,那么，我们就来看这个类的源码吧！</p>
+<h2 id="ArrayList签名"><a href="#ArrayList签名" class="headerlink" title="ArrayList签名"></a><strong>ArrayList签名</strong></h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ArrayList</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">AbstractList</span>&lt;<span class="title">E</span>&gt;</span></div><div class="line">       <span class="keyword">implements</span> <span class="title">List</span>&lt;<span class="title">E</span>&gt;, <span class="title">RandomAccess</span>, <span class="title">Cloneable</span>, <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span></div></pre></td></tr></table></figure>
+<p>从上面我们知道ArrayList是实现了List、RandomAccess ，Cloneable，Serializable接口的一个类。<br><a id="more"></a></p>
+<p>那么它的成员属性有哪些呢？如下的源码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 默认初始化对的容量是10</span></div><div class="line"> <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_CAPACITY = <span class="number">10</span>;</div><div class="line"> </div><div class="line"> <span class="comment">// 当初始化容量为0 时，构造一个这样的空的Object类型的数组，下面的构造方法中会有提到</span></div><div class="line">   <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object[] EMPTY_ELEMENTDATA = &#123;&#125;;</div><div class="line"> <span class="comment">/**</span></div><div class="line">     * Shared empty array instance used for default sized empty instances. We</div><div class="line">     * distinguish this from EMPTY_ELEMENTDATA to know how much to inflate when</div><div class="line">     * first element is added.</div><div class="line">     */</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object[] DEFAULTCAPACITY_EMPTY_ELEMENTDATA = &#123;&#125;;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * The array buffer into which the elements of the ArrayList are stored.</div><div class="line">     * The capacity of the ArrayList is the length of this array buffer. Any</div><div class="line">     * empty ArrayList with elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA</div><div class="line">     * will be expanded to DEFAULT_CAPACITY when the first element is added.</div><div class="line">     */</div><div class="line">     <span class="comment">//真正存储元素的容器，就是一个Object类型的数组，当</span></div><div class="line">    <span class="keyword">transient</span> Object[] elementData; <span class="comment">// non-private to simplify nested class access</span></div><div class="line">    <span class="comment">// 标识数组的大小</span></div><div class="line">     <span class="keyword">private</span> <span class="keyword">int</span> size；</div></pre></td></tr></table></figure></p>
+<h2 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a><strong>构造函数</strong></h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">    <span class="comment">/**</span></div><div class="line">     * Constructs an empty list with the specified initial capacity.</div><div class="line">     *</div><div class="line">     * <span class="doctag">@param</span>  initialCapacity  the initial capacity of the list</div><div class="line">     * <span class="doctag">@throws</span> IllegalArgumentException if the specified initial capacity</div><div class="line">     *         is negative</div><div class="line">     */</div><div class="line">     <span class="comment">// 指定容量大小的构造函数</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ArrayList</span><span class="params">(<span class="keyword">int</span> initialCapacity)</span> </span>&#123;</div><div class="line">        <span class="comment">// 大于0的时候创建新的数组对象</span></div><div class="line">        <span class="keyword">if</span> (initialCapacity &gt; <span class="number">0</span>) &#123;</div><div class="line">            <span class="keyword">this</span>.elementData = <span class="keyword">new</span> Object[initialCapacity];</div><div class="line">            <span class="comment">// 指定大小为0 的时候，引用一个空数组</span></div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (initialCapacity == <span class="number">0</span>) &#123;</div><div class="line">            <span class="keyword">this</span>.elementData = EMPTY_ELEMENTDATA;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Illegal Capacity: "</span>+</div><div class="line">                                               initialCapacity);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Constructs an empty list with an initial capacity of ten.</div><div class="line">     */</div><div class="line">     <span class="comment">//当没有进行初始化容量大小的时候，将引用默认的空数组</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ArrayList</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.elementData = DEFAULTCAPACITY_EMPTY_ELEMENTDATA;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line"><span class="comment">//传入一个集合的时候</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="title">ArrayList</span><span class="params">(Collection&lt;? extends E&gt; c)</span> </span>&#123;</div><div class="line">        <span class="comment">//将集合转变成一个数组</span></div><div class="line">        elementData = c.toArray();</div><div class="line">        <span class="keyword">if</span> ((size = elementData.length) != <span class="number">0</span>) &#123;</div><div class="line">            <span class="comment">// c.toArray might (incorrectly) not return Object[] (see 6260652)</span></div><div class="line">            <span class="keyword">if</span> (elementData.getClass() != Object[].class)</div><div class="line">                elementData = Arrays.copyOf(elementData, size, Object[].class);</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="comment">// 如果集合为空的话，将用空的数组进行代替</span></div><div class="line">            <span class="comment">// replace with empty array.</span></div><div class="line">            <span class="keyword">this</span>.elementData = EMPTY_ELEMENTDATA;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>在利用Collection来构造的时候，有一个确认对象类型的检验，如果集合中的对象不为Object类型，那么就利用Array类的静态方法进行拷贝，这个给出的注释是调用toArray()方法时可能出现问题。看来API开发人员想的还是比较的细致的。当转换的数组为空的时候，ArrayList并没有使用转换的空结果，而是依然使用自己构造的空数组。</p>
+<h2 id="主要方法"><a href="#主要方法" class="headerlink" title="主要方法"></a><strong>主要方法</strong></h2><h3 id="Add"><a href="#Add" class="headerlink" title="Add()"></a><strong>Add()</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">    * Appends the specified element to the end of this list.</div><div class="line">    *</div><div class="line">    * <span class="doctag">@param</span> e element to be appended to this list</div><div class="line">    * <span class="doctag">@return</span> &lt;tt&gt;true&lt;/tt&gt; (as specified by &#123;<span class="doctag">@link</span> Collection#add&#125;)</div><div class="line">    */</div><div class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span> </span>&#123;</div><div class="line">       ensureCapacityInternal(size + <span class="number">1</span>);  <span class="comment">// Increments modCount!!</span></div><div class="line">       elementData[size++] = e;</div><div class="line">       <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<p><strong>ArrayList的添加元素，是添加到数组的末尾的，并且是永远返回一个true, 这是说明这个向容器中添加的时候是永远不会出现错误的了哦！</strong><br>再来看add（）方法中的<code>ensureCapacityInternal</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">ensureCapacityInternal</span><span class="params">(<span class="keyword">int</span> minCapacity)</span> </span>&#123;</div><div class="line">       <span class="keyword">if</span> (elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA) &#123;</div><div class="line">           <span class="comment">//将默认的容量大小和向里面再添加一个元素是的大小进行比较，选择其中较大的。</span></div><div class="line">           minCapacity = Math.max(DEFAULT_CAPACITY, minCapacity);</div><div class="line">       &#125;</div><div class="line">       ensureExplicitCapacity(minCapacity);</div><div class="line">   &#125;</div></pre></td></tr></table></figure></p>
+<p>这个方法是非常重要的，这里面是确保ArrayList容量能否再增加一个，那里面是怎么做的呢？ 通过上面的代码知道<code>ensureCapacityInternal</code> 这个方法中首先是判断当前的对象数组是不是默认的空数组，如果是的话，就在默认容量（10）和需要的容量中取一个最大值，然后把得到的这个值传递给下一个函数<code>ensureExplicitCapacity</code>,所以在这里就可以解答上面 <code>transient Object[] elementData</code>上面的解释了，在创建一个空TreeMap，如果使用的默认的构造方法，那么elementData就是 <code>DEFAULTCAPACITY_EMPTY_ELEMENTDATA</code>,当首次插入对象的时候，最大值的时候一定是10，实际上就相当于构造了一个长度为10的对象的数组。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">ensureExplicitCapacity</span><span class="params">(<span class="keyword">int</span> minCapacity)</span> </span>&#123;</div><div class="line">       modCount++;</div><div class="line">       <span class="comment">// overflow-conscious code</span></div><div class="line">       <span class="keyword">if</span> (minCapacity - elementData.length &gt; <span class="number">0</span>)</div><div class="line">           grow(minCapacity);</div><div class="line">   &#125;</div></pre></td></tr></table></figure></p>
+<p><code>ensureExplicitCapacity</code>这个方法第一行先不管是干什么的，看后面的，就是判断需要的容量和现在用来存储的对象的数组(elementData)哪个更大，如果现在已经有的不够大了，那就扩容！<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * The maximum size of array to allocate.</div><div class="line"> * Some VMs reserve some header words in an array.</div><div class="line"> * Attempts to allocate larger arrays may result in</div><div class="line"> * OutOfMemoryError: Requested array size exceeds VM limit</div><div class="line"> */</div><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAX_ARRAY_SIZE = Integer.MAX_VALUE - <span class="number">8</span>;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Increases the capacity to ensure that it can hold at least the</div><div class="line"> * number of elements specified by the minimum capacity argument.</div><div class="line"> *</div><div class="line"> * <span class="doctag">@param</span> minCapacity the desired minimum capacity</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">grow</span><span class="params">(<span class="keyword">int</span> minCapacity)</span> </span>&#123;</div><div class="line">    <span class="comment">// overflow-conscious code</span></div><div class="line">    <span class="keyword">int</span> oldCapacity = elementData.length;</div><div class="line">    <span class="comment">// 进行扩容  是的变为原来的1.5倍</span></div><div class="line">    <span class="keyword">int</span> newCapacity = oldCapacity + (oldCapacity &gt;&gt; <span class="number">1</span>);</div><div class="line">    <span class="keyword">if</span> (newCapacity - minCapacity &lt; <span class="number">0</span>)</div><div class="line">        newCapacity = minCapacity;</div><div class="line">    <span class="keyword">if</span> (newCapacity - MAX_ARRAY_SIZE &gt; <span class="number">0</span>)</div><div class="line">        newCapacity = hugeCapacity(minCapacity);</div><div class="line">    <span class="comment">// minCapacity is usually close to size, so this is a win:</span></div><div class="line">    elementData = Arrays.copyOf(elementData, newCapacity);</div><div class="line">&#125;</div><div class="line"></div><div class="line">   <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">hugeCapacity</span><span class="params">(<span class="keyword">int</span> minCapacity)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (minCapacity &lt; <span class="number">0</span>) <span class="comment">// overflow</span></div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> OutOfMemoryError();</div><div class="line">    <span class="keyword">return</span> (minCapacity &gt; MAX_ARRAY_SIZE) ?</div><div class="line">        Integer.MAX_VALUE :</div><div class="line">        MAX_ARRAY_SIZE;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>上面的这段代码进行了扩容的操作，可以看出扩容是通过<code>newCapacity = oldCapacity + (oldCapacity &gt;&gt; 1);</code> 这段代码实现的，这段代码实际是上就是将原来的容量变为原来的1.5倍。</strong></p>
+<p>但是要对扩容后的容量进行检验，共有两种可能：</p>
+<ol>
+<li>得到的容量比需要的容量小，为什么会出现这样的情况呢，溢出了呗</li>
+<li>得到的容量超过了规定的最大容量，进入<code>hugeCapacity</code>如果需要的容量小于0，抛出内存溢出异常，如果需要的容量比规定的最大容量大，那么最大容量只能是 <code>Integer.MAX_VALUE</code>.</li>
+</ol>
+<p>最后将elementData通过Array的复制拷贝方法进行了扩容。以上就是整个添加新的元素的过程。从这个过程可以看出，ArrayList也并不是无限大的，他指定了最大容量是<code>Interger.MAX_VALUE-8</code>，再大的话，实际最大只能是<code>Integer.MAX_VALUE</code>这个值了。</p>
+<h3 id="add-int-E"><a href="#add-int-E" class="headerlink" title="add(int, E)"></a><strong>add(int, E)</strong></h3><p>这个方法是在指定的位置上插入元素element<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">   * Inserts the specified element at the specified position in this</div><div class="line">   * list. Shifts the element currently at that position (if any) and</div><div class="line">   * any subsequent elements to the right (adds one to their indices).</div><div class="line">   *</div><div class="line">   * <span class="doctag">@param</span> index index at which the specified element is to be inserted</div><div class="line">   * <span class="doctag">@param</span> element element to be inserted</div><div class="line">   * <span class="doctag">@throws</span> IndexOutOfBoundsException &#123;<span class="doctag">@inheritDoc</span>&#125;</div><div class="line">   */</div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> index, E element)</span> </span>&#123;</div><div class="line">      <span class="comment">//检查边界</span></div><div class="line">      rangeCheckForAdd(index);</div><div class="line">      ensureCapacityInternal(size + <span class="number">1</span>);  <span class="comment">// Increments modCount!!</span></div><div class="line">      System.arraycopy(elementData, index, elementData, index + <span class="number">1</span>,</div><div class="line">                       size - index);</div><div class="line">      elementData[index] = element;</div><div class="line">      size++;</div><div class="line">  &#125;</div><div class="line">     <span class="comment">/**</span></div><div class="line">   * A version of rangeCheck used by add and addAll.</div><div class="line">   */</div><div class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">rangeCheckForAdd</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</div><div class="line">      <span class="keyword">if</span> (index &gt; size || index &lt; <span class="number">0</span>)</div><div class="line">          <span class="keyword">throw</span> <span class="keyword">new</span> IndexOutOfBoundsException(outOfBoundsMsg(index));</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<p>首先进行的是合法性的检查，然后再进行容量的检验并扩容。<br>第三行是进行元素的复制，复制的方法是一个native方法，其实原理就是将原来index位置开始的元素，依次向后移动一位，通过openjdk,可以知道是代用了C语言和C++的代码。并且<code>System.arraycopy()</code>方法使用的是C语言中的<code>--------------------</code> 方法。这个方法是比较高效的，所以在Java的源码中，有拷贝的地方几乎都是有它的身影的。add（）方法最后将元素放入指定的位置中，元素的数量进行增加。</p>
+<h3 id="Remove方法"><a href="#Remove方法" class="headerlink" title="Remove方法"></a><strong>Remove方法</strong></h3><h4 id="remove-int-index"><a href="#remove-int-index" class="headerlink" title="remove(int index)"></a><strong>remove(int index)</strong></h4><p>从指定的位置删除元素，实现原理就是把index后面的数据都向前移动，时间复杂度为O(n)<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">    * Removes the element at the specified position in this list.</div><div class="line">    * Shifts any subsequent elements to the left (subtracts one from their</div><div class="line">    * indices).</div><div class="line">    *</div><div class="line">    * <span class="doctag">@param</span> index the index of the element to be removed</div><div class="line">    * <span class="doctag">@return</span> the element that was removed from the list</div><div class="line">    * <span class="doctag">@throws</span> IndexOutOfBoundsException &#123;<span class="doctag">@inheritDoc</span>&#125;</div><div class="line">    */</div><div class="line">   <span class="function"><span class="keyword">public</span> E <span class="title">remove</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</div><div class="line">       <span class="comment">//边界检查</span></div><div class="line">       rangeCheck(index);</div><div class="line">       modCount++;</div><div class="line">       E oldValue = elementData(index);</div><div class="line">       <span class="keyword">int</span> numMoved = size - index - <span class="number">1</span>;</div><div class="line">       <span class="keyword">if</span> (numMoved &gt; <span class="number">0</span>)</div><div class="line">           System.arraycopy(elementData, index+<span class="number">1</span>, elementData, index,</div><div class="line">                            numMoved);</div><div class="line">       elementData[--size] = <span class="keyword">null</span>; <span class="comment">// clear to let GC do its work</span></div><div class="line">       <span class="keyword">return</span> oldValue;</div><div class="line">   &#125;</div></pre></td></tr></table></figure></p>
+<ol>
+<li>第一行就是检验index的返回，有人会问为什么不检验负数的情况。本人亲自试验了一下，如果index是负数的话，第一行是可以正确执行的，但是在elementData(index)这样地方就会抛出java.lang.ArrayIndexOutOfBoundsException: -1即 数组越界异常，其实个人觉得，如果没有第一句 检验，仍然会抛出数组越界异常。只不过多了第一行的话，抛出的异常就是java.lang.IndexOutOfBoundsException: Index: 2, Size: 2，而且会打印出错误信息。又有哪个Java程序员不喜欢看到更详细的异常信息呢？</li>
+<li>计算移动量，如果要删除的元素不是最后以一位，就要进行移动。</li>
+<li>将移动后的数组末尾赋值null。<strong>这里有一句注释，让GC去回收，这个是一种释放内存的方式。</strong>赋值为null，的确是不做任何的处理更加的有效，因为Java的垃圾回收机制是通过一些垃圾回收方法来确定对象是否回收，其中的一个算法是”可达性分析”，如果没有其他的引用，即到”Root”不可达的话，是非常容易被垃圾回收机制回收的（这里大概讲一下Java的垃圾回收机制，更详细的请看我的关于Java垃圾回收机制原理的博客）。</li>
+</ol>
+<h4 id="remove-Object-o"><a href="#remove-Object-o" class="headerlink" title="remove(Object o)"></a><strong>remove(Object o)</strong></h4><p>删除指定的元素，仅仅删除符合条件的第一个元素，如果不存在，返回false即删除失败<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">    * Removes the first occurrence of the specified element from this list,</div><div class="line">    * if it is present.  If the list does not contain the element, it is</div><div class="line">    * unchanged.  More formally, removes the element with the lowest index</div><div class="line">    * &lt;tt&gt;i&lt;/tt&gt; such that</div><div class="line">    * &lt;tt&gt;(o==null&amp;nbsp;?&amp;nbsp;get(i)==null&amp;nbsp;:&amp;nbsp;o.equals(get(i)))&lt;/tt&gt;</div><div class="line">    * (if such an element exists).  Returns &lt;tt&gt;true&lt;/tt&gt; if this list</div><div class="line">    * contained the specified element (or equivalently, if this list</div><div class="line">    * changed as a result of the call).</div><div class="line">    *</div><div class="line">    * <span class="doctag">@param</span> o element to be removed from this list, if present</div><div class="line">    * <span class="doctag">@return</span> &lt;tt&gt;true&lt;/tt&gt; if this list contained the specified element</div><div class="line">    */</div><div class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">remove</span><span class="params">(Object o)</span> </span>&#123;</div><div class="line">       <span class="keyword">if</span> (o == <span class="keyword">null</span>) &#123;</div><div class="line">           <span class="keyword">for</span> (<span class="keyword">int</span> index = <span class="number">0</span>; index &lt; size; index++)</div><div class="line">               <span class="keyword">if</span> (elementData[index] == <span class="keyword">null</span>) &#123;</div><div class="line">                   fastRemove(index);</div><div class="line">                   <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">               &#125;</div><div class="line">       &#125; <span class="keyword">else</span> &#123;</div><div class="line">           <span class="keyword">for</span> (<span class="keyword">int</span> index = <span class="number">0</span>; index &lt; size; index++)</div><div class="line">               <span class="keyword">if</span> (o.equals(elementData[index])) &#123;</div><div class="line">                   fastRemove(index);</div><div class="line">                   <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">               &#125;</div><div class="line">       &#125;</div><div class="line">       <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">   &#125;</div></pre></td></tr></table></figure></p>
+<p>分析这段代码，首先对o进行了非空处理。如果不进行这样的处理，将会引发o.equals的空指针异常。这个是非常常见的处理方式在这if else语句块中，都用了fastRemove（index） 听上去挺高大上的，快速删除的，其实看了源码就知道，很简单。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*</span></div><div class="line">   * Private remove method that skips bounds checking and does not</div><div class="line">   * return the value removed.</div><div class="line">   */</div><div class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">fastRemove</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</div><div class="line">      modCount++;</div><div class="line">      <span class="keyword">int</span> numMoved = size - index - <span class="number">1</span>;</div><div class="line">      <span class="keyword">if</span> (numMoved &gt; <span class="number">0</span>)</div><div class="line">          System.arraycopy(elementData, index+<span class="number">1</span>, elementData, index,</div><div class="line">                           numMoved);</div><div class="line">      elementData[--size] = <span class="keyword">null</span>; <span class="comment">// clear to let GC do its work</span></div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<p>这不就是remove(index)方法的后半部分吗？为何不直接调用这个方法呢？肯定是为了提交一点点效率嘛，这毕竟是Java API嘛.</p>
+<h3 id="removeAll-Collection-lt-gt-c"><a href="#removeAll-Collection-lt-gt-c" class="headerlink" title="removeAll(Collection&lt;?&gt; c)"></a><strong>removeAll(Collection&lt;?&gt; c)</strong></h3><p>在集合中，删除与Collection中元素相等的元素<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">removeAll</span><span class="params">(Collection&lt;?&gt; c)</span> </span>&#123;</div><div class="line">        Objects.requireNonNull(c);</div><div class="line">        <span class="keyword">return</span> batchRemove(c, <span class="keyword">false</span>);</div><div class="line">        &#125;</div></pre></td></tr></table></figure></p>
+<p>第一行是java1.7新出的工具类，用于检验非空的，如果为空，抛出空指针异常。<br>接下来就来看下面的这个方法:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">batchRemove</span><span class="params">(Collection&lt;?&gt; c, <span class="keyword">boolean</span> complement)</span> </span>&#123;</div><div class="line">    <span class="keyword">final</span> Object[] elementData = <span class="keyword">this</span>.elementData;</div><div class="line">    <span class="keyword">int</span> r = <span class="number">0</span>, w = <span class="number">0</span>;</div><div class="line">    <span class="keyword">boolean</span> modified = <span class="keyword">false</span>;</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="keyword">for</span> (; r &lt; size; r++)</div><div class="line">            <span class="keyword">if</span> (c.contains(elementData[r]) == complement)</div><div class="line">                elementData[w++] = elementData[r];</div><div class="line">    &#125; <span class="keyword">finally</span> &#123;</div><div class="line">        <span class="comment">// Preserve behavioral compatibility with AbstractCollection,</span></div><div class="line">        <span class="comment">// even if c.contains() throws.</span></div><div class="line">        <span class="keyword">if</span> (r != size) &#123;</div><div class="line">            System.arraycopy(elementData, r,</div><div class="line">                             elementData, w,</div><div class="line">                             size - r);</div><div class="line">            w += size - r;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (w != size) &#123;</div><div class="line">            <span class="comment">// clear to let GC do its work</span></div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = w; i &lt; size; i++)</div><div class="line">                elementData[i] = <span class="keyword">null</span>;</div><div class="line">            modCount += size - w;</div><div class="line">            size = w;</div><div class="line">            modified = <span class="keyword">true</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> modified;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>下面来分析一下这段代码。首先对集合中的对象数组进行了一次复制，然后将数组中的元素依次与collection进行对比。try{}块的结果就是得到了一个数组，数组前w位元素或与collection相同（complement=true的时候)或不同（complement=false)。<br>下面来看finally,先来看第二个if{}代码块，它的作用就是把数组中w以后的元素全部变为null值，让gc来回收。现在回到finally的第一个if中，看条件(r != size)，似乎永远不会满足这个条件吧。上面的for循环一直r++啊，可是别忘了，c.contains(elementData[r])这句话是有可能抛出异常的，如果一旦类型不匹配，就会抛出异常 进入finally中。<br>这个方法，如果没有删除任何数据，那么将会返回false。</p>
+<p>现在我们再来看return batchRemove(c,false);这行的含义吧。它指定了第二个参数为false，所以在batchRemove（）保留下来的都是与collection中不同的元素。相同的元素都被删除了。这样就达到了removeAll(Collection&lt;?&gt; c)的目的。</p>
+<h3 id="迭代器"><a href="#迭代器" class="headerlink" title="迭代器"></a><strong>迭代器</strong></h3><p>迭代器可是操作ArrayList的神器，在ArrayList内部通过内部类的形式实现了Iterator接口，完成对ArrayList的操作，下面就看源码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">    * An optimized version of AbstractList.Itr</div><div class="line">    */</div><div class="line">   private class Itr implements Iterator&lt;E&gt; &#123;</div><div class="line">       int cursor;       // index of next element to return</div><div class="line">       int lastRet = -1; // index of last element returned; -1 if no such</div><div class="line">       int expectedModCount = modCount;</div><div class="line"></div><div class="line">       public boolean hasNext() &#123;</div><div class="line">           return cursor != size;</div><div class="line">       &#125;</div><div class="line"></div><div class="line">       @SuppressWarnings(&quot;unchecked&quot;)</div><div class="line">       public E next() &#123;</div><div class="line">           checkForComodification();</div><div class="line">           int i = cursor;</div><div class="line">           if (i &gt;= size)</div><div class="line">               throw new NoSuchElementException();</div><div class="line">           Object[] elementData = ArrayList.this.elementData;</div><div class="line">           if (i &gt;= elementData.length)</div><div class="line">               throw new ConcurrentModificationException();</div><div class="line">           cursor = i + 1;</div><div class="line">           return (E) elementData[lastRet = i];</div><div class="line">       &#125;</div><div class="line"></div><div class="line">       public void remove() &#123;</div><div class="line">           if (lastRet &lt; 0)</div><div class="line">               throw new IllegalStateException();</div><div class="line">           checkForComodification();</div><div class="line"></div><div class="line">           try &#123;</div><div class="line">               ArrayList.this.remove(lastRet);</div><div class="line">               cursor = lastRet;</div><div class="line">               lastRet = -1;</div><div class="line">               expectedModCount = modCount;</div><div class="line">           &#125; catch (IndexOutOfBoundsException ex) &#123;</div><div class="line">               throw new ConcurrentModificationException();</div><div class="line">           &#125;</div><div class="line">       &#125;</div><div class="line"></div><div class="line">       @Override</div><div class="line">       @SuppressWarnings(&quot;unchecked&quot;)</div><div class="line">       public void forEachRemaining(Consumer&lt;? super E&gt; consumer) &#123;</div><div class="line">           Objects.requireNonNull(consumer);</div><div class="line">           final int size = ArrayList.this.size;</div><div class="line">           int i = cursor;</div><div class="line">           if (i &gt;= size) &#123;</div><div class="line">               return;</div><div class="line">           &#125;</div><div class="line">           final Object[] elementData = ArrayList.this.elementData;</div><div class="line">           if (i &gt;= elementData.length) &#123;</div><div class="line">               throw new ConcurrentModificationException();</div><div class="line">           &#125;</div><div class="line">           while (i != size &amp;&amp; modCount == expectedModCount) &#123;</div><div class="line">               consumer.accept((E) elementData[i++]);</div><div class="line">           &#125;</div><div class="line">           // update once at end of iteration to reduce heap write traffic</div><div class="line">           cursor = i;</div><div class="line">           lastRet = i - 1;</div><div class="line">           checkForComodification();</div><div class="line">       &#125;</div><div class="line"></div><div class="line">       final void checkForComodification() &#123;</div><div class="line">           if (modCount != expectedModCount)</div><div class="line">               throw new ConcurrentModificationException();</div><div class="line">       &#125;</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<p>这个类并不长，让我们来分析一下<br>（1） 属性<br>a  游标<br>int cursor; 我们知道iterator是始终向前走的，就是这个游标始终在++的原因<br>b 末尾标识<br> int lastRe 标识了最后一个返回的元素的索引位置，-1代表这个元素不存在<br>C 操作数标识<br> int expectedModCount = modCount;  这个非常重要，它用来校验在使用iterator期间，是否存在非Iterator的操作对ArrayList进行了修改。<br>（2）checkForComodification 方法<br>这个方法很简单，但是可以看到在这个内部类中，几乎所有方法都在调用它。它所做的工作就是校验在使用iterator期间，是否存在非Iterator的操作对ArrayList进行了修改。<br>在ArrayList中，有很多操作都修改了一个变量，modCount。每次进行操作，modCount都在++。前面一直不理解这个有什么用，在这看到了它的用意。Iterator的游标特性决定了它对ArrayList中元素在这一时刻的位置很敏感，如果当前游标在index位置，而有其他操作在index-1的位置上插入了一个元素，那么调用iterator的next()方法，返回的还是当前这个元素，这样就乱了。为了避免这个情况发生，需要在这个期间把ArrayList“锁住“。它并没有实现真正的锁，所以采用了这个校验的方式。<br>（3）next()<br>返回当前游标位置的元素，这里面第一个if判断的条件很有意思。因此游标前移，当移动到一个不存在数据的地方，它抛出了异常。而并没有返回null。这就是我们为什么在使用iterator的时候不能用（null==iterator.next())来判断的原因。而是在要每次循环开始的时候判断iterator.hasNext()。<br>（4） remove()<br>删除lastRe 所标识位置的元素。我们可以把它理解为当前元素。在try前面有一个校验，保证元素没有被改动过，要不就删错了。<br>在try{}语句块中，首先删除了lastRe标识的元素，然后让游标指向了这个位置。我们知道在删除元素以后，这个位置有了新的元素，这样再次调用next()的时候不会出现空指针异常，更不会跳过一个元素。<br>最后expectedModCount = modCount;这句相当于释放了锁。也是在表示，在我Iterator的地盘，只有我能够去修改mod，别人动了就不行！``</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ol>
+<li>ArrayList是用Object数组来实现的，所谓的动态扩容，实际上是不断的产生新的数组，然后进行复制。</li>
+<li>在使用ArrayList插入大量元素时，应该有选择的申请一个容量，而不是使用默认的容量，因为扩容是会消耗很多的时间的。</li>
+<li>ArrayList不是线程安全的，它的操作中没有使用同步的方法，如果想使用线程安全的，可以用Vector，也可以使用Collections.synchronizedList 来创建线程安全的list。</li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/path/to/wechat-reward-image" alt="Charse WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/path/to/alipay-reward-image" alt="Charse Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/Java源码/" rel="tag"># Java源码</a>
+          
+            <a href="/tags/ArrayList/" rel="tag"># ArrayList</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/11/Spring的事务架构/" rel="next" title="Spring的事务架构">
+                <i class="fa fa-chevron-left"></i> Spring的事务架构
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/11/25/Java常用类源码——TreeMap源码解析/" rel="prev" title="Java常用类源码——TreeMap源码解析">
+                Java常用类源码——TreeMap源码解析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="Charse" />
+          <p class="site-author-name" itemprop="name">Charse</p>
+           
+              <p class="site-description motion-element" itemprop="description">Stay hungry, Stay foolish.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/your-user-name" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/your-user-name" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/your-user-name" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  豆瓣
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/your-user-name" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ArrayList"><span class="nav-number">1.</span> <span class="nav-text">ArrayList</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ArrayList签名"><span class="nav-number">1.1.</span> <span class="nav-text">ArrayList签名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构造函数"><span class="nav-number">1.2.</span> <span class="nav-text">构造函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#主要方法"><span class="nav-number">1.3.</span> <span class="nav-text">主要方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Add"><span class="nav-number">1.3.1.</span> <span class="nav-text">Add()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#add-int-E"><span class="nav-number">1.3.2.</span> <span class="nav-text">add(int, E)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Remove方法"><span class="nav-number">1.3.3.</span> <span class="nav-text">Remove方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#remove-int-index"><span class="nav-number">1.3.3.1.</span> <span class="nav-text">remove(int index)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#remove-Object-o"><span class="nav-number">1.3.3.2.</span> <span class="nav-text">remove(Object o)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#removeAll-Collection-lt-gt-c"><span class="nav-number">1.3.4.</span> <span class="nav-text">removeAll(Collection<?> c)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#迭代器"><span class="nav-number">1.3.5.</span> <span class="nav-text">迭代器</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">2.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Charse</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

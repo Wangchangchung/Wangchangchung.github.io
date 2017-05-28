@@ -1,0 +1,914 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java,Java源码,TreeMap," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="网上介绍HashMap的比较多，但是介绍TreeMap的反而不是那么多，其中的原因我觉得，有两个：1、HashMap的使用场景比较多，2、是相对于HashMap来说，TreeMap所用到的数据结构更为复杂。">
+<meta name="keywords" content="Java,Java源码,TreeMap">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java常用类源码——TreeMap源码解析">
+<meta property="og:url" content="http://yoursite.com/2016/11/25/Java常用类源码——TreeMap源码解析/index.html">
+<meta property="og:site_name" content="Charse&#39;s Blog">
+<meta property="og:description" content="网上介绍HashMap的比较多，但是介绍TreeMap的反而不是那么多，其中的原因我觉得，有两个：1、HashMap的使用场景比较多，2、是相对于HashMap来说，TreeMap所用到的数据结构更为复杂。">
+<meta property="og:updated_time" content="2017-03-12T02:32:59.340Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java常用类源码——TreeMap源码解析">
+<meta name="twitter:description" content="网上介绍HashMap的比较多，但是介绍TreeMap的反而不是那么多，其中的原因我觉得，有两个：1、HashMap的使用场景比较多，2、是相对于HashMap来说，TreeMap所用到的数据结构更为复杂。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/11/25/Java常用类源码——TreeMap源码解析/"/>
+
+
+
+
+
+  <title>Java常用类源码——TreeMap源码解析 | Charse's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Charse's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/25/Java常用类源码——TreeMap源码解析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charse">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Charse's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java常用类源码——TreeMap源码解析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-11-25T17:03:50+08:00">
+                2016-11-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>网上介绍HashMap的比较多，但是介绍TreeMap的反而不是那么多，其中的原因我觉得，有两个：1、HashMap的使用场景比较多，2、是相对于HashMap来说，TreeMap所用到的数据结构更为复杂。<br><a id="more"></a></p>
+<h2 id="TreeMap的签名"><a href="#TreeMap的签名" class="headerlink" title="TreeMap的签名"></a><strong>TreeMap的签名</strong></h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TreeMap</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt;</span></div><div class="line">    <span class="keyword">extends</span> <span class="title">AbstractMap</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt;</div><div class="line">    <span class="keyword">implements</span> <span class="title">NavigableMap</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt;, <span class="title">Cloneable</span>, <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span></div></pre></td></tr></table></figure>
+<p>从上面的类的签名可以知道，相比HashMap来说，TreeMap多继承了一个接口<code>NavigableMap</code>，也就是这个接口，决定了TreeMap于HashMap的不同：</p>
+<blockquote>
+<p>HashMap的key是无序的，TreeMap的key是有序的</p>
+</blockquote>
+<h2 id="接口NavigableMap"><a href="#接口NavigableMap" class="headerlink" title="接口NavigableMap"></a><strong>接口NavigableMap</strong></h2><p>首先看下<code>NavigableMap</code>签名<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">NavigableMap</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">extends</span> <span class="title">SortedMap</span>&lt;<span class="title">K</span>, <span class="title">V</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>我们从中可以知道<code>NavigableMap</code>继承了<code>SortedMap</code>,再看SortedMap的签名</p>
+<h3 id="SortedMap"><a href="#SortedMap" class="headerlink" title="SortedMap"></a><strong>SortedMap</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">SortedMap</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">extends</span> <span class="title">Map</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>SortedMap 顾名思义可以知道，这个Map是有序的，这个顺序一般是值由<code>Comparable接口</code>提供的keys的自然序（natural ordering）,或者也可以在创建SortedMap实例时，指定一个<code>Comparator</code>来决定。当我们在用集合视角（collection views， 与HashMap一样，也是由entrySet、keySet与values方法提供）来迭代（iterate） 一个SortedMap实例时会体现出key的顺序，这里引申下关于Comparable 与Comparator 的区别</p>
+<ul>
+<li>Comparable一般表示类的自然序，比如定义一个Student类，学号为默认排序。</li>
+<li>Comparator一般表示类在某种场合下的特殊分类，需要定制化排序，比如现在想按照Student类的age来排序</li>
+</ul>
+<p>插入SortedMap中的key的类都必须继承Comparable类(或指定一个Comparator)，这样才能确定如何比较（通过k1.compareTo(k2)或者comparator.compare(k1，k2)）两个key，否则，在插入时，会经常报出ClassCastExecption的异常， 此为，SortedMap中key的顺序性应该与equals方法保持一致。也就是说k1.compareTo(k2)或comparator.compare(k1, k2)为true时，k1.equals(k2)也应该为true。</p>
+<p>介绍完了SortedMap，再来回到我们的NavigableMap上面来。 NavigableMap是JDK1.6新增的，在SortedMap的基础上，增加了一些“导航方法”（navigation methods）来返回与搜索目标最近的元素。例如下面这些方法：</p>
+<ul>
+<li>lowerEntry，返回所有比给定Map.Entry小的元素</li>
+<li>floorEntry，返回所有比给定Map.Entry小或相等的元素</li>
+<li>ceilingEntry，返回所有比给定Map.Entry大或相等的元素</li>
+<li>higherEntry，返回所有比给定Map.Entry大的元素</li>
+</ul>
+<p>我在看TreeMap中的源码的时候，我们先看一下TreeSet集合的源码:</p>
+<p>TreeSet源码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TreeSet</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">AbstractSet</span>&lt;<span class="title">E</span>&gt; </span></div><div class="line">    <span class="keyword">implements</span> <span class="title">NavigableSet</span>&lt;<span class="title">E</span>&gt;, <span class="title">Cloneable</span>, <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span></div><div class="line"> &#123; </div><div class="line">    <span class="comment">// 使用 NavigableMap 的 key 来保存 Set 集合的元素</span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">transient</span> NavigableMap&lt;E,Object&gt; m; </div><div class="line">    <span class="comment">// 使用一个 PRESENT 作为 Map 集合的所有 value。</span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object PRESENT = <span class="keyword">new</span> Object(); </div><div class="line">    <span class="comment">// 包访问权限的构造器，以指定的 NavigableMap 对象创建 Set 集合</span></div><div class="line">    TreeSet(NavigableMap&lt;E,Object&gt; m) </div><div class="line">    &#123; </div><div class="line">        <span class="keyword">this</span>.m = m; </div><div class="line">    &#125; </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TreeSet</span><span class="params">()</span>                                      <span class="comment">// ①</span></span></div><div class="line">    &#123; </div><div class="line">        <span class="comment">// 以自然排序方式创建一个新的 TreeMap，</span></div><div class="line">        <span class="comment">// 根据该 TreeSet 创建一个 TreeSet，</span></div><div class="line">        <span class="comment">// 使用该 TreeMap 的 key 来保存 Set 集合的元素</span></div><div class="line">        <span class="keyword">this</span>(<span class="keyword">new</span> TreeMap&lt;E,Object&gt;()); </div><div class="line">    &#125; </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TreeSet</span><span class="params">(Comparator&lt;? <span class="keyword">super</span> E&gt; comparator)</span>     <span class="comment">// ②</span></span></div><div class="line">    &#123; </div><div class="line">        <span class="comment">// 以定制排序方式创建一个新的 TreeMap，</span></div><div class="line">        <span class="comment">// 根据该 TreeSet 创建一个 TreeSet，</span></div><div class="line">        <span class="comment">// 使用该 TreeMap 的 key 来保存 Set 集合的元素</span></div><div class="line">        <span class="keyword">this</span>(<span class="keyword">new</span> TreeMap&lt;E,Object&gt;(comparator)); </div><div class="line">    &#125; </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TreeSet</span><span class="params">(Collection&lt;? extends E&gt; c)</span> </span></div><div class="line">    &#123; </div><div class="line">        <span class="comment">// 调用①号构造器创建一个 TreeSet，底层以 TreeMap 保存集合元素</span></div><div class="line">        <span class="keyword">this</span>(); </div><div class="line">        <span class="comment">// 向 TreeSet 中添加 Collection 集合 c 里的所有元素</span></div><div class="line">        addAll(c); </div><div class="line">    &#125; </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TreeSet</span><span class="params">(SortedSet&lt;E&gt; s)</span> </span></div><div class="line">    &#123; </div><div class="line">        <span class="comment">// 调用②号构造器创建一个 TreeSet，底层以 TreeMap 保存集合元素</span></div><div class="line">        <span class="keyword">this</span>(s.comparator()); </div><div class="line">        <span class="comment">// 向 TreeSet 中添加 SortedSet 集合 s 里的所有元素</span></div><div class="line">        addAll(s); </div><div class="line">    &#125; </div><div class="line">    <span class="comment">//TreeSet 的其他方法都只是直接调用 TreeMap 的方法来提供实现</span></div><div class="line">    ... </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">addAll</span><span class="params">(Collection&lt;? extends E&gt; c)</span> </span></div><div class="line">    &#123; </div><div class="line">        <span class="keyword">if</span> (m.size() == <span class="number">0</span> &amp;&amp; c.size() &gt; <span class="number">0</span> &amp;&amp; </div><div class="line">            c <span class="keyword">instanceof</span> SortedSet &amp;&amp; </div><div class="line">            m <span class="keyword">instanceof</span> TreeMap) </div><div class="line">        &#123; </div><div class="line">            <span class="comment">// 把 c 集合强制转换为 SortedSet 集合</span></div><div class="line">            SortedSet&lt;? extends E&gt; set = (SortedSet&lt;? extends E&gt;) c; </div><div class="line">            <span class="comment">// 把 m 集合强制转换为 TreeMap 集合</span></div><div class="line">            TreeMap&lt;E,Object&gt; map = (TreeMap&lt;E, Object&gt;) m; </div><div class="line">            Comparator&lt;? <span class="keyword">super</span> E&gt; cc = (Comparator&lt;? <span class="keyword">super</span> E&gt;) set.comparator(); </div><div class="line">            Comparator&lt;? <span class="keyword">super</span> E&gt; mc = map.comparator(); </div><div class="line">            <span class="comment">// 如果 cc 和 mc 两个 Comparator 相等</span></div><div class="line">            <span class="keyword">if</span> (cc == mc || (cc != <span class="keyword">null</span> &amp;&amp; cc.equals(mc))) </div><div class="line">            &#123; </div><div class="line">                <span class="comment">// 把 Collection 中所有元素添加成 TreeMap 集合的 key </span></div><div class="line">                map.addAllForTreeSet(set, PRESENT); </div><div class="line">                <span class="keyword">return</span> <span class="keyword">true</span>; </div><div class="line">            &#125; </div><div class="line">        &#125; </div><div class="line">        <span class="comment">// 直接调用父类的 addAll() 方法来实现</span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">super</span>.addAll(c); </div><div class="line">    &#125; </div><div class="line">    ... </div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
+<p>从上面代码可以看出，TreeSet 的 ① 号、② 号构造器的都是新建一个 TreeMap 作为实际存储 Set 元素的容器，而另外 2 个构造器则分别依赖于 ① 号和 ② 号构造器，由此可见，TreeSet 底层实际使用的存储容器就是 TreeMap。<br>与HashSet于HashMap完全类似的是， TreeSet里面绝大部分方法都是直接调用TreeMap的方法来实现的，这一点读者可以自行参阅TreeSet的源码，此处就不再给出了。</p>
+<h2 id="设计理念"><a href="#设计理念" class="headerlink" title="设计理念"></a><strong>设计理念</strong></h2><h3 id="红黑树"><a href="#红黑树" class="headerlink" title="红黑树"></a><strong>红黑树</strong></h3><p>TreeMap是用红黑树作为基础实现的，红黑树是一种二叉搜索树，我们想回忆一下二叉搜索树的一些性质。<br><strong>二叉搜索树</strong></p>
+<blockquote>
+<p>二叉搜索树的关键特点: 左子树的值小于根节点，右子树的值大于根节点</p>
+</blockquote>
+<p>二叉搜索树的优势在于：</p>
+<ol>
+<li>每进行一次判断就能将问题的规模减少一半。</li>
+<li>所以如果二叉搜索树是平衡的话，查找元素的时间复杂度为log(n) ,也就是树的高度。</li>
+</ol>
+<p>如果说二叉搜索树将问题规模减少了一半，那么三叉搜索树不就是将问题规模减少了三分之二，这个不是更好吗？以此类推，我们还可以有四叉搜索树，五叉搜索书…..对于更一般的情况:</p>
+<blockquote>
+<p>n个元素，K叉树搜索树的K为多少是效率是最好的？ K=2时吗？</p>
+</blockquote>
+<p>K叉搜索树<br>如果大家按照我上面的分析，很可能陷入一个误区，就是</p>
+<blockquote>
+<p>三叉搜索树在将问题规模减少三分之二时，所需要比较操作的次数是两次(二叉搜索树再将问题规模减少一半时，只需要一次比较操作)</p>
+</blockquote>
+<p>我们不能把这两次给忽略了，对于更一般的情况</p>
+<blockquote>
+<p>n个元素，K 叉树搜索树需要的平均比较次数为 k*log(n/k).</p>
+</blockquote>
+<p>对于极端的情况 k = n时， K叉树就转化为了线性表了，复杂度也就是O(n)了，如果用数学角度来解决这个问题，相当于：</p>
+<blockquote>
+<p>n为固定值是，k 取何值时， k*log(n/k)的取值最小？</p>
+</blockquote>
+<p>k<em>log(n/k)根据对数的运算规则可以转化为ln(n)</em>k/ln(k)，ln(n)为常数，所以相当于k/ln(k)的极小值。</p>
+<blockquote>
+<p>当k=e 时，k/ln(k)取最小值。</p>
+</blockquote>
+<p>运算上述的式子，在k = 3时 比 k= 2 时得到的结果还要小，那就是说三叉搜索树应该比二叉搜索树更好一些，但是为什么二叉树更流行能？在stackoverflow上找到了答案：</p>
+<blockquote>
+<p>现在的CPU可以针对二重逻辑(binary logic)的代码优化，三重逻辑会被分解为多个二重逻辑</p>
+</blockquote>
+<p>这样也就大概的能理解为什么二叉树这么流行了，就是因为进行一次比较操作，我们最多可以将问题规模减少一半。</p>
+<p><strong>红黑树的性质</strong></p>
+<blockquote>
+<p>叶子节点为图中的NIL节点，国内一些教材中没有这个NIL节点，，我们在画图时有时也会省略这些NIL节点，但是我们需要明确，当我们说叶子节点时，指的就是这些NIL节点。</p>
+</blockquote>
+<p>红黑树通过下面5条规则，保证了树是平衡的：<br>1、树的节点只有红与黑两种颜色<br>2、根节点为黑色的<br>3、叶子节点为黑色的<br>4、红色节点的子节点必定是黑色的<br>5、从任意一节点出发，到其后继的叶子节点的路径中，黑色节点的数目相同</p>
+<p>满足了上面5个条件后，就能保证:根节点到叶子节点的最长路径不会的大于根节点到叶子最短路径的2倍，其实这个很好理解，主要是用了性质4与5这里说明一下:</p>
+<blockquote>
+<p>假设根节点到叶子节点最短的路径中，黑色节点数目为B，那么根据性质5，根节点到叶子节点的最长路径中，黑色节点数目也是B，最长的情况就是每两个黑色节点中将有个红色节点（也就是红黑相间的情况），所以红色节点最多为B-1个，这样就能保证上面的结论了。</p>
+</blockquote>
+<p>在HashMao的每一个节点被称为Entry<k, v="">,从二叉树的知识可以推测出在红黑树中，一个节点应该具备的基本属性，到底是不是呢？那就看下面的源码吧！</k,></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Entry</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">implements</span> <span class="title">Map</span>.<span class="title">Entry</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; </span>&#123;</div><div class="line">    <span class="comment">//节点key</span></div><div class="line">    K key;</div><div class="line">    <span class="comment">//节点值</span></div><div class="line">    V value;</div><div class="line">    <span class="comment">//左子树节点</span></div><div class="line">    Entry&lt;K,V&gt; left;</div><div class="line">    <span class="comment">//右子树节点</span></div><div class="line">    Entry&lt;K,V&gt; right;</div><div class="line">    <span class="comment">//父节点</span></div><div class="line">    Entry&lt;K,V&gt; parent;</div><div class="line">    <span class="comment">//节点颜色</span></div><div class="line">    <span class="keyword">boolean</span> color = BLACK;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Make a new cell with given key, value, and parent, and with</div><div class="line">     * &#123;<span class="doctag">@code</span> null&#125; child links, and BLACK color.</div><div class="line">     */</div><div class="line">    Entry(K key, V value, Entry&lt;K,V&gt; parent) &#123;</div><div class="line">        <span class="keyword">this</span>.key = key;</div><div class="line">        <span class="keyword">this</span>.value = value;</div><div class="line">        <span class="keyword">this</span>.parent = parent;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Returns the key.</div><div class="line">     *</div><div class="line">     * <span class="doctag">@return</span> the key</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">public</span> K <span class="title">getKey</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> key;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Returns the value associated with the key.</div><div class="line">     *</div><div class="line">     * <span class="doctag">@return</span> the value associated with the key</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">public</span> V <span class="title">getValue</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> value;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Replaces the value currently associated with the key with the given</div><div class="line">     * value.</div><div class="line">     *</div><div class="line">     * <span class="doctag">@return</span> the value associated with the key before this method was</div><div class="line">     *         called</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">public</span> V <span class="title">setValue</span><span class="params">(V value)</span> </span>&#123;</div><div class="line">        V oldValue = <span class="keyword">this</span>.value;</div><div class="line">        <span class="keyword">this</span>.value = value;</div><div class="line">        <span class="keyword">return</span> oldValue;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object o)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (!(o <span class="keyword">instanceof</span> Map.Entry))</div><div class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">        Map.Entry&lt;?,?&gt; e = (Map.Entry&lt;?,?&gt;)o;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> valEquals(key,e.getKey()) &amp;&amp; valEquals(value,e.getValue());</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> keyHash = (key==<span class="keyword">null</span> ? <span class="number">0</span> : key.hashCode());</div><div class="line">        <span class="keyword">int</span> valueHash = (value==<span class="keyword">null</span> ? <span class="number">0</span> : value.hashCode());</div><div class="line">        <span class="keyword">return</span> keyHash ^ valueHash;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> key + <span class="string">"="</span> + value;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>下面我们进行TreeMap的测试：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestDemo</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> String hello;</div><div class="line">    <span class="function"><span class="keyword">public</span>  <span class="keyword">static</span> <span class="keyword">void</span>  <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</div><div class="line">        TreeMap   tree = <span class="keyword">new</span> TreeMap&lt;String , Double&gt;();</div><div class="line">        tree.put(<span class="string">"ccc"</span>, <span class="number">89.0</span>);</div><div class="line">        tree.put(<span class="string">"aaa"</span>, <span class="number">80.0</span>);</div><div class="line">        tree.put(<span class="string">"zzz"</span>, <span class="number">80.0</span>);</div><div class="line">        tree.put(<span class="string">"bbb"</span>, <span class="number">89.0</span>);</div><div class="line">        System.out.println(tree);</div><div class="line">       <span class="comment">// TreeSet  treeser;</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>当程序执行tree.put（”ccc”, 89.0）时，系统将直接把”ccc”-89.0这个Entry放入Map中，这个Entry就是该红黑树”根节点”，接着程序tree.put(“aaa”, 80.0);时，程序将会将”aaa”-80.0 作为新节点添加到已有的红黑树中。以后向TreeMap中放入一个key-value对，系统都需要将该Entry当成一个新节点，添加成已有红黑树中，通过这种方式， 可以保证TreeMap中所有的key 总是由按照红黑树的生成规则排列。</p>
+<p>Put()方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> V <span class="title">put</span><span class="params">(K key, V value)</span> </span>&#123;<span class="comment">//向红黑树中插入键值对</span></div><div class="line">		Entry&lt;K,V&gt; t = root;</div><div class="line">		<span class="keyword">if</span> (t == <span class="keyword">null</span>) &#123;<span class="comment">//如果树为空</span></div><div class="line">			compare(key, key); <span class="comment">// type (and possibly null) check</span></div><div class="line">			root = <span class="keyword">new</span> Entry&lt;&gt;(key, value, <span class="keyword">null</span>);</div><div class="line">			size = <span class="number">1</span>;</div><div class="line">			modCount++;</div><div class="line">			<span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">int</span> cmp;</div><div class="line">		Entry&lt;K,V&gt; parent;<span class="comment">//父结点</span></div><div class="line">		<span class="comment">// split comparator and comparable paths</span></div><div class="line">		Comparator&lt;? <span class="keyword">super</span> K&gt; cpr = comparator;</div><div class="line">		<span class="keyword">if</span> (cpr != <span class="keyword">null</span>) &#123;<span class="comment">//优先通过比较器比较两个结点的大小</span></div><div class="line">			<span class="keyword">do</span> &#123;</div><div class="line">				parent = t;</div><div class="line">				cmp = cpr.compare(key, t.key);</div><div class="line">				<span class="keyword">if</span> (cmp &lt; <span class="number">0</span>)<span class="comment">//待插入结点小于当前结点</span></div><div class="line">					t = t.left;<span class="comment">//进入左子树</span></div><div class="line">				<span class="keyword">else</span> <span class="keyword">if</span> (cmp &gt; <span class="number">0</span>)<span class="comment">//待插入结点大于当前结点</span></div><div class="line">					t = t.right;<span class="comment">//进入右子树</span></div><div class="line">				<span class="keyword">else</span><span class="comment">//当前结点等于待插入结点，覆盖原值</span></div><div class="line">					<span class="keyword">return</span> t.setValue(value);</div><div class="line">			&#125; <span class="keyword">while</span> (t != <span class="keyword">null</span>);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">else</span> &#123;<span class="comment">//如果没有定义比较器，那么key必须实现Comparable接口</span></div><div class="line">			<span class="keyword">if</span> (key == <span class="keyword">null</span>)<span class="comment">//不允许空键</span></div><div class="line">				<span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</div><div class="line">			Comparable&lt;? <span class="keyword">super</span> K&gt; k = (Comparable&lt;? <span class="keyword">super</span> K&gt;) key;</div><div class="line">			<span class="keyword">do</span> &#123;</div><div class="line">				parent = t;</div><div class="line">				cmp = k.compareTo(t.key);</div><div class="line">				<span class="keyword">if</span> (cmp &lt; <span class="number">0</span>)</div><div class="line">					t = t.left;<span class="comment">//进入左子树</span></div><div class="line">				<span class="keyword">else</span> <span class="keyword">if</span> (cmp &gt; <span class="number">0</span>)</div><div class="line">					t = t.right;<span class="comment">//进入右子树</span></div><div class="line">				<span class="keyword">else</span></div><div class="line">					<span class="keyword">return</span> t.setValue(value);<span class="comment">//覆盖原值</span></div><div class="line">			&#125; <span class="keyword">while</span> (t != <span class="keyword">null</span>);</div><div class="line">		&#125;</div><div class="line">		<span class="comment">//找到插入点之后，创建新结点，插入之。</span></div><div class="line">		Entry&lt;K,V&gt; e = <span class="keyword">new</span> Entry&lt;&gt;(key, value, parent);</div><div class="line">		<span class="keyword">if</span> (cmp &lt; <span class="number">0</span>)<span class="comment">//判断是挂到左边还是右边</span></div><div class="line">			parent.left = e;</div><div class="line">		<span class="keyword">else</span></div><div class="line">			parent.right = e;</div><div class="line">		fixAfterInsertion(e);<span class="comment">//进行着色和旋转等操作修复红黑树</span></div><div class="line">		size++;</div><div class="line">		modCount++;</div><div class="line">		<span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">	&#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>说明:</p>
+</blockquote>
+<ul>
+<li>TreeMap的查询和更新操作都设计比较操作，故而TreeMap的键必须实现Comparable接口或者构造时得传入比较器（既然是实现了Comparable接口又传入了比较器情况下，比较器优先）；</li>
+<li>put操作不允许null键，但是值（value） 允许null；</li>
+<li>键重复的情况下，新值将会覆盖掉旧值。</li>
+</ul>
+<h2 id="重要的方法"><a href="#重要的方法" class="headerlink" title="重要的方法"></a><strong>重要的方法</strong></h2><h3 id="get-方法"><a href="#get-方法" class="headerlink" title="get()方法"></a><strong>get()方法</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> V <span class="title">get</span><span class="params">(Object key)</span> </span>&#123;<span class="comment">//查询操作</span></div><div class="line">        Entry&lt;K,V&gt; p = getEntry(key);</div><div class="line">        <span class="keyword">return</span> (p==<span class="keyword">null</span> ? <span class="keyword">null</span> : p.value);</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p><strong>调用getEntry方法查询指定键值：</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">final</span> Entry&lt;K,V&gt; <span class="title">getEntry</span><span class="params">(Object key)</span> </span>&#123;<span class="comment">//跟普通二叉排序树的查询操作一致</span></div><div class="line">		<span class="comment">// Offload comparator-based version for sake of performance</span></div><div class="line">		<span class="keyword">if</span> (comparator != <span class="keyword">null</span>)<span class="comment">//存在比较器</span></div><div class="line">			<span class="keyword">return</span> getEntryUsingComparator(key);<span class="comment">//根据比较器定义的比较规则查找</span></div><div class="line">		<span class="keyword">if</span> (key == <span class="keyword">null</span>)</div><div class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</div><div class="line">		Comparable&lt;? <span class="keyword">super</span> K&gt; k = (Comparable&lt;? <span class="keyword">super</span> K&gt;) key;</div><div class="line">		Entry&lt;K,V&gt; p = root;</div><div class="line">		<span class="keyword">while</span> (p != <span class="keyword">null</span>) &#123;<span class="comment">//根据Comparable接口定义的比较规则查找</span></div><div class="line">			<span class="keyword">int</span> cmp = k.compareTo(p.key);</div><div class="line">			<span class="keyword">if</span> (cmp &lt; <span class="number">0</span>)<span class="comment">//待查结点在左子树</span></div><div class="line">				p = p.left;</div><div class="line">			<span class="keyword">else</span> <span class="keyword">if</span> (cmp &gt; <span class="number">0</span>)<span class="comment">//待查结点在右子树</span></div><div class="line">				p = p.right;</div><div class="line">			<span class="keyword">else</span></div><div class="line">				<span class="keyword">return</span> p;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">return</span> <span class="keyword">null</span>;<span class="comment">//没找到</span></div><div class="line">	&#125;</div><div class="line"> <span class="function"><span class="keyword">final</span> Entry&lt;K,V&gt; <span class="title">getEntryUsingComparator</span><span class="params">(Object key)</span> </span>&#123;<span class="comment">//根据比较器定义的比较规则查找</span></div><div class="line">		K k = (K) key;</div><div class="line">		Comparator&lt;? <span class="keyword">super</span> K&gt; cpr = comparator;</div><div class="line">		<span class="keyword">if</span> (cpr != <span class="keyword">null</span>) &#123;</div><div class="line">			Entry&lt;K,V&gt; p = root;</div><div class="line">			<span class="keyword">while</span> (p != <span class="keyword">null</span>) &#123;</div><div class="line">				<span class="keyword">int</span> cmp = cpr.compare(k, p.key);</div><div class="line">				<span class="keyword">if</span> (cmp &lt; <span class="number">0</span>)</div><div class="line">					p = p.left;</div><div class="line">				<span class="keyword">else</span> <span class="keyword">if</span> (cmp &gt; <span class="number">0</span>)</div><div class="line">					p = p.right;</div><div class="line">				<span class="keyword">else</span></div><div class="line">					<span class="keyword">return</span> p;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">	&#125;</div></pre></td></tr></table></figure></p>
+<p>从上面的查找方法可以得出，对比HashMap近乎O(1)的查找复杂符，TreeMap显得略有些不足。</p>
+<h3 id="remove-方法"><a href="#remove-方法" class="headerlink" title="remove()方法"></a><strong>remove()方法</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> V <span class="title">remove</span><span class="params">(Object key)</span> </span>&#123;</div><div class="line">		Entry&lt;K,V&gt; p = getEntry(key);<span class="comment">//首先找到待删结点</span></div><div class="line">		<span class="keyword">if</span> (p == <span class="keyword">null</span>)<span class="comment">//判断是否找到</span></div><div class="line">			<span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">		V oldValue = p.value;</div><div class="line">		deleteEntry(p);<span class="comment">//删除结点</span></div><div class="line">		<span class="keyword">return</span> oldValue;</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<p>虽然看上去寥寥几行的代码，其实逻辑十分复杂，具体体现在删除节点后恢复操作。 我们看下面的deletEntry()方法。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">deleteEntry</span><span class="params">(Entry&lt;K,V&gt; p)</span> </span>&#123;<span class="comment">//删除一个结点</span></div><div class="line">		modCount++;</div><div class="line">		size--;</div><div class="line">		<span class="comment">// If strictly internal, copy successor's element to p and then make p</span></div><div class="line">		<span class="comment">// point to successor.</span></div><div class="line">		<span class="keyword">if</span> (p.left != <span class="keyword">null</span> &amp;&amp; p.right != <span class="keyword">null</span>) &#123;<span class="comment">//p的左右孩子都存在</span></div><div class="line">			Entry&lt;K,V&gt; s = successor(p);<span class="comment">//找到p的直接后继(顺着p右子树一直向左)</span></div><div class="line">			p.key = s.key;<span class="comment">//用直接后继替代p</span></div><div class="line">			p.value = s.value;</div><div class="line">			p = s;</div><div class="line">		&#125; <span class="comment">// p has 2 children</span></div><div class="line">		<span class="comment">//下面操作将释放s结点，并修复红黑树</span></div><div class="line">		<span class="comment">// Start fixup at replacement node, if it exists.</span></div><div class="line">		Entry&lt;K,V&gt; replacement = (p.left != <span class="keyword">null</span> ? p.left : p.right);</div><div class="line">		<span class="keyword">if</span> (replacement != <span class="keyword">null</span>) &#123;</div><div class="line">			<span class="comment">// Link replacement to parent</span></div><div class="line">			replacement.parent = p.parent;</div><div class="line">			<span class="keyword">if</span> (p.parent == <span class="keyword">null</span>)</div><div class="line">				root = replacement;</div><div class="line">			<span class="keyword">else</span> <span class="keyword">if</span> (p == p.parent.left)</div><div class="line">				p.parent.left  = replacement;</div><div class="line">			<span class="keyword">else</span></div><div class="line">				p.parent.right = replacement;</div><div class="line">			<span class="comment">// Null out links so they are OK to use by fixAfterDeletion.</span></div><div class="line">			p.left = p.right = p.parent = <span class="keyword">null</span>;</div><div class="line">			<span class="comment">// Fix replacement</span></div><div class="line">			<span class="keyword">if</span> (p.color == BLACK)</div><div class="line">				fixAfterDeletion(replacement);<span class="comment">//修复红黑树</span></div><div class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (p.parent == <span class="keyword">null</span>) &#123; <span class="comment">// return if we are the only node.</span></div><div class="line">			root = <span class="keyword">null</span>;</div><div class="line">		&#125; <span class="keyword">else</span> &#123; <span class="comment">//  No children. Use self as phantom replacement and unlink.</span></div><div class="line">			<span class="keyword">if</span> (p.color == BLACK)</div><div class="line">				fixAfterDeletion(p);</div><div class="line">			<span class="keyword">if</span> (p.parent != <span class="keyword">null</span>) &#123;</div><div class="line">				<span class="keyword">if</span> (p == p.parent.left)</div><div class="line">					p.parent.left = <span class="keyword">null</span>;</div><div class="line">				<span class="keyword">else</span> <span class="keyword">if</span> (p == p.parent.right)</div><div class="line">					p.parent.right = <span class="keyword">null</span>;</div><div class="line">				p.parent = <span class="keyword">null</span>;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div></pre></td></tr></table></figure></p>
+<p>successtor函数用于找一个节点的中序后继：迭代器遍历操作正是基于successtor操作完成的，所以遍历TreeMap得到的键值对是有序的。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">static</span> &lt;K,V&gt; TreeMap.<span class="function">Entry&lt;K,V&gt; <span class="title">successor</span><span class="params">(Entry&lt;K,V&gt; t)</span> </span>&#123;<span class="comment">//查找中序后继</span></div><div class="line">		<span class="keyword">if</span> (t == <span class="keyword">null</span>)</div><div class="line">			<span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (t.right != <span class="keyword">null</span>) &#123;<span class="comment">//如果存在右子树</span></div><div class="line">			Entry&lt;K,V&gt; p = t.right;</div><div class="line">			<span class="keyword">while</span> (p.left != <span class="keyword">null</span>)<span class="comment">//顺着右子树，向左搜索</span></div><div class="line">				p = p.left;</div><div class="line">			<span class="keyword">return</span> p;</div><div class="line">		&#125; <span class="keyword">else</span> &#123;<span class="comment">//如果不存在右子树</span></div><div class="line">			Entry&lt;K,V&gt; p = t.parent;<span class="comment">//顺着父亲，向上搜索</span></div><div class="line">			Entry&lt;K,V&gt; ch = t;</div><div class="line">			<span class="keyword">while</span> (p != <span class="keyword">null</span> &amp;&amp; ch == p.right) &#123;<span class="comment">//如果当前结点是父结点的右孩子，那么继续向上</span></div><div class="line">				ch = p;</div><div class="line">				p = p.parent;</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">return</span> p;</div><div class="line">		&#125;</div><div class="line">	&#125;</div></pre></td></tr></table></figure></p>
+<p>对称的，还有查找直接前驱的方法:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">static</span> &lt;K,V&gt; <span class="function">Entry&lt;K,V&gt; <span class="title">predecessor</span><span class="params">(Entry&lt;K,V&gt; t)</span> </span>&#123;</div><div class="line">		<span class="keyword">if</span> (t == <span class="keyword">null</span>)</div><div class="line">			<span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (t.left != <span class="keyword">null</span>) &#123;<span class="comment">//若存在左子树</span></div><div class="line">			Entry&lt;K,V&gt; p = t.left;</div><div class="line">			<span class="keyword">while</span> (p.right != <span class="keyword">null</span>)<span class="comment">//顺着左子树，向右搜索</span></div><div class="line">				p = p.right;</div><div class="line">			<span class="keyword">return</span> p;</div><div class="line">		&#125; <span class="keyword">else</span> &#123;</div><div class="line">			Entry&lt;K,V&gt; p = t.parent;</div><div class="line">			Entry&lt;K,V&gt; ch = t;</div><div class="line">			<span class="keyword">while</span> (p != <span class="keyword">null</span> &amp;&amp; ch == p.left) &#123;</div><div class="line">				ch = p;</div><div class="line">				p = p.parent;</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">return</span> p;</div><div class="line">		&#125;</div><div class="line">	&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h2><ol>
+<li>TreeMap的实现基于红黑树；</li>
+<li>TreeMap不允许插入null键，但允许null值；</li>
+<li>TreeMap线程不安全；</li>
+<li>插入节点时，若键重复，则新值会覆盖旧值；</li>
+<li>TreeMap是根据key进行排序的，它的排序和定位需要依赖比较器或覆写Comparable接口，也因此不需要key覆写hashCode方法和equals方法，就可以排除掉重复的key，而HashMap的key则需要通过覆写hashCode方法和equals方法来确保没有重复的key，要求key必须实现Comparable接口，或者初始化传入Comparator版本比较器；</li>
+<li>遍历TreeMap得到的结果集是有序的（中序遍历）；</li>
+<li>TreeMap的查询、插入、删除效率均没有HashMap高，一般只有要对key排序时才用TreeMap。TreeMap的各项操作的平均时间复杂为O（log（n））</li>
+</ol>
+<p>TreeSet和HashSet的源码不再进行剖析，二者分别是基于TreeMap和HashMap实现的，只是对应的节点中只有key，而没有value，因此对TreeMap 和HashMap比较了解的话，对TreeSet和HashMap的理解就会非常容易。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/path/to/wechat-reward-image" alt="Charse WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/path/to/alipay-reward-image" alt="Charse Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/Java源码/" rel="tag"># Java源码</a>
+          
+            <a href="/tags/TreeMap/" rel="tag"># TreeMap</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/20/Java常用类源码——ArrayList源码解析/" rel="next" title="Java常用类源码——ArrayList源码解析">
+                <i class="fa fa-chevron-left"></i> Java常用类源码——ArrayList源码解析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/12/01/分布式系统的难点/" rel="prev" title="分布式系统的难点">
+                分布式系统的难点 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="Charse" />
+          <p class="site-author-name" itemprop="name">Charse</p>
+           
+              <p class="site-description motion-element" itemprop="description">Stay hungry, Stay foolish.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/your-user-name" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/your-user-name" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/your-user-name" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  豆瓣
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/your-user-name" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#TreeMap的签名"><span class="nav-number">1.</span> <span class="nav-text">TreeMap的签名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#接口NavigableMap"><span class="nav-number">2.</span> <span class="nav-text">接口NavigableMap</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SortedMap"><span class="nav-number">2.1.</span> <span class="nav-text">SortedMap</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设计理念"><span class="nav-number">3.</span> <span class="nav-text">设计理念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#红黑树"><span class="nav-number">3.1.</span> <span class="nav-text">红黑树</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重要的方法"><span class="nav-number">4.</span> <span class="nav-text">重要的方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#get-方法"><span class="nav-number">4.1.</span> <span class="nav-text">get()方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#remove-方法"><span class="nav-number">4.2.</span> <span class="nav-text">remove()方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Charse</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,849 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="数据库,索引," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="索引是数据库对应用程序的设计和开发非常中要的一个方面。如果索引太多，应用程序的性能可能会受到影响。而索引太少，对查询性能有会产生影响。所以要找到一个合适的平衡点，这对应用程序的性能是至关重要的。">
+<meta name="keywords" content="数据库,索引">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据库索引的工作原理">
+<meta property="og:url" content="http://yoursite.com/2016/09/02/数据库索引的工作原理/index.html">
+<meta property="og:site_name" content="Charse&#39;s Blog">
+<meta property="og:description" content="索引是数据库对应用程序的设计和开发非常中要的一个方面。如果索引太多，应用程序的性能可能会受到影响。而索引太少，对查询性能有会产生影响。所以要找到一个合适的平衡点，这对应用程序的性能是至关重要的。">
+<meta property="og:updated_time" content="2016-11-05T09:10:40.479Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据库索引的工作原理">
+<meta name="twitter:description" content="索引是数据库对应用程序的设计和开发非常中要的一个方面。如果索引太多，应用程序的性能可能会受到影响。而索引太少，对查询性能有会产生影响。所以要找到一个合适的平衡点，这对应用程序的性能是至关重要的。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/09/02/数据库索引的工作原理/"/>
+
+
+
+
+
+  <title>数据库索引的工作原理 | Charse's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Charse's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/02/数据库索引的工作原理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charse">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Charse's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">数据库索引的工作原理</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-09-02T08:45:54+08:00">
+                2016-09-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL/" itemprop="url" rel="index">
+                    <span itemprop="name">MySQL</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>索引是数据库对应用程序的设计和开发非常中要的一个方面。如果索引太多，应用程序的性能可能会受到影响。而索引太少，对查询性能有会产生影响。所以要找到一个合适的平衡点，这对应用程序的性能是至关重要的。<br><a id="more"></a></p>
+<h3 id="1-为什么需要索引"><a href="#1-为什么需要索引" class="headerlink" title="1. 为什么需要索引"></a>1. 为什么需要索引</h3><p>数据在磁盘上是以块的形式存储的。为确保对磁盘操作的原子性，访问数据的时候会一并访问所有数据块。磁盘上的这些数据块与链表类似，即它们都包含一个数据段和一个指针，指针指向下一个节点（数据块）的内存地址，而且它们都不需要连续存储（即逻辑上相邻的数据块在物理上可以相隔很远）。</p>
+<p>鉴于很多记录只能做到按一个字段排序，所以要查询某个未经排序的字段，就需要使用线性查找，即要访问N/2个数据块，其中N指的是一个表所涵盖的所有数据块。如果该字段是非键字段（也就是说，不包含唯一值），那么就要搜索整个表空间，即要访问全部N个数据块。</p>
+<p>然而，对于经过排序的字段，可以使用二分查找，因此只要访问log2 N个数据块。同样，对于已经排过序的非键字段，只要找到更大的值，也就不用再搜索表中的其他数据块了。这样一来，性能就会有实质性的提升。</p>
+<h3 id="2-什么是索引"><a href="#2-什么是索引" class="headerlink" title="2.  什么是索引"></a>2.  什么是索引</h3><p>索引是对记录按照一个或多个字段进行排序的一种方式。对表中的某个字段建立索引会创建另一种数据结构，其中保存着字段的值，每个值又指向与它相关的记录。即这种种数据结构按照一定顺序建立了列值与记录行之间的对应关系。这种索引的数据结构是经过排序的，因而可以对其执行二分查找。</p>
+<h3 id="3-索引的原理"><a href="#3-索引的原理" class="headerlink" title="3. 索引的原理"></a>3. 索引的原理</h3><pre><code>字段名              数据类型          在磁盘上的大小
+id(Primary key)       int               4字节
+name                  char(20)          20字节
+age                   tinyint           1字节
+</code></pre><p>我们通过建立上面的表来比较在数据库中包含大数据量的情况下，分析两种查询情况:<br>1、查询经过排序的字段id<br>2、查询未经过排序的字段name</p>
+<h4 id="分析示例一"><a href="#分析示例一" class="headerlink" title="分析示例一"></a>分析示例一</h4><p>假设数据库表中有R = 1000万条记录，mysql数据库在磁盘上为每条记录分配的大小为B = 4 + 20 + 1 = 25字节，这样我们就可以计算这个表分块因数bfr = (B/R) = 1024/25 = 40， 也就是说，磁盘上的单位数据块上保存着40条记录，那么我们就可以得出这整个表所需要的数据块就是N =  (R/bfr) = 10000000/40 = 250000。</p>
+<p>1、使用id字段查找时的情况： 由于id字段是线性的(作为表的主键)，需要访问 N / 2 = 125000个数据块才能找到目标，但是这个字段是经过排序的，所以可以使用二分查找的方法，所以这样平均的访问log2 250000 = 17.9 = 18  个块，这很显然，是对数据库<br>2、使用name字段查找的情况：<br>由于name字段是为经过排序的，因此不可能使用二分查找，并且这个字段的值也不是唯一的，所以数据库要从表的开头查找到尾，即要访问 N = 250000个数据块。</p>
+<p>所以，通过这个比较得知，包含索引的查询效率是更高的，那数据库性能就可以得到很好的提升。</p>
+<p>如果一条索引记录只包含索引字段和一个指向原始记录的指针，那么这条记录肯定要比他所指向的包含更多的记录要更小，也就是所，索引本身占用的磁盘空间比原来的表更小，因此需要遍历的数据块也不搜索原来的表更少。如果下，以name字段建立索引的表模式:</p>
+<pre><code>字段名          数据类型            在磁盘上的大小
+name            char(20)            20字节
+记录指针         指针类型             4字节
+</code></pre><h4 id="分析示例二"><a href="#分析示例二" class="headerlink" title="分析示例二"></a>分析示例二</h4><p>数据库中有 r = 1000 000条记录，每条索引记录要占用 R = 24字节的空间大小，那么同样适用默认的数据块大小 B = 1024字节。 那么索引的分块因数就是bfr = (B/R) = 1024 / 24 = 5。最终建立索引所生成的表的大小为 N = (r / bfr) = 1000000 /5  = 2500000个数据块。</p>
+<p>现在，再搜索name字段就可以使用索引来提高性能，对索引使用二分查找，需要分为log2 2500000 = 18 个数据块，在加上为找到实际记录的地址还要访问一个数据块，总共要访问18 + 1 = 19 个数据块，这个与之前的250000 个数据块相比，是在是差别太大了。</p>
+<h3 id="4-什么时候用索引"><a href="#4-什么时候用索引" class="headerlink" title="4. 什么时候用索引"></a>4. 什么时候用索引</h3><p>创建索引要额外占用磁盘空间（比如，上面例子中要额外占用277 778个数据块），建立的索引太多可能导致磁盘空间不足。因此，在建立索引时，一定要慎重选择正确的字段。</p>
+<p>由于索引只能提高搜索记录中某个匹配字段的速度，因此在执行插入和删除操作的情况下，仅为输出结果而为字段建立索引，就纯粹是浪费磁盘空间和处理时间了；这种情况下不用建立索引。另外，由于二分查找的原因，数据的基数性（cardinality）或唯一性也非常重要。对基数性为2的字段建立索引，会将数据一分为二，而对基数性为1000的字段，则同样会返回大约1000条记录。在这么低的基数性下，索引的效率将减低至线性查找的水平，而查询优化器会在基数性小于记录数的30%时放弃索引，实际上等于索引纯粹只会浪费空间。</p>
+<p><strong>查询优化器的原理</strong></p>
+<blockquote>
+<p>查询优化中最核心的问题就是精确估算不同查询计划的成本。优化器在估算查询计划的成本时，会使用一个数学模型，该模型又依赖于对每个查询计划中涉及的最大数据量的基数性（或者叫重数）的估算。而对基数性的估算又依赖于对查询中谓词选择因数（selection factor of predicates）的估算。过去，数据库系统在估算选择性时，要使用每个字段中值的分布情况的详尽统计信息，比如直方图。这种技术对于估算孤立谓词的选择符效果很好。然而，很多查询的谓词是相互关联的，例如 select count(*) from R where R.make=’Honda’ and R.model=’Accord’。查询谓词经常会高度关联（比如，model=’Accord’的前提条件是make=’Honda’），而估计这种关联的选择性非常困难。查询优化器之所以会选择低劣的查询计划，一方面是因为对基数性估算不准，另一方面就是因为遗漏了很多关联性。而这也是为什么数据库管理员应该经常更新数据库统计信息（特别是在重要的数据加载和卸载之后）的原因。（译自维基百科：<a href="http://en.wikipedia.org/wiki/Query_optimizer。）" target="_blank" rel="external">http://en.wikipedia.org/wiki/Query_optimizer。）</a></p>
+</blockquote>
+<h3 id="5-索引优缺点"><a href="#5-索引优缺点" class="headerlink" title="5. 索引优缺点"></a>5. 索引优缺点</h3><h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><ul>
+<li>快速存取数据，减少磁盘的I/O操作</li>
+<li>保证数据记录的唯一性</li>
+<li>实现表与表之间的参照完整性</li>
+<li>在是用order by、group by子句进行数据检索是。利用索引可以减少排序和分组时间</li>
+</ul>
+<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><ul>
+<li>索引创建太多查询的效率反而降低</li>
+<li>索引创建太多导致数据库和系统资源浪费太多，性能下降。</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/path/to/wechat-reward-image" alt="Charse WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/path/to/alipay-reward-image" alt="Charse Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据库/" rel="tag"># 数据库</a>
+          
+            <a href="/tags/索引/" rel="tag"># 索引</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/08/30/MySQL数据库操作基本语法/" rel="next" title="MySQL数据库操作基本语法">
+                <i class="fa fa-chevron-left"></i> MySQL数据库操作基本语法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/02/Android控件CheckBox中出现Error-inflating-class-android-widget-CheckBox问题解决/" rel="prev" title="Android控件CheckBox中出现Error inflating class android.widget.CheckBox问题解决">
+                Android控件CheckBox中出现Error inflating class android.widget.CheckBox问题解决 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="Charse" />
+          <p class="site-author-name" itemprop="name">Charse</p>
+           
+              <p class="site-description motion-element" itemprop="description">Stay hungry, Stay foolish.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/your-user-name" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/your-user-name" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/your-user-name" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  豆瓣
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/your-user-name" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-为什么需要索引"><span class="nav-number">1.</span> <span class="nav-text">1. 为什么需要索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-什么是索引"><span class="nav-number">2.</span> <span class="nav-text">2.  什么是索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-索引的原理"><span class="nav-number">3.</span> <span class="nav-text">3. 索引的原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#分析示例一"><span class="nav-number">3.1.</span> <span class="nav-text">分析示例一</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分析示例二"><span class="nav-number">3.2.</span> <span class="nav-text">分析示例二</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-什么时候用索引"><span class="nav-number">4.</span> <span class="nav-text">4. 什么时候用索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-索引优缺点"><span class="nav-number">5.</span> <span class="nav-text">5. 索引优缺点</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#优点"><span class="nav-number">5.1.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#缺点"><span class="nav-number">5.2.</span> <span class="nav-text">缺点</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Charse</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

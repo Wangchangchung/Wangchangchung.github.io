@@ -1,0 +1,861 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java,JVM," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="最近在技术博客中看到一篇关于 HashMap 的优化使用建议，觉得非常有意思，于是转载该篇博文，和大家一起分享技术。">
+<meta name="keywords" content="Java,JVM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="高性能场景下,HashMap的优化使用建议">
+<meta property="og:url" content="http://yoursite.com/2016/10/02/高性能场景下-HashMap的优化使用建议/index.html">
+<meta property="og:site_name" content="Charse&#39;s Blog">
+<meta property="og:description" content="最近在技术博客中看到一篇关于 HashMap 的优化使用建议，觉得非常有意思，于是转载该篇博文，和大家一起分享技术。">
+<meta property="og:updated_time" content="2016-10-07T14:23:24.192Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="高性能场景下,HashMap的优化使用建议">
+<meta name="twitter:description" content="最近在技术博客中看到一篇关于 HashMap 的优化使用建议，觉得非常有意思，于是转载该篇博文，和大家一起分享技术。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/10/02/高性能场景下-HashMap的优化使用建议/"/>
+
+
+
+
+
+  <title>高性能场景下,HashMap的优化使用建议 | Charse's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Charse's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/02/高性能场景下-HashMap的优化使用建议/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charse">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Charse's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">高性能场景下,HashMap的优化使用建议</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-10-02T22:11:12+08:00">
+                2016-10-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近在技术博客中看到一篇关于 HashMap 的优化使用建议，觉得非常有意思，于是转载该篇博文，和大家一起分享技术。<br> <a id="more"></a></p>
+<h3 id="HashMap-在JDK-7-与-JDK8-下的差别"><a href="#HashMap-在JDK-7-与-JDK8-下的差别" class="headerlink" title="HashMap 在JDK 7 与 JDK8 下的差别"></a><strong>HashMap 在JDK 7 与 JDK8 下的差别</strong></h3><p>顺便理一下HashMap.get(Object key)的几个关键步骤，作为后面讨论的基础。</p>
+<h4 id="1-1-获取key的HashCode并二次加工"><a href="#1-1-获取key的HashCode并二次加工" class="headerlink" title="1.1 获取key的HashCode并二次加工"></a><strong>1.1 获取key的HashCode并二次加工</strong></h4><p>因为对原Key的hashCode质量没信心，怕会存在大量冲突，HashMap进行了二次加工。</p>
+<p>JDK7的做法：</p>
+<blockquote>
+<p>h ^= (h &gt;&gt;&gt; 20) ^ (h &gt;&gt;&gt; 12);<br>return h ^ (h &gt;&gt;&gt; 7) ^ (h &gt;&gt;&gt; 4);</p>
+</blockquote>
+<p>JDK8 因为对自己改造过的哈希大量冲突时的红黑树有信心，所以简单一些，只是把高16位异或下来。</p>
+<blockquote>
+<p>return h ^ (h &gt;&gt;&gt; 16);</p>
+</blockquote>
+<p>所以即使Key比较均匀无哈希冲突，JDK8也比JDK7略快的原因大概于此。</p>
+<p>顺便科普一下，Integer的HashCode就是自己，Long要把高32位异或下来变成int， String则是循环累计结果＊31＋下一个字符，不过因为String是不可变对象，所以生成完一次就会自己cache起来。</p>
+<h4 id="1-2-落桶"><a href="#1-2-落桶" class="headerlink" title="1.2 落桶"></a><strong>1.2 落桶</strong></h4><blockquote>
+<p>index = hash &amp; (array.length-1);</p>
+</blockquote>
+<p>桶数组大小是2的指数的好处，通过一次&amp;就够了，而不是代价稍大的取模。</p>
+<h4 id="1-3-最后选择Entry"><a href="#1-3-最后选择Entry" class="headerlink" title="1.3 最后选择Entry"></a><strong>1.3 最后选择Entry</strong></h4><p>判断Entry是否符合，都是首先哈希值要相等，但因为哈希值不是唯一的，所以还要对比key是否相等，最好是同一个对象，能用＝＝对比，否则要走equals()。 比如String，如果不是同一个对象，equals()起来要一个个字符做比较也是挺累的。 </p>
+<blockquote>
+<p>if (e.hash == hash &amp;&amp; ((k = e.key) == key || key.equals(k)))<br>return e.value;</p>
+</blockquote>
+<p>更累的是存在哈希冲突的情况，比如两个哈希值取模后落在同一个桶上，或者两条不同的key有相同的哈希值。</p>
+<p>JDK7的做法是建一条链表，后插入的元素在上面，一个个地执行上面的判断。<br>而JDK8则在链表长度达到8，而且桶数量达到64时，建一棵红黑树，解决严重冲突时的性能问题。</p>
+<h3 id="2-很多人忽视的加载因子Load-Factor"><a href="#2-很多人忽视的加载因子Load-Factor" class="headerlink" title="2. 很多人忽视的加载因子Load Factor"></a><strong>2. 很多人忽视的加载因子Load Factor</strong></h3><p>加载因子存在的原因，还是因为减缓哈希冲突，如果初始桶为16，等到满16个元素才扩容，某些桶里可能就有不止一个元素了。所以加载因子默认为0.75，也就是说大小为16的HashMap，到了第13个元素，就会扩容成32。</p>
+<h4 id="2-1-考虑加载因子地设定初始大小"><a href="#2-1-考虑加载因子地设定初始大小" class="headerlink" title="2.1 考虑加载因子地设定初始大小"></a><strong>2.1 考虑加载因子地设定初始大小</strong></h4><p>相比扩容时只是System.arraycopy()的ArrayList，HashMap扩容的代价其实蛮大的，首先，要生成一个新的桶数组，然后要把所有元素都重新Hash落桶一次，几乎等于重新执行了一次所有元素的put。</p>
+<p>所以如果你心目中有明确的Map 大小，设定时一定要考虑加载因子的存在。</p>
+<p>Map map = new HashMap(srcMap.size())这样的写法肯定是不对的，有25%的可能会遇上扩容。</p>
+<p>Thrift里的做法比较粗暴， Map map = new HashMap( 2* srcMap.size()), 直接两倍又有点浪费空间。</p>
+<p>Guava的做法则是加上如下计算</p>
+<blockquote>
+<p>(int) ((float) expectedSize / 0.75F + 1.0F);</p>
+</blockquote>
+<h4 id="2-2-减小加载因子"><a href="#2-2-减小加载因子" class="headerlink" title="2.2 减小加载因子"></a><strong>2.2 减小加载因子</strong></h4><p>在构造函数里，设定加载因子是0.5甚至0.25。</p>
+<p>如果你的Map是一个长期存在而不是每次动态生成的，而里面的key又是没法预估的，那可以适当加大初始大小，同时减少加载因子，降低冲突的机率。毕竟如果是长期存在的map，浪费点数组大小不算啥，降低冲突概率，减少比较的次数更重要。</p>
+<h3 id="3-Key的设计"><a href="#3-Key的设计" class="headerlink" title="3. Key的设计"></a><strong>3. Key的设计</strong></h3><p>对于String型的Key，如果无法保证无冲突而且能用==来对比，那就尽量搞短点，否则一个个字符的equals还是花时间的。</p>
+<p>甚至，对于已知的预定义Key，可以自己试着放一下，看冲不冲突。比如，像”a1”,”a2”,”a3” 这种，hashCode是个小数字递增，绝对是不冲突的：）</p>
+<h3 id="4-EnumMap"><a href="#4-EnumMap" class="headerlink" title="4. EnumMap"></a><strong>4. EnumMap</strong></h3><p>对于上面的问题，有些同学可能会很冲动的想，这么麻烦，我还是换回用数组，然后用常量来定义一些下标算了。其实不用自己来，EnumMap就是可读性与性能俱佳的实现。</p>
+<p>EnumMap的原理是，在构造函数里要传入枚举类，那它就构建一个与枚举的所有值等大的数组，按Enum. ordinal()下标来访问数组，不就是你刚才想做的事情么？</p>
+<p>美中不足的是，因为要实现Map接口，而 V get(Object key)中key是Object而不是泛型K，所以安全起见，EnumMap每次访问都要先对Key进行类型判断。在JMC里录得不低的采样命中频率。</p>
+<p>所以也可以自己再port一个类出来，不实现Map接口，或者自己增加fastGet(),fastPut()的函数。</p>
+<h3 id="5-IntObjectHashMap"><a href="#5-IntObjectHashMap" class="headerlink" title="5. IntObjectHashMap"></a><strong>5. IntObjectHashMap</strong></h3><p>Netty以及其他FastUtils之类的原始类型map，都支持key是int或 long。但两者的区别并不仅仅在于int 换 Integer的那点空间，而是整个存储结构和Hash冲突的解决方法都不一样。</p>
+<p>HashMap的结构是 Node[] table; Node 下面有Hash，Key，Value，Next四个属性。</p>
+<p>而IntObjectHashMap的结构是int[] keys 和 Object[] values.</p>
+<p>在插入时，同样把int先取模落桶，如果遇到冲突，则不采样HashMap的链地址法，而是用开放地址法（线性探测法）index＋1找下一个空桶，最后在keys[index]，values[index]中分别记录。在查找时也是先落桶，然后在key[index++]中逐个比较key。</p>
+<p>所以，对比整个数据结构，省的不止是int vs Integer，还有每个Node的内容。<br>而性能嘛，IntObjectHashMap还是稳赢一点的，随便测了几种场景，耗时至少都有24ms vs 28ms的样子，好的时候甚至快1/3。</p>
+<h3 id="优化建议"><a href="#优化建议" class="headerlink" title="优化建议"></a><strong>优化建议</strong></h3><p>考虑加载因子地设定初始大小<br>减小加载因子<br>String类型的key，不能用==判断或者可能有哈希冲突时，尽量减少长度<br>使用定制版的EnumMap<br>使用IntObjectHashMap</p>
+<p>本文本转载自：[江南白衣](calvin1978.blogcn.com/articles/hashmap.html)calvin1978.blogcn.com/articles/hashmap.html</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/path/to/wechat-reward-image" alt="Charse WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/path/to/alipay-reward-image" alt="Charse Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/JVM/" rel="tag"># JVM</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/22/MySQL-B+-树的索引使用/" rel="next" title="MySQL B+ 树的索引使用">
+                <i class="fa fa-chevron-left"></i> MySQL B+ 树的索引使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/10/05/Hibernate框架——基本操作/" rel="prev" title="Hibernate框架——基本操作">
+                Hibernate框架——基本操作 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="Charse" />
+          <p class="site-author-name" itemprop="name">Charse</p>
+           
+              <p class="site-description motion-element" itemprop="description">Stay hungry, Stay foolish.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/your-user-name" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/your-user-name" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/your-user-name" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  豆瓣
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/your-user-name" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#HashMap-在JDK-7-与-JDK8-下的差别"><span class="nav-number">1.</span> <span class="nav-text">HashMap 在JDK 7 与 JDK8 下的差别</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-获取key的HashCode并二次加工"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 获取key的HashCode并二次加工</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-落桶"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 落桶</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-最后选择Entry"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 最后选择Entry</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-很多人忽视的加载因子Load-Factor"><span class="nav-number">2.</span> <span class="nav-text">2. 很多人忽视的加载因子Load Factor</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-考虑加载因子地设定初始大小"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 考虑加载因子地设定初始大小</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-减小加载因子"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 减小加载因子</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Key的设计"><span class="nav-number">3.</span> <span class="nav-text">3. Key的设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-EnumMap"><span class="nav-number">4.</span> <span class="nav-text">4. EnumMap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-IntObjectHashMap"><span class="nav-number">5.</span> <span class="nav-text">5. IntObjectHashMap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优化建议"><span class="nav-number">6.</span> <span class="nav-text">优化建议</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Charse</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

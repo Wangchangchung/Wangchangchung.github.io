@@ -1,0 +1,855 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Spring,Java Web," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="事务处理是数据库访问层非常重要的一项操作，那么Spring给我们提供的事务是一个什么样的事务呢?">
+<meta name="keywords" content="Spring,Java Web">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring的事务架构">
+<meta property="og:url" content="http://yoursite.com/2016/11/11/Spring的事务架构/index.html">
+<meta property="og:site_name" content="Charse&#39;s Blog">
+<meta property="og:description" content="事务处理是数据库访问层非常重要的一项操作，那么Spring给我们提供的事务是一个什么样的事务呢?">
+<meta property="og:image" content="http://yoursite.com/picture/SpringTrance/Spring_Trancastion.png">
+<meta property="og:image" content="http://yoursite.com/picture/SpringTrance/Spring_chuangbo.png">
+<meta property="og:image" content="http://yoursite.com/picture/SpringTrance/Spring_geli.png">
+<meta property="og:updated_time" content="2017-03-12T02:39:23.907Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring的事务架构">
+<meta name="twitter:description" content="事务处理是数据库访问层非常重要的一项操作，那么Spring给我们提供的事务是一个什么样的事务呢?">
+<meta name="twitter:image" content="http://yoursite.com/picture/SpringTrance/Spring_Trancastion.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/11/11/Spring的事务架构/"/>
+
+
+
+
+
+  <title>Spring的事务架构 | Charse's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Charse's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/11/Spring的事务架构/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charse">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Charse's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Spring的事务架构</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-11-11T16:31:23+08:00">
+                2016-11-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring/" itemprop="url" rel="index">
+                    <span itemprop="name">Spring</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>事务处理是数据库访问层非常重要的一项操作，那么Spring给我们提供的事务是一个什么样的事务呢?<br><a id="more"></a></p>
+<h1 id="Spring-声明式事务处理"><a href="#Spring-声明式事务处理" class="headerlink" title="Spring 声明式事务处理"></a><strong>Spring 声明式事务处理</strong></h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a><strong>概念</strong></h2><p>程序员不再负责处理事务，事务处理交给Spring容器来做。程序员做的是声明。那么声明什么呢？<br><strong>具体声明:</strong><br>  程序员负责的两个内容:</p>
+<ul>
+<li>对表的CRUD操作：目标类的目标方法</li>
+<li>告诉Spring容器什么样的目标方法采用什么样的事务策略来处理。</li>
+</ul>
+<p>Spring 容器负责（切面）:事务的处理</p>
+<p><strong>Spring采用的实现原理:采用AOP技术来实现的。</strong></p>
+<h2 id="Spring-事务的架构"><a href="#Spring-事务的架构" class="headerlink" title="Spring 事务的架构"></a><strong>Spring 事务的架构</strong></h2><p>分析Spring的事务的架构我们从他的几个事务的管理的几个类源码中看吧：<br>下面直接放代码了！</p>
+<p>PlatformTransactionManager类部分源码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">PlatformTransactionManager</span> </span>&#123;</div><div class="line"><span class="comment">/**</span></div><div class="line">	 * Return a currently active transaction or create a new one, according to</div><div class="line">	 * the specified propagation behavior.</div><div class="line">	 * &lt;p&gt;Note that parameters like isolation level or timeout will only be applied</div><div class="line">	 * to new transactions, and thus be ignored when participating in active ones.</div><div class="line">	 * &lt;p&gt;Furthermore, not all transaction definition settings will be supported</div><div class="line">	 * by every transaction manager: A proper transaction manager implementation</div><div class="line">	 * should throw an exception when unsupported settings are encountered.</div><div class="line">	 */</div><div class="line"><span class="function">TransactionStatus <span class="title">getTransaction</span><span class="params">(TransactionDefinition definition)</span> <span class="keyword">throws</span> TransactionException</span>;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line">	 * Commit the given transaction, with regard to its status. If the transaction</div><div class="line">	 * has been marked rollback-only programmatically, perform a rollback.</div><div class="line">	 * &lt;p&gt;If the transaction wasn't a new one, omit the commit for proper</div><div class="line">	 * participation in the surrounding transaction. If a previous transaction</div><div class="line">	 * has been suspended to be able to create a new one, resume the previous</div><div class="line">	 * transaction after committing the new one.*/</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">commit</span><span class="params">(TransactionStatus status)</span> <span class="keyword">throws</span> TransactionException</span>;</div><div class="line">	<span class="comment">/**</span></div><div class="line">	 * Perform a rollback of the given transaction.</div><div class="line">	 * &lt;p&gt;If the transaction wasn't a new one, just set it rollback-only for proper</div><div class="line">	 * participation in the surrounding transaction. If a previous transaction</div><div class="line">	 * has been suspended to be able to create a new one, resume the previous</div><div class="line">	 * transaction after rolling back the new one.</div><div class="line">	 * &lt;p&gt;&lt;b&gt;Do not call rollback on a transaction if commit threw an exception.&lt;/b&gt;</div><div class="line">	 * The transaction will already have been completed and cleaned up when commit</div><div class="line">	 * returns, even in case of a commit exception. Consequently, a rollback call</div><div class="line">	 * after commit failure will lead to an IllegalTransactionStateException</div><div class="line">	 */</div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">rollback</span><span class="params">(TransactionStatus status)</span> <span class="keyword">throws</span> TransactionException</span>;</div><div class="line">	<span class="comment">//.....</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>AbstractPlatformTransactionManager类部分源码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@SuppressWarnings</span>(<span class="string">"serial"</span>)</div><div class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractPlatformTransactionManager</span> <span class="keyword">implements</span> <span class="title">PlatformTransactionManager</span>, <span class="title">Serializable</span> </span>&#123;</div><div class="line"></div><div class="line"><span class="comment">//---------------------------------------------------------------------</span></div><div class="line">	<span class="comment">// Implementation of PlatformTransactionManager</span></div><div class="line">	<span class="comment">//---------------------------------------------------------------------</span></div><div class="line"></div><div class="line">	<span class="comment">/**</span></div><div class="line">	 * This implementation handles propagation behavior. Delegates to</div><div class="line">	 * &#123;<span class="doctag">@code</span> doGetTransaction&#125;, &#123;<span class="doctag">@code</span> isExistingTransaction&#125;</div><div class="line">	 * and &#123;<span class="doctag">@code</span> doBegin&#125;.</div><div class="line">	 * <span class="doctag">@see</span> #doGetTransaction</div><div class="line">	 * <span class="doctag">@see</span> #isExistingTransaction</div><div class="line">	 * <span class="doctag">@see</span> #doBegin</div><div class="line">	 */</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">final</span> TransactionStatus <span class="title">getTransaction</span><span class="params">(TransactionDefinition definition)</span> <span class="keyword">throws</span> TransactionException </span>&#123;</div><div class="line">		Object transaction = doGetTransaction();</div><div class="line"></div><div class="line">		<span class="comment">// Cache debug flag to avoid repeated checks.</span></div><div class="line">		<span class="keyword">boolean</span> debugEnabled = logger.isDebugEnabled();</div><div class="line"></div><div class="line">		<span class="keyword">if</span> (definition == <span class="keyword">null</span>) &#123;</div><div class="line">			<span class="comment">// Use defaults if no transaction definition given.</span></div><div class="line">			definition = <span class="keyword">new</span> DefaultTransactionDefinition();</div><div class="line">		&#125;</div><div class="line">		<span class="comment">//......</span></div><div class="line">&#125;</div><div class="line">    <span class="comment">// rollback已经实现</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">rollback</span><span class="params">(TransactionStatus status)</span> <span class="keyword">throws</span> TransactionException </span>&#123;</div><div class="line">		<span class="keyword">if</span> (status.isCompleted()) &#123;</div><div class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> IllegalTransactionStateException(</div><div class="line">					<span class="string">"Transaction is already completed - do not call commit or rollback more than once per transaction"</span>);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		DefaultTransactionStatus defStatus = (DefaultTransactionStatus) status;</div><div class="line">		processRollback(defStatus);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="comment">//已经实现</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">commit</span><span class="params">(TransactionStatus status)</span> <span class="keyword">throws</span> TransactionException </span>&#123;</div><div class="line">		<span class="keyword">if</span> (status.isCompleted()) &#123;</div><div class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> IllegalTransactionStateException(</div><div class="line">					<span class="string">"Transaction is already completed - do not call commit or rollback more than once per transaction"</span>);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		DefaultTransactionStatus defStatus = (DefaultTransactionStatus) status;</div><div class="line">		<span class="keyword">if</span> (defStatus.isLocalRollbackOnly()) &#123;</div><div class="line">			<span class="keyword">if</span> (defStatus.isDebug()) &#123;</div><div class="line">				logger.debug(<span class="string">"Transactional code has requested rollback"</span>);</div><div class="line">			&#125;</div><div class="line">			processRollback(defStatus);</div><div class="line">			<span class="keyword">return</span>;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">if</span> (!shouldCommitOnGlobalRollbackOnly() &amp;&amp; defStatus.isGlobalRollbackOnly()) &#123;</div><div class="line">			<span class="keyword">if</span> (defStatus.isDebug()) &#123;</div><div class="line">				logger.debug(<span class="string">"Global transaction is marked as rollback-only but transactional code requested commit"</span>);</div><div class="line">			&#125;</div><div class="line">			processRollback(defStatus);</div><div class="line">			<span class="comment">// Throw UnexpectedRollbackException only at outermost transaction boundary</span></div><div class="line">			<span class="comment">// or if explicitly asked to.</span></div><div class="line">			<span class="keyword">if</span> (status.isNewTransaction() || isFailEarlyOnGlobalRollbackOnly()) &#123;</div><div class="line">				<span class="keyword">throw</span> <span class="keyword">new</span> UnexpectedRollbackException(</div><div class="line">						<span class="string">"Transaction rolled back because it has been marked as rollback-only"</span>);</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">return</span>;</div><div class="line">		&#125;</div><div class="line">		processCommit(defStatus);</div><div class="line">	&#125;</div><div class="line">	<span class="comment">//.....</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>DataSourceTransactionManager类源码  不在tx事务包中，而是在JDBC的包中。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@SuppressWarnings</span>(<span class="string">"serial"</span>)</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DataSourceTransactionManager</span> <span class="keyword">extends</span> <span class="title">AbstractPlatformTransactionManager</span></span></div><div class="line">		<span class="keyword">implements</span> <span class="title">ResourceTransactionManager</span>, <span class="title">InitializingBean</span> &#123;</div><div class="line"></div><div class="line">	<span class="keyword">private</span> DataSource dataSource;</div><div class="line"></div><div class="line"><span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">protected</span> Object <span class="title">doGetTransaction</span><span class="params">()</span> </span>&#123;</div><div class="line">		DataSourceTransactionObject txObject = <span class="keyword">new</span> DataSourceTransactionObject();</div><div class="line">		txObject.setSavepointAllowed(isNestedTransactionAllowed());</div><div class="line">		ConnectionHolder conHolder =</div><div class="line">			(ConnectionHolder) TransactionSynchronizationManager.getResource(<span class="keyword">this</span>.dataSource);</div><div class="line">		txObject.setConnectionHolder(conHolder, <span class="keyword">false</span>);</div><div class="line">		<span class="keyword">return</span> txObject;</div><div class="line">	&#125;</div><div class="line">	<span class="comment">//......</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>HibernateTransactionManager类源码，在orm包下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@SuppressWarnings</span>(<span class="string">"serial"</span>)</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HibernateTransactionManager</span> <span class="keyword">extends</span> <span class="title">AbstractPlatformTransactionManager</span></span></div><div class="line">		<span class="keyword">implements</span> <span class="title">ResourceTransactionManager</span>, <span class="title">BeanFactoryAware</span>, <span class="title">InitializingBean</span> &#123;</div><div class="line">		</div><div class="line">	<span class="keyword">private</span> SessionFactory sessionFactory;</div><div class="line"></div><div class="line">	<span class="keyword">private</span> DataSource dataSource;</div><div class="line"></div><div class="line">	<span class="keyword">private</span> <span class="keyword">boolean</span> autodetectDataSource = <span class="keyword">true</span>;</div><div class="line"></div><div class="line">	<span class="keyword">private</span> <span class="keyword">boolean</span> prepareConnection = <span class="keyword">true</span>;</div><div class="line"></div><div class="line">	<span class="keyword">private</span> <span class="keyword">boolean</span> hibernateManagedSession = <span class="keyword">false</span>;</div><div class="line"></div><div class="line">	<span class="keyword">private</span> <span class="keyword">boolean</span> earlyFlushBeforeCommit = <span class="keyword">false</span>;</div><div class="line">	<span class="comment">// ......</span></div><div class="line">		<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">protected</span> Object <span class="title">doGetTransaction</span><span class="params">()</span> </span>&#123;</div><div class="line">		HibernateTransactionObject txObject = <span class="keyword">new</span> HibernateTransactionObject();</div><div class="line">		txObject.setSavepointAllowed(isNestedTransactionAllowed());</div><div class="line"></div><div class="line">		SessionHolder sessionHolder =</div><div class="line">				(SessionHolder) TransactionSynchronizationManager.getResource(getSessionFactory());</div><div class="line">		<span class="keyword">if</span> (sessionHolder != <span class="keyword">null</span>) &#123;</div><div class="line">			<span class="keyword">if</span> (logger.isDebugEnabled()) &#123;</div><div class="line">				logger.debug(<span class="string">"Found thread-bound Session ["</span> +</div><div class="line">						SessionFactoryUtils.toString(sessionHolder.getSession()) + <span class="string">"] for Hibernate transaction"</span>);</div><div class="line">			&#125;</div><div class="line">			txObject.setSessionHolder(sessionHolder);</div><div class="line">		&#125;</div><div class="line">		<span class="comment">// ...</span></div><div class="line">	&#125;</div></pre></td></tr></table></figure></p>
+<p>通过观察源代码的分析，Spring的事务的整体架构 如下图:<br><img src="/picture/SpringTrance/Spring_Trancastion.png" alt="Spring的事务架构"></p>
+<p>从图中可以知道，HibernateTransactionManager和DataSourceTransactionManager都是继承于AbstractPlatformTransactionManager，而AbstractPlatformTransactionManager实现了PlatformTransactionManager接口，其中AbstractPlatformTransactionManager是一个抽象类， 实现了一部分的方法，还有一些方法是抽象的，那么这样的目的是在于干什么呢？ </p>
+<p><strong>目的是在于: 面向接口编程，</strong></p>
+<blockquote>
+<p>那么Spring他就怎么面向接口编程的了？<br>所以根据上面的分析的Spring的事务架构，可以知道，只要我们遵循Spring中的那套事务规范，并且实现了，那么Spring内部就可以按照我们的要求处理数据库，而不管是处理什么数据，不管不同数据库操作方式的不同，只要准许这个架构，那么就可以集成到Spring中去，Spring内部准备可一个壳子，只要你往里面填东西，人家Spring就可以帮你干活了。</p>
+</blockquote>
+<p><strong>再来看AbstractPlatformTransactionManager抽象类不管是它的作用还是一任何一个Java的抽象，抽象类的作用是： 将公共的方法实现了，然后不同的方法就声明为抽象，那么谁继承，那谁就实现。</strong></p>
+<p>所以，AbstractPlatfromTransactionManager, 为什么获取事务被整成抽象的方法? 因为不同的数据库技术，获取数据库事务是不同的， 比如说JDBC是通过一个方法connection.setAutoCommit（flase），获取事务，为隐式操作，事务和数据库链接是非常紧密的。</p>
+<h2 id="事务的定义"><a href="#事务的定义" class="headerlink" title="事务的定义"></a><strong>事务的定义</strong></h2><p>在顶层的PlatformTransactionManager类中我们发现有一个TransactionDefinition类，那么这个类是什么呢？里面有什么呢？先来看下面的源码吧！</p>
+<p>TransactionDefinition 类部分源码:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">TransactionDefinition</span> </span>&#123;</div><div class="line">        <span class="comment">//事务的传播机制</span></div><div class="line">        <span class="keyword">int</span> PROPAGATION_REQUIRED = <span class="number">0</span>;</div><div class="line">    	<span class="keyword">int</span> PROPAGATION_SUPPORTS = <span class="number">1</span>;</div><div class="line">    	<span class="keyword">int</span> PROPAGATION_MANDATORY = <span class="number">2</span>;</div><div class="line">    	<span class="keyword">int</span> PROPAGATION_REQUIRES_NEW = <span class="number">3</span>;</div><div class="line">    	<span class="keyword">int</span> PROPAGATION_NOT_SUPPORTED = <span class="number">4</span>;</div><div class="line">    	<span class="keyword">int</span> PROPAGATION_NEVER = <span class="number">5</span>;</div><div class="line">    	<span class="keyword">int</span> PROPAGATION_NESTED = <span class="number">6</span>;</div><div class="line">    	<span class="keyword">int</span> ISOLATION_DEFAULT = -<span class="number">1</span>;</div><div class="line">    	<span class="comment">// 隔离机制</span></div><div class="line">    	<span class="keyword">int</span> ISOLATION_READ_UNCOMMITTED = Connection.TRANSACTION_READ_UNCOMMITTED;</div><div class="line">    	<span class="keyword">int</span> ISOLATION_REPEATABLE_READ = Connection.TRANSACTION_REPEATABLE_READ;</div><div class="line">	    <span class="keyword">int</span> ISOLATION_SERIALIZABLE = Connection.TRANSACTION_SERIALIZABLE;</div><div class="line">	    <span class="keyword">int</span> TIMEOUT_DEFAULT = -<span class="number">1</span>;</div><div class="line">	    </div><div class="line">	    <span class="comment">//.....</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>从类名可以知道，这个类是Spring用来描述事务的。其中这个类主要的有两个功能是：</p>
+<ol>
+<li>描述事务的传播机制</li>
+<li>描述事务的隔离机制</li>
+</ol>
+<p>那么什么叫传播机制? 主要用于解决什么问题的呢？我们先来看下面的一种情况：</p>
+<p>假设有一个Service层中有一个AService类，里面有一个aService方法，它调用了Dao层BDao和CDao类中的bDao和cDao方法，那么如果bDao和cDao在处理的时候分别存在事务，我们在aService方法中，本身也是存在一个事务的，那么加入该方法里面的bDao和cDao中的事务怎么处理呢？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">AService&#123;</div><div class="line">    aService()&#123;<span class="comment">//txa</span></div><div class="line">        bDao();</div><div class="line">        cDao();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">BDao：</div><div class="line">    bDao()&#123;<span class="comment">//txb</span></div><div class="line">    &#125;</div><div class="line">CDao:</div><div class="line">    cDao()&#123;<span class="comment">//txc</span></div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>那么在aService中共有多少个事务？很显然，有三个事务，这个是不允许的呀，一个方法中有三个事务。那么怎么解决呢？这个问题是属于事务嵌套的问题，那么Spring中的事务传播机是用来解决事务的嵌套问题。Spring中有如下几种传播机制:<br><img src="/picture/SpringTrance/Spring_chuangbo.png" alt="Spring中的事务传播机制"><br>一般情况下我们选择的是第一个。</p>
+<p>那么是隔离机制是为了数据的规范性的约束机制了，它和数据的隔离机制很相似，那么我们来看一下几种事务的隔离级别：</p>
+<p>下面是Spring的隔离机制:<br><img src="/picture/SpringTrance/Spring_geli.png" alt="Spring中的隔离机制"></p>
+<p>隔离机制越高，效率越低，数据规范性越强，隔离机制越低，效率越高，数据就越烂（可能读取脏数据等）。</p>
+<p><strong>说明:通过Spring的事务处理架构，再通过配置文件，配置具体的实现事务的类，就可以让Spring容器知道是什么样的技术来操作数据库，通过对事务状态的判断，通过事务的定义，就让Spring可以知道具体的目标方法采用什么样的事务策略来处理了。</strong></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/path/to/wechat-reward-image" alt="Charse WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/path/to/alipay-reward-image" alt="Charse Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spring/" rel="tag"># Spring</a>
+          
+            <a href="/tags/Java-Web/" rel="tag"># Java Web</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/10/Spring的数据库访问哲学/" rel="next" title="Spring的数据库访问哲学">
+                <i class="fa fa-chevron-left"></i> Spring的数据库访问哲学
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/11/20/Java常用类源码——ArrayList源码解析/" rel="prev" title="Java常用类源码——ArrayList源码解析">
+                Java常用类源码——ArrayList源码解析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="Charse" />
+          <p class="site-author-name" itemprop="name">Charse</p>
+           
+              <p class="site-description motion-element" itemprop="description">Stay hungry, Stay foolish.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/your-user-name" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/your-user-name" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/your-user-name" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  豆瓣
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/your-user-name" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-声明式事务处理"><span class="nav-number">1.</span> <span class="nav-text">Spring 声明式事务处理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#概念"><span class="nav-number">1.1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-事务的架构"><span class="nav-number">1.2.</span> <span class="nav-text">Spring 事务的架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事务的定义"><span class="nav-number">1.3.</span> <span class="nav-text">事务的定义</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Charse</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

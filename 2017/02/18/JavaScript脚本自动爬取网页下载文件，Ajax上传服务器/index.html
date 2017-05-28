@@ -1,0 +1,837 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="JavaScript,Ajax," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="任务背景寒假里，自己找了一份实习的工作，分配给我的任务是完成业务操作的自动化工作，就是提高老板的工作效率，解放双手。 老板的任务要求是：在阿里妈妈的订单下载页面中，由于有数据更新的时候，就要将订单报表，手动下载到电脑本地，然后用公司的开发工具上传到服务器中，这样就可以在平台中看到新生产的订单，这一过程比较的繁琐，而且一天要多次的操作，如何能够简单点，自动获取报表中的数据，然后自动的上传到服务器中去">
+<meta name="keywords" content="JavaScript,Ajax">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript脚本自动爬取网页下载文件，Ajax上传服务器">
+<meta property="og:url" content="http://yoursite.com/2017/02/18/JavaScript脚本自动爬取网页下载文件，Ajax上传服务器/index.html">
+<meta property="og:site_name" content="Charse&#39;s Blog">
+<meta property="og:description" content="任务背景寒假里，自己找了一份实习的工作，分配给我的任务是完成业务操作的自动化工作，就是提高老板的工作效率，解放双手。 老板的任务要求是：在阿里妈妈的订单下载页面中，由于有数据更新的时候，就要将订单报表，手动下载到电脑本地，然后用公司的开发工具上传到服务器中，这样就可以在平台中看到新生产的订单，这一过程比较的繁琐，而且一天要多次的操作，如何能够简单点，自动获取报表中的数据，然后自动的上传到服务器中去">
+<meta property="og:image" content="http://yoursite.com/picture/chnagxiaozhushou/changxiaocom1.jpg">
+<meta property="og:image" content="http://yoursite.com/picture/chnagxiaozhushou/wangyelaingjie.png">
+<meta property="og:image" content="http://yoursite.com/picture/chnagxiaozhushou/jieguo.png">
+<meta property="og:image" content="http://yoursite.com/picture/chnagxiaozhushou/changxiaocom2.jpg">
+<meta property="og:updated_time" content="2017-03-12T02:34:28.915Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JavaScript脚本自动爬取网页下载文件，Ajax上传服务器">
+<meta name="twitter:description" content="任务背景寒假里，自己找了一份实习的工作，分配给我的任务是完成业务操作的自动化工作，就是提高老板的工作效率，解放双手。 老板的任务要求是：在阿里妈妈的订单下载页面中，由于有数据更新的时候，就要将订单报表，手动下载到电脑本地，然后用公司的开发工具上传到服务器中，这样就可以在平台中看到新生产的订单，这一过程比较的繁琐，而且一天要多次的操作，如何能够简单点，自动获取报表中的数据，然后自动的上传到服务器中去">
+<meta name="twitter:image" content="http://yoursite.com/picture/chnagxiaozhushou/changxiaocom1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/02/18/JavaScript脚本自动爬取网页下载文件，Ajax上传服务器/"/>
+
+
+
+
+
+  <title>JavaScript脚本自动爬取网页下载文件，Ajax上传服务器 | Charse's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Charse's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/18/JavaScript脚本自动爬取网页下载文件，Ajax上传服务器/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charse">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Charse's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">JavaScript脚本自动爬取网页下载文件，Ajax上传服务器</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-18T14:34:08+08:00">
+                2017-02-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="任务背景"><a href="#任务背景" class="headerlink" title="任务背景"></a><strong>任务背景</strong></h2><p>寒假里，自己找了一份实习的工作，分配给我的任务是完成业务操作的自动化工作，就是提高老板的工作效率，解放双手。</p>
+<p>老板的任务要求是：在阿里妈妈的订单下载页面中，由于有数据更新的时候，就要将订单报表，手动下载到电脑本地，然后用公司的开发工具上传到服务器中，这样就可以在平台中看到新生产的订单，这一过程比较的繁琐，而且一天要多次的操作，如何能够简单点，自动获取报表中的数据，然后自动的上传到服务器中去呢？这个就是我的一个任务了。<br><a id="more"></a></p>
+<p><img src="/picture/chnagxiaozhushou/changxiaocom1.jpg" alt="畅销助手公司"></p>
+<h2 id="解决思路"><a href="#解决思路" class="headerlink" title="解决思路"></a><strong>解决思路</strong></h2><p>由于是要给老板使用，于是在做技术选择的时候，就想应该使用方便的语言，不要让老板的电脑中添加太多的开发环境（Java，PHP，Python），并且主要是运行在网页中，所以很显然的是，我应该使用JavaScript，说实话，JavaScrpit这个脚本语言真是太强大了，前后端都进入了详情请看我的博文《Node.js的特点》)。</p>
+<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a><strong>问题</strong></h3><p>说明了任务背景后，我总结了几个非常中要的问题：</p>
+<p>1、在向网页中的一个请求发起的时候，用单独的JavaScript脚本是不在同一个域中的也就是说：你单独写一个javaScrpit代码，去请求别人服务器中的资源的时候，是没有权限的，平时我们下载资源是登入后，有权限进行下载文件，但是你写的代码中并没有进行登入，所以在自己写的代码中，你要么做登入的操作，要么在服务器中设置请求端允许跨域的操作，然而服务器是别人的，你怎么设置得了^_^（阿里妈妈服务器）,做登入操作是在是比较的麻烦，而且是安全性的问题，所以最后决定是使用，登录状态后，执行脚本，再进行数据的请求。（什么是跨域， 跨域问题的解决，请看这里<a href="http://www.2cto.com/kf/201604/499381.html）" target="_blank" rel="external">http://www.2cto.com/kf/201604/499381.html）</a></p>
+<p>2、向服务器请求数据的时候，一开始是直接访问，请求后文件被下载在本地，但是如何再通过JavaScript再上传到服务其中，这个可是一个大的问题了，因为浏览器的规范中是：浏览器不能够直接操作硬盘的数据的，只有在用户手动提交文件（上传表单文件）才是可以获取的，如果可以的话，那不是黑客随意的通过浏览器端窃取你本地硬盘的数据了吗？（可是这样的事没有发生），所以请求的资源不能够下载在本地，应该保存在内存中，那么请求方式就要做一些变化，不能直接去跳转链接，而我这里做的就是用GET请求。</p>
+<p>3、以什么样的方式，将数据上传到服务器中，由于实际的文件是一个excel文件，在最终的解决方案中，问题2中的方式获取的数据是二进制的流数据，如何让这个数据在后台成功获取呢？这个又是一个问题，因为是在脚本中写入代码。平时的我们提交表单数据的时候是通过键值对”Key”,”Value”的形式提交给后台的，后台通过的name值获取数据的，但是我们现在提交的是一个二进制文件数据，并且是在js脚本中，根本没有表单from，所以如何让它提交给后台呢？通过API的查询，我们最终使用的是Blob、FormData 来提交数据给后台。<br>所以综合上面的问题和解决方案，再来总结下任务：<br>1、使用JavaScript 爬取网页源码中的数据链接。<br><img src="/picture/chnagxiaozhushou/wangyelaingjie.png" alt="抓取网页中的连接"></p>
+<p>2、使用GET方式向阿里妈妈的服务器请求数据（跨域问题是难点）。<br>跨域问题的出现一般是这样的问题：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">XMLHttpRequest cannot load http:<span class="comment">//myApiUrl/login. No</span></div><div class="line"><span class="string">'Access-Control-Allow-Origin'</span> header is present on the requested</div><div class="line">resource. Origin <span class="string">'null'</span> is therefore not allowed access.</div></pre></td></tr></table></figure></p>
+<p>3、将请求的数据先保存在内存中。</p>
+<p>4、使用Blob、FormData将数据上传至服务器，向服务器发出处理请求。</p>
+<h2 id="最终方案实现"><a href="#最终方案实现" class="headerlink" title="最终方案实现"></a><strong>最终方案实现</strong></h2><p>JavaScript代码的实现，这个脚本的代码<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//获取网络中的jQuery</span></div><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">func</span>)</span>&#123;</div><div class="line">	<span class="keyword">if</span>( <span class="keyword">typeof</span> $ == <span class="string">'undefined'</span> )&#123;</div><div class="line">		<span class="keyword">var</span> script = <span class="built_in">document</span>.createElement(<span class="string">'script'</span>),</div><div class="line">		    head = <span class="built_in">document</span>.documentElement.firstChild;</div><div class="line">		script.src = <span class="string">'http://m.youyouhd.com/static/library/jquery/2.1.4/jquery.min.js?v=1487321406'</span>;</div><div class="line">		script.onload = func;</div><div class="line">		head.insertBefore(script, head.firstChild);</div><div class="line">	&#125;<span class="keyword">else</span>&#123;</div><div class="line">		$(func)</div><div class="line">	&#125;</div><div class="line">&#125;)(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="comment">// 设置定时器，每隔一段时间，对数据进行获取，然后上传到服务器中</span></div><div class="line">	timeOut =  setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;		</div><div class="line">		<span class="keyword">var</span> item = <span class="built_in">document</span>.getElementsByTagName(<span class="string">'a'</span>);</div><div class="line">		<span class="keyword">var</span> urldown;</div><div class="line">		<span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; item.length; i++)&#123;	</div><div class="line">			<span class="keyword">if</span> (item[i].title==<span class="string">'下载报表'</span>) &#123;</div><div class="line">				urldown = item[i].href;</div><div class="line">				<span class="keyword">break</span>;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		<span class="function"><span class="keyword">function</span> <span class="title">createXHR</span>(<span class="params"></span>)</span>&#123;</div><div class="line">			<span class="keyword">if</span>(<span class="built_in">window</span>.XMLHttpRequest)&#123;</div><div class="line">				<span class="keyword">return</span> <span class="keyword">new</span> XMLHttpRequest();</div><div class="line">			&#125;<span class="keyword">else</span>&#123;</div><div class="line">				<span class="keyword">return</span> <span class="keyword">new</span> ActiveXObject(<span class="string">"Microsoft.XMLHTTP"</span>);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">"地址是:"</span> + urldown);</div><div class="line">		<span class="comment">// GET请求</span></div><div class="line">		<span class="keyword">var</span> http = createXHR();</div><div class="line">		http.open(<span class="string">'GET'</span>, urldown, <span class="literal">true</span>);</div><div class="line">		http.responseType = <span class="string">"blob"</span>;</div><div class="line">		http.send();</div><div class="line">		http.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">			<span class="keyword">if</span> (http.readyState == <span class="number">4</span> &amp;&amp; http.status== <span class="number">200</span>) &#123;</div><div class="line">				<span class="built_in">console</span>.info(http);</div><div class="line">				<span class="comment">//创建 Blob对象、FormData对象</span></div><div class="line">				<span class="keyword">var</span> xmlRoot = http.response;</div><div class="line">				<span class="keyword">var</span> blod = <span class="keyword">new</span> Blob([xmlRoot]);</div><div class="line">				<span class="keyword">var</span> formData = <span class="keyword">new</span> FormData();</div><div class="line">				formData.append(<span class="string">'data'</span>, blod);</div><div class="line">				<span class="comment">// 向服务器提交数据，</span></div><div class="line">				$.ajax(&#123;</div><div class="line">				<span class="attr">url</span>:</div><div class="line">				<span class="string">"http://laowang.zxmall.com/tbunion/create"</span>,</div><div class="line">				<span class="attr">data</span>:formData,</div><div class="line">				<span class="attr">type</span>:<span class="string">'POST'</span>,</div><div class="line">				<span class="attr">processData</span>:<span class="literal">false</span>,</div><div class="line">				<span class="attr">contentType</span>:<span class="literal">false</span>,</div><div class="line">				<span class="attr">success</span>:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">				<span class="comment">//提交成功后，向服务器触发 处理请求，直到全部数据处理为止。</span></div><div class="line">				<span class="keyword">var</span> falg = <span class="literal">true</span>;</div><div class="line">				<span class="keyword">while</span>(falg)&#123;</div><div class="line">					$.ajax(&#123;</div><div class="line">						<span class="attr">async</span>:<span class="literal">false</span>,</div><div class="line">						<span class="attr">url</span>:<span class="string">"http://laowang.zxmall.com/tbunion/import?ajax=1"</span>,</div><div class="line">						<span class="attr">dataType</span>: <span class="string">'JSON'</span>,</div><div class="line">						<span class="attr">success</span>:<span class="function"><span class="keyword">function</span>(<span class="params">rep</span>)</span>&#123;</div><div class="line">						<span class="built_in">console</span>.log(rep);</div><div class="line">						<span class="comment">//服务器向我发送剩余多少的数据</span></div><div class="line">						<span class="keyword">if</span> (rep.left_count==<span class="number">0</span>) &#123;</div><div class="line">							falg = <span class="literal">false</span>;</div><div class="line">						&#125;</div><div class="line">					&#125;</div><div class="line">				&#125;)</div><div class="line">			&#125;</div><div class="line">		&#125;,</div><div class="line">		<span class="attr">error</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	        <span class="built_in">console</span>.log(<span class="string">'ajax上传失败'</span>);</div><div class="line">		&#125;</div><div class="line">	&#125;);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;,<span class="number">300000</span>);</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>后台的简单获取文件数据，使用PHP进行获取：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">header(<span class="string">"Access-Control-Allow-Origin: *"</span>);</div><div class="line"><span class="keyword">if</span> ($_FILES[<span class="string">"data"</span>][<span class="string">"error"</span>] &gt; <span class="number">0</span>)&#123;</div><div class="line">    <span class="keyword">echo</span> <span class="string">"Return Code: "</span> . $_FILES[<span class="string">"data"</span>][<span class="string">"error"</span>] . <span class="string">"&lt;br /&gt;"</span>;</div><div class="line">&#125;<span class="keyword">else</span>&#123;</div><div class="line">    move_uploaded_file($_FILES[<span class="string">"data"</span>][<span class="string">"tmp_name"</span>],       $_FILES[<span class="string">"data"</span>][<span class="string">"name"</span>] . <span class="string">'.xls'</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>因为写的是脚本，并且是在浏览器中进行执行的，所以在浏览器中要进行触发设置，这段代码是直接以书签地址的方式，保存在浏览其中，要执行自动获取数据后，就打开响应的页面，点击该书签就行，相当于将JavaScript代码直接嵌入带当前的网页中，然后就可以解决跨域的问题了，（这个做法我很想知道是不是2016年中秋节 阿里员工用js写一个脚本强月饼的做法，我觉的很有可能是呀！），之前我也不知道有这样的做法，还是技术小黄同学给我提供的思路，整的是非常感谢了，下面的http地址是将上面的js代码引入，实际的地址是公司服务器的地址，这里做本地的测试，所以写的是本地的地址，如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">javascript:(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123; <span class="keyword">var</span> script=<span class="built_in">document</span>.createElement(<span class="string">"script"</span>);script.setAttribute(<span class="string">"src"</span>, <span class="string">"http://127.0.0.1:90/changxiao.js"</span>);<span class="built_in">document</span>.getElementsByTagName(<span class="string">"head"</span>)[<span class="number">0</span>].appendChild(script); &#125;)</div></pre></td></tr></table></figure></p>
+<p>最后的结果是，完美的处理了数据，到目前为止没有出现什么的问题:<br><img src="/picture/chnagxiaozhushou/jieguo.png" alt="jieguo">;</p>
+<h2 id="收获"><a href="#收获" class="headerlink" title="收获"></a><strong>收获</strong></h2><p><img src="/picture/chnagxiaozhushou/changxiaocom2.jpg" alt="shouhuo"></p>
+<p>在这次的短暂实习的过程中，感触真的是非常深刻，在这个团队中，感谢技术小黄对我的帮助，团队中能够有人给自己指导真的帮助是非常的大，对自己的成长非常的大，尤其是技术的提升很大。</p>
+<p>在工作中，又深有体会了一遍：“在学校，课堂中学习的知识真的是非常的少，不足以完全解决工作中的问题，我们还要自身进行深入的学习”，这一深刻的道理呀！还有一点就是，在学习中的遇到的问题和在工作中遇到的问题，真不是一个等级，工作中遇到的问题，比如老大直接让你实现哪一个功能的话，这个问题可能是从来没有人做过的，需要自己去想解决思路，找到解决问题的办法，在学校中遇到的问题，那感觉实在是太简单了。同时，一些基本的技能真的是非常重要的，因为扎实的基础技能可以很高效的帮助你提高效率。还有非常重要的一点是：团队之间的交流很重要，交流能力对个人来讲是一个非常重要的能力，怎么让别人听懂你要说的，如何快速理解别人说的是什么，这是非常关键的，在团队中，交流是不可避免的。交流能力，领导力，这些或许是决定程序员未来道路方向的一个重要指标。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/path/to/wechat-reward-image" alt="Charse WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/path/to/alipay-reward-image" alt="Charse Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          
+            <a href="/tags/Ajax/" rel="tag"># Ajax</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/01/02/设计模式——观察者模式/" rel="next" title="设计模式——观察者模式">
+                <i class="fa fa-chevron-left"></i> 设计模式——观察者模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/18/数据库范式/" rel="prev" title="数据库范式">
+                数据库范式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="Charse" />
+          <p class="site-author-name" itemprop="name">Charse</p>
+           
+              <p class="site-description motion-element" itemprop="description">Stay hungry, Stay foolish.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/your-user-name" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/your-user-name" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/your-user-name" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  豆瓣
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/your-user-name" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#任务背景"><span class="nav-number">1.</span> <span class="nav-text">任务背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决思路"><span class="nav-number">2.</span> <span class="nav-text">解决思路</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题"><span class="nav-number">2.1.</span> <span class="nav-text">问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最终方案实现"><span class="nav-number">3.</span> <span class="nav-text">最终方案实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#收获"><span class="nav-number">4.</span> <span class="nav-text">收获</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Charse</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

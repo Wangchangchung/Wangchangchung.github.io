@@ -1,0 +1,907 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hibernate,Java," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="在Java Web的后台开发中，数据持久化操作是非常重要的一步，数据持久化，简单来说是将程序的数据保存在数据库中，将数据写入磁盘。JDBC是一种持久化机制，是我们最经常使用的，但是，有许多开源的框架有更好的操作性，例如Hibernate.">
+<meta name="keywords" content="Hibernate,Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hibernate框架——基本操作">
+<meta property="og:url" content="http://yoursite.com/2016/10/05/Hibernate框架——基本操作/index.html">
+<meta property="og:site_name" content="Charse&#39;s Blog">
+<meta property="og:description" content="在Java Web的后台开发中，数据持久化操作是非常重要的一步，数据持久化，简单来说是将程序的数据保存在数据库中，将数据写入磁盘。JDBC是一种持久化机制，是我们最经常使用的，但是，有许多开源的框架有更好的操作性，例如Hibernate.">
+<meta property="og:image" content="http://yoursite.com/picture/hibernate/Configuration.configure.png">
+<meta property="og:image" content="http://yoursite.com/picture/hibernate/HibernateQuery.png">
+<meta property="og:image" content="http://yoursite.com/picture/hibernate/sessioQuery.png">
+<meta property="og:image" content="http://yoursite.com/picture/hibernate/java_type.png">
+<meta property="og:image" content="http://yoursite.com/picture/hibernate/increment_max.png">
+<meta property="og:updated_time" content="2017-03-11T14:31:31.298Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hibernate框架——基本操作">
+<meta name="twitter:description" content="在Java Web的后台开发中，数据持久化操作是非常重要的一步，数据持久化，简单来说是将程序的数据保存在数据库中，将数据写入磁盘。JDBC是一种持久化机制，是我们最经常使用的，但是，有许多开源的框架有更好的操作性，例如Hibernate.">
+<meta name="twitter:image" content="http://yoursite.com/picture/hibernate/Configuration.configure.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/10/05/Hibernate框架——基本操作/"/>
+
+
+
+
+
+  <title>Hibernate框架——基本操作 | Charse's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Charse's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/05/Hibernate框架——基本操作/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charse">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Charse's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Hibernate框架——基本操作</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-10-05T19:36:02+08:00">
+                2016-10-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Hibernate/" itemprop="url" rel="index">
+                    <span itemprop="name">Hibernate</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在Java Web的后台开发中，数据持久化操作是非常重要的一步，数据持久化，简单来说是将程序的数据保存在数据库中，将数据写入磁盘。JDBC是一种持久化机制，是我们最经常使用的，但是，有许多开源的框架有更好的操作性，例如Hibernate.<br><a id="more"></a></p>
+<h2 id="JDBC的优点和缺点"><a href="#JDBC的优点和缺点" class="headerlink" title="JDBC的优点和缺点"></a><strong>JDBC的优点和缺点</strong></h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a><strong>优点</strong></h3><blockquote>
+<p>直接底层操作，提供了很简单、便捷的访问数据库的方法，跨平台性比较强。灵活性比较强，可以写很复杂的SQL语句。</p>
+</blockquote>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a><strong>缺点</strong></h3><blockquote>
+<p>因为java是面向对象的，JDBC没有做到使数据能够面向对象的编程，使程序员的思考任然停留在SQL语句上。<br>操作比较繁琐，很多代码需要重写很多次。<br>如果遇到批量操作，频繁与数据库进行交互，容易造成效率的下降。</p>
+</blockquote>
+<p>JDBC的程序操作可以封装一些什么内容？又不可以封装哪些内容？</p>
+<h2 id="Hibernate"><a href="#Hibernate" class="headerlink" title="Hibernate"></a><strong>Hibernate</strong></h2><h3 id="为什么要使用Hibernate"><a href="#为什么要使用Hibernate" class="headerlink" title="为什么要使用Hibernate"></a><strong>为什么要使用Hibernate</strong></h3><ul>
+<li>Hibernate实现了面向对象的数据库编程</li>
+<li>Hibernate比起JDBC来，在代码的书写上比较简单化了。</li>
+<li>Hibernate提出了缓存机制，这样可以使访问数据库的效率提高很大。</li>
+</ul>
+<h3 id="Hibernate的缺点"><a href="#Hibernate的缺点" class="headerlink" title="Hibernate的缺点"></a><strong>Hibernate的缺点</strong></h3><ul>
+<li>该框架程序员是没有办法干预SQL语句的生成</li>
+<li>如果一个项目中，对SQL语句的优化的要求比较高，这个时候不能用Hibernate来做</li>
+<li>表之间的关系很复杂的情况下，不能用Hibernate来做</li>
+<li>如果一张表的数据超过了千万级别，也是不适合用hibernate来做</li>
+</ul>
+<h2 id="Hibernate的组成"><a href="#Hibernate的组成" class="headerlink" title="Hibernate的组成"></a><strong>Hibernate的组成</strong></h2><h3 id="持久化类"><a href="#持久化类" class="headerlink" title="持久化类"></a><strong>持久化类</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> <span class="keyword">implements</span> <span class="title">Serializable</span></span>&#123;</div><div class="line">	<span class="keyword">private</span> Long pid;</div><div class="line">	<span class="keyword">private</span> String name;</div><div class="line">	<span class="keyword">private</span> String description;</div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">public</span> Long <span class="title">getPid</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="keyword">return</span> pid;</div><div class="line">	&#125;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setPid</span><span class="params">(Long pid)</span> </span>&#123;</div><div class="line">		<span class="keyword">this</span>.pid = pid;</div><div class="line">	&#125;</div><div class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="keyword">return</span> name;</div><div class="line">	&#125;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</div><div class="line">		<span class="keyword">this</span>.name = name;</div><div class="line">	&#125;</div><div class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getDescription</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="keyword">return</span> description;</div><div class="line">	&#125;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setDescription</span><span class="params">(String description)</span> </span>&#123;</div><div class="line">		<span class="keyword">this</span>.description = description;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>说明：持久化类中必须有一个默认的构造器，因为hibernate加载类是通过java的反射机制利用，默认的构造器创建持久化对象的。</p>
+</blockquote>
+<h3 id="映射文件"><a href="#映射文件" class="headerlink" title="映射文件"></a><strong>映射文件</strong></h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version="1.0" encoding="utf-8"?&gt;</div><div class="line"><span class="meta">&lt;!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"</span></div><div class="line">"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd"&gt;</div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">hibernate-mapping</span>&gt;</span></div><div class="line">	<span class="comment">&lt;!-- 描述一个持久化类</span></div><div class="line">			name 属性为持久化类的全名 </div><div class="line">			table 该持久化类对应的表名 默认情况下为类名</div><div class="line">			catalog 为数据库的名称</div><div class="line">	 --&gt;</div><div class="line">	 <span class="tag">&lt;<span class="name">class</span> <span class="attr">name</span>=<span class="string">"com.wcc.hibernate.bean.Person"</span> <span class="attr">table</span>=<span class="string">"person"</span>&gt;</span></div><div class="line">	 		<span class="comment">&lt;!--</span></div><div class="line">	 			id 对应表中的主键</div><div class="line">	 			name 为持久化类中的属性的名称</div><div class="line">	 			length 为对应数据库表中相应的字段的长度</div><div class="line">	 			column  属性的名称对应的表的字段名称  , 不写 则默认是和属性的名称保持一致 </div><div class="line">	 		 --&gt;</div><div class="line">	 		 <span class="tag">&lt;<span class="name">id</span> <span class="attr">name</span> = <span class="string">"pid"</span> <span class="attr">length</span> = <span class="string">"5"</span>  <span class="attr">type</span>= <span class="string">"java.lang.Long"</span>  <span class="attr">column</span> = <span class="string">"pid"</span>&gt;</span> </div><div class="line">	 		 	<span class="comment">&lt;!-- 主键的生成器 --&gt;</span></div><div class="line">	 		 	<span class="tag">&lt;<span class="name">generator</span> <span class="attr">class</span>=<span class="string">"increment"</span>&gt;</span><span class="tag">&lt;/<span class="name">generator</span>&gt;</span></div><div class="line">	 		 <span class="tag">&lt;/<span class="name">id</span>&gt;</span></div><div class="line">	 		 </div><div class="line">	 		 <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">column</span>=<span class="string">"name"</span> <span class="attr">type</span>=<span class="string">"java.lang.String"</span>  <span class="attr">length</span>=<span class="string">"20"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line">	 		 <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"description"</span> <span class="attr">column</span>=<span class="string">"name"</span> <span class="attr">type</span>=<span class="string">"java.lang.String"</span> <span class="attr">length</span>=<span class="string">"50"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line">	 <span class="tag">&lt;/<span class="name">class</span>&gt;</span><span class="tag">&lt;/<span class="name">hibernate-mapping</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>从映射文件中可以看出，该映射文件完成了从类到表、类中的属性到表中的字段的对应关系。</p>
+<h3 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a><strong>配置文件</strong></h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version='1.0' encoding='UTF-8'?&gt;</div><div class="line"><span class="meta">&lt;!DOCTYPE hibernate-configuration PUBLIC</span></div><div class="line">          "-//Hibernate/Hibernate Configuration DTD 3.0//EN"</div><div class="line">          "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd"&gt;</div><div class="line"><span class="comment">&lt;!-- Generated by MyEclipse Hibernate Tools.                   --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">hibernate-configuration</span>&gt;</span></div><div class="line"></div><div class="line">	<span class="comment">&lt;!-- 一个session-factory 代表一个数据库 --&gt;</span></div><div class="line"> <span class="tag">&lt;<span class="name">session-factory</span>&gt;</span></div><div class="line">    <span class="comment">&lt;!-- 连接数据的用户名 --&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"connection.username"</span>&gt;</span>root<span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line">    <span class="comment">&lt;!-- 连接数据库密码 --&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"connection.password"</span>&gt;</span>wcc<span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line">    <span class="comment">&lt;!-- 连接数据库的驱动 --&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"connection.driver_class"</span>&gt;</span>com.mysql.jdbc.Drvier<span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line">    <span class="comment">&lt;!-- 连接数据的url --&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"connection.url"</span>&gt;</span>jdbc:mysql://localhost:3306/（你的数据库的名称)<span class="tag">&lt;/<span class="name">property</span>&gt;</span> // 你的数据库地址，这里是在本地做测试，所以使用的是localhost</div><div class="line">    	</div><div class="line">    <span class="comment">&lt;!-- 方言 ： 告诉hibernate用什么样的数据库 --&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"dialect"</span>&gt;</span>org.hibernate.dialect.MySQLDialect<span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line">    	</div><div class="line">    <span class="comment">&lt;!-- </span></div><div class="line">	validate 加载hibernate时，验证数据库的结构</div><div class="line">	update  加载hibernate时，检查数据库，如果表不存在，则创建，如果存在，则更新</div><div class="line">	create  每次加载hiberante,都会创建表</div><div class="line">	create-drop  每次加载hiberante,创建，卸载hiberante时，销毁</div><div class="line">	--&gt;</div><div class="line">	<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"hbm2ddl.auto"</span>&gt;</span>update<span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line">	<span class="comment">&lt;!-- 显示SQL语句 --&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"show_sql"</span>&gt;</span>true<span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line">	<span class="comment">&lt;!-- 格式化SQL语句 --&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"format_sql"</span>&gt;</span>true<span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line">	</div><div class="line">	<span class="comment">&lt;!-- 加载映射文件 --&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">mapping</span> <span class="attr">resource</span>=<span class="string">"com/wcc/hibernate/bean/Person.hbm.xml"</span>&gt;</span><span class="tag">&lt;/<span class="name">mapping</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">session-factory</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">hibernate-configuration</span>&gt;</span></div></pre></td></tr></table></figure>
+<ul>
+<li><strong>Hibernate.connection.url：</strong>  表示要链接的数据库地址</li>
+<li><strong>Hibernate.connection.driver_class ：</strong>    表示要链接的数据库的驱动类</li>
+<li><strong>Hibernate.connection.username：</strong>    要连接的数据库的用户名</li>
+<li><strong>Hibernate.connection.password：</strong>    要连接的数据库的密码</li>
+<li><strong>Hibernate.dialect：</strong> 表示要使用的数据库的类型<ul>
+<li>org.hibernate.dialect.MySQL5Dialect     mysql数据库</li>
+<li>org.hibernate.dialect.Oracle9Dialect        oracle数据库</li>
+<li>org.hibernate.dialect.SQLServerDialect    SQLServer数据库</li>
+</ul>
+</li>
+<li><strong>hibernate.hbm2ddl.auto：</strong> <ul>
+<li>validate:加载hibernate时验证创建表结构</li>
+<li>pdate:加载hibernate时自动更新数据库结构，如果表存在不用创建，如果不存在就创建。</li>
+<li>create:每一次加载hibernate时都创建表结构</li>
+<li>create-drop:加载hibernate时创建，退出时删除</li>
+</ul>
+</li>
+</ul>
+<h2 id="使用Hibernate执行CRUD操作"><a href="#使用Hibernate执行CRUD操作" class="headerlink" title="使用Hibernate执行CRUD操作"></a><strong>使用Hibernate执行CRUD操作</strong></h2><h3 id="增加"><a href="#增加" class="headerlink" title="增加"></a><strong>增加</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Test</span></div><div class="line"><span class="function"><span class="keyword">public</span>  <span class="keyword">void</span> <span class="title">savePerson</span><span class="params">()</span></span>&#123;</div><div class="line">	<span class="comment">//创建配置文件对象</span></div><div class="line">	Configuration  configuration = <span class="keyword">new</span> Configuration();</div><div class="line">	<span class="comment">// 加载配置文件 使用不带参数的方法 那么配置文件 应该按照如下的要求：</span></div><div class="line">	<span class="comment">// 1、 该配置文件必须放在根目录下, 2、名称必须是hibernate.cfg.xml</span></div><div class="line">	configuration.configure();</div><div class="line">	<span class="comment">// 还有其他的方法 configure(String  path);  里面传入的是文件的路径或者是URL  以获得配置文件</span></div><div class="line">	<span class="comment">//创建sessionFactory</span></div><div class="line">	SessionFactory  sessionFactory = configuration.buildSessionFactory();</div><div class="line">	<span class="comment">//打开一个Session  这个Session和javaWeb 和邮件的发送的session是不同的</span></div><div class="line">	Session session = sessionFactory.openSession();</div><div class="line">	<span class="comment">//创建一个事务 开始事务</span></div><div class="line">	Transaction  transaction = session.beginTransaction(); </div><div class="line">	Person person = <span class="keyword">new</span> Person();</div><div class="line">	person.setName(<span class="string">"王小末"</span>);</div><div class="line">	person.setDescription(<span class="string">"女神呀"</span>);</div><div class="line">	<span class="comment">//利用Session将对象保存好</span></div><div class="line">	session.save(person);</div><div class="line">	<span class="comment">// 提交事务</span></div><div class="line">	transaction.commit();</div><div class="line">	<span class="comment">// 关闭Session</span></div><div class="line">	session.close();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>加载Hibernate的配置文件的有多重方法，一般使用<code>Configuration.configure()</code>方法加载配置文件的时候，配置文件是要在类的根目录中为什么呢？查看Hibernate的源码可以知道，使用该<code>Configuration.configure()</code>构造方法的时候是从根目录下加载该文件的,如下图：<br><img src="/picture/hibernate/Configuration.configure.png" alt="Configuration.configure源码"></p>
+<p>因为每次操作都是要进行配置文件的加载，和SessionFactory的创建，所以直接写一个Utils来方便使用：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HibernateUtils</span> </span>&#123;</div><div class="line">	</div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> SessionFactory sessionFactory;</div><div class="line">	</div><div class="line">	<span class="keyword">static</span>&#123;</div><div class="line">		Configuration configuration = <span class="keyword">new</span> Configuration();</div><div class="line">		configuration.configure();</div><div class="line">		sessionFactory = configuration.buildSessionFactory();</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>使用上面的类，简化代码，进行更新，查找，删除的操作。</p>
+<h3 id="更新"><a href="#更新" class="headerlink" title="更新"></a><strong>更新</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="meta">@Test</span></div><div class="line"><span class="function"><span class="keyword">public</span>  <span class="keyword">void</span>  <span class="title">updatePerson</span><span class="params">()</span></span>&#123;</div><div class="line">	<span class="comment">//利用我们自己写的工具类，将Session拿到</span></div><div class="line">	Session session = HibernateUtils.sessionFactory.openSession();</div><div class="line">	Transaction transaction = session.beginTransaction();</div><div class="line">		</div><div class="line">	<span class="comment">/**</span></div><div class="line">	 * 根据主键查询数据库表中的一行记录</div><div class="line">	 * 第一个参数为持久化类的class形式</div><div class="line">	 * 第二个对象为对象 的序列化， 能接受基本数据类型</div><div class="line">	 */</div><div class="line">	Person person = (Person) session.get(Person.class, <span class="number">2L</span>);</div><div class="line">	person.setDescription(<span class="string">"真美呀呀"</span>);</div><div class="line">	<span class="comment">// 通过对象来更新数据</span></div><div class="line">	session.update(person);</div><div class="line">	<span class="comment">// 事务的提交</span></div><div class="line">	transaction.commit();</div><div class="line">	session.close();		</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="查找"><a href="#查找" class="headerlink" title="查找"></a><strong>查找</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Test</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testQueryPerson</span><span class="params">()</span></span>&#123;</div><div class="line">	Session session = HibernateUtils.sessionFactory.openSession();</div><div class="line">	<span class="comment">//  from 后面跟的是持久化类名，  不是表的名字</span></div><div class="line">	List&lt;Person&gt; peroList = session.createQuery(<span class="string">"from Person"</span>).list();</div><div class="line">	System.out.println(<span class="string">"从数据库中查询的记录条数为："</span> +  peroList.size());</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="删除"><a href="#删除" class="headerlink" title="删除"></a><strong>删除</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="meta">@Test</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testDeletePerson</span><span class="params">()</span></span>&#123;</div><div class="line">	<span class="comment">/**</span></div><div class="line">	* 从数据库中将pid为2的数据提取出来</div><div class="line">	*/</div><div class="line">	Session session = HibernateUtils.sessionFactory.openSession();</div><div class="line">	Transaction transaction = session.beginTransaction();</div><div class="line">		</div><div class="line">	<span class="comment">//把 pid为1 的持久化对象提取出来</span></div><div class="line">	Person person =  (Person) session.get(Person.class, <span class="number">2L</span>);</div><div class="line">	<span class="comment">// 利用Session 删除对象</span></div><div class="line">	session.delete(person);</div><div class="line">		</div><div class="line">	transaction.commit();</div><div class="line">	session.close();</div><div class="line">	System.out.println(<span class="string">"数据库中删除记录成功！"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="Hibernate的流程"><a href="#Hibernate的流程" class="headerlink" title="Hibernate的流程"></a><strong>Hibernate的流程</strong></h2><p><img src="/picture/hibernate/HibernateQuery.png" alt="Hibernate执行流程图"></p>
+<blockquote>
+<p>说明：<br>1、CRUD操作是由session来完成的。<br>2、在Hibernate中事务不是自动提交的。</p>
+</blockquote>
+<h2 id="简单例子的详细解析"><a href="#简单例子的详细解析" class="headerlink" title="简单例子的详细解析"></a><strong>简单例子的详细解析</strong></h2><h3 id="Configuration类"><a href="#Configuration类" class="headerlink" title="Configuration类"></a><strong>Configuration类</strong></h3><p>利用该类加载了Hibernate的配置文件</p>
+<h3 id="sessionFactory类"><a href="#sessionFactory类" class="headerlink" title="sessionFactory类"></a><strong>sessionFactory类</strong></h3><ul>
+<li>Hibernate配置文件的信息、持久化类的信息、映射文件的信息全部在该类中。</li>
+<li>sessionFactory对象有且只有一个</li>
+<li>sessionFactory的生命周期是整个Hibernate实例</li>
+<li>sessionFactory本身就是线程安全的</li>
+<li>二级缓存在sessionFactory中存放。</li>
+<li>sessionFactory和数据库的连接没有直接的关系</li>
+</ul>
+<h3 id="session类"><a href="#session类" class="headerlink" title="session类"></a><strong>session类</strong></h3><ul>
+<li>CRUD操作由session来完成</li>
+<li>一个session代表数据库的一个连接</li>
+</ul>
+<h2 id="session-内部执行流程"><a href="#session-内部执行流程" class="headerlink" title="session 内部执行流程"></a><strong>session 内部执行流程</strong></h2><p><img src="/picture/hibernate/sessioQuery.png" alt="session执行流程"></p>
+<h2 id="Hibernate中的类型"><a href="#Hibernate中的类型" class="headerlink" title="Hibernate中的类型"></a><strong>Hibernate中的类型</strong></h2><p>在Hibernate中有两种类型： java.type , hibernate type</p>
+<h3 id="Java-type"><a href="#Java-type" class="headerlink" title="Java type"></a><strong>Java type</strong></h3><p>Hibernate 内部之间提供了Java类型到数据库的对照表，如下图的官方文档中的基本数据类型截图：</p>
+<p><img src="/picture/hibernate/java_type.png" alt="Hibernate中的JavaType"></p>
+<blockquote>
+<p>说明： 用Java类型可以直接完成从Java类型到数据库类型的映射</p>
+</blockquote>
+<h3 id="Hibernate-type"><a href="#Hibernate-type" class="headerlink" title="Hibernate type"></a><strong>Hibernate type</strong></h3><p>从上面可以看出，如果选择hibernate类型，需要查找该hibernate类型对象的Java类型，从而再找到数据库类型，所以Java类型效率是比较高。</p>
+<h3 id="主键的产生器"><a href="#主键的产生器" class="headerlink" title="主键的产生器"></a><strong>主键的产生器</strong></h3><h4 id="Increment"><a href="#Increment" class="headerlink" title="Increment"></a><strong>Increment</strong></h4><p>主键自动增长，但是不同于Identity，Increment是和数据中的主键自动增长是一样的，那么Hibernate是怎么实现的呢？ 当我们向数据库中执行增加一条记录的时候，Hibernate是怎么执行？请看下面的图:</p>
+<p><img src="/picture/hibernate/increment_max.png" alt="使用increment的SQL输出"></p>
+<p>从Hibernate的查SQL语句的输出可以看出，<strong>在Increment设置下，执行SQL语句的时候是：先查找主键的最大值，再在最大值的基础上加1， 所以从这可以看出，使用Increment的效率比较低。</strong></p>
+<h4 id="Assigned"><a href="#Assigned" class="headerlink" title="Assigned"></a><strong>Assigned</strong></h4><p>需要由程序员手动赋值<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">generator</span> <span class="attr">class</span>=<span class="string">"assigned"</span>&gt;</span><span class="tag">&lt;/<span class="name">generator</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>那么我们在编程的时候是要对主键直接进行过设置，例如：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">person.setPid(<span class="number">2L</span>);</div></pre></td></tr></table></figure></p>
+<h4 id="Identity"><a href="#Identity" class="headerlink" title="Identity"></a><strong>Identity</strong></h4><p>支持主键的自动增长<br>将这个进行配置之后，例如： 插入了3条记录，那么数据库中主键是 1， 2，3， 当删除主键为2的记录之后，再进行插入一条数据，就会主键值为4，数据库中记录主键值为：1，3，4 删除主键为3的记录，再插入一条记录，那么主键值为：1，4，5，  这样在数据库中并不是那么直观的看出所有的记录数。</p>
+<h4 id="UUID"><a href="#UUID" class="headerlink" title="UUID"></a><strong>UUID</strong></h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">generator</span> <span class="attr">class</span>=<span class="string">"uuid"</span>&gt;</span><span class="tag">&lt;/<span class="name">generator</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>持久化类中的属性必须是String类型</p>
+<h4 id="Native"><a href="#Native" class="headerlink" title="Native"></a><strong>Native</strong></h4><p>Hibernate会根据数据库的不同，选择合适的主键的生成策略</p>
+<h4 id="Sequence"><a href="#Sequence" class="headerlink" title="Sequence"></a><strong>Sequence</strong></h4><p>是oracle内部特有的内容，相当于uuid，所以是字符串类型。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/path/to/wechat-reward-image" alt="Charse WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/path/to/alipay-reward-image" alt="Charse Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Hibernate/" rel="tag"># Hibernate</a>
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/10/02/高性能场景下-HashMap的优化使用建议/" rel="next" title="高性能场景下,HashMap的优化使用建议">
+                <i class="fa fa-chevron-left"></i> 高性能场景下,HashMap的优化使用建议
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/11/01/Hibernate框架——对象状态/" rel="prev" title="Hibernate框架——对象状态">
+                Hibernate框架——对象状态 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="Charse" />
+          <p class="site-author-name" itemprop="name">Charse</p>
+           
+              <p class="site-description motion-element" itemprop="description">Stay hungry, Stay foolish.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/your-user-name" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/your-user-name" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/your-user-name" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  豆瓣
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/your-user-name" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#JDBC的优点和缺点"><span class="nav-number">1.</span> <span class="nav-text">JDBC的优点和缺点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#优点"><span class="nav-number">1.1.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缺点"><span class="nav-number">1.2.</span> <span class="nav-text">缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hibernate"><span class="nav-number">2.</span> <span class="nav-text">Hibernate</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么要使用Hibernate"><span class="nav-number">2.1.</span> <span class="nav-text">为什么要使用Hibernate</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hibernate的缺点"><span class="nav-number">2.2.</span> <span class="nav-text">Hibernate的缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hibernate的组成"><span class="nav-number">3.</span> <span class="nav-text">Hibernate的组成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#持久化类"><span class="nav-number">3.1.</span> <span class="nav-text">持久化类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#映射文件"><span class="nav-number">3.2.</span> <span class="nav-text">映射文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置文件"><span class="nav-number">3.3.</span> <span class="nav-text">配置文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Hibernate执行CRUD操作"><span class="nav-number">4.</span> <span class="nav-text">使用Hibernate执行CRUD操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#增加"><span class="nav-number">4.1.</span> <span class="nav-text">增加</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#更新"><span class="nav-number">4.2.</span> <span class="nav-text">更新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查找"><span class="nav-number">4.3.</span> <span class="nav-text">查找</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除"><span class="nav-number">4.4.</span> <span class="nav-text">删除</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hibernate的流程"><span class="nav-number">5.</span> <span class="nav-text">Hibernate的流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单例子的详细解析"><span class="nav-number">6.</span> <span class="nav-text">简单例子的详细解析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Configuration类"><span class="nav-number">6.1.</span> <span class="nav-text">Configuration类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sessionFactory类"><span class="nav-number">6.2.</span> <span class="nav-text">sessionFactory类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#session类"><span class="nav-number">6.3.</span> <span class="nav-text">session类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#session-内部执行流程"><span class="nav-number">7.</span> <span class="nav-text">session 内部执行流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hibernate中的类型"><span class="nav-number">8.</span> <span class="nav-text">Hibernate中的类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-type"><span class="nav-number">8.1.</span> <span class="nav-text">Java type</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hibernate-type"><span class="nav-number">8.2.</span> <span class="nav-text">Hibernate type</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主键的产生器"><span class="nav-number">8.3.</span> <span class="nav-text">主键的产生器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Increment"><span class="nav-number">8.3.1.</span> <span class="nav-text">Increment</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Assigned"><span class="nav-number">8.3.2.</span> <span class="nav-text">Assigned</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Identity"><span class="nav-number">8.3.3.</span> <span class="nav-text">Identity</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#UUID"><span class="nav-number">8.3.4.</span> <span class="nav-text">UUID</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Native"><span class="nav-number">8.3.5.</span> <span class="nav-text">Native</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Sequence"><span class="nav-number">8.3.6.</span> <span class="nav-text">Sequence</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Charse</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

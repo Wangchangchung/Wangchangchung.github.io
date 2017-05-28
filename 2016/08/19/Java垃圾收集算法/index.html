@@ -1,0 +1,838 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java,垃圾收集算法," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="本篇文章主要讲解java中的主要几种垃圾收集算法思想，不讨论它的具体实现过程，因为垃圾收集算法的实现涉及大量的程序细节，而且各个平台的虚拟机操作内存的方法又各不相同。">
+<meta name="keywords" content="Java,垃圾收集算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java垃圾收集算法">
+<meta property="og:url" content="http://yoursite.com/2016/08/19/Java垃圾收集算法/index.html">
+<meta property="og:site_name" content="Charse&#39;s Blog">
+<meta property="og:description" content="本篇文章主要讲解java中的主要几种垃圾收集算法思想，不讨论它的具体实现过程，因为垃圾收集算法的实现涉及大量的程序细节，而且各个平台的虚拟机操作内存的方法又各不相同。">
+<meta property="og:image" content="http://yoursite.com/img/MarkClear.jpg">
+<meta property="og:image" content="http://yoursite.com/picture/CopyShuanfa.png">
+<meta property="og:image" content="http://yoursite.com/picture/MarkXZhengLi.png">
+<meta property="og:updated_time" content="2017-03-12T02:31:42.719Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java垃圾收集算法">
+<meta name="twitter:description" content="本篇文章主要讲解java中的主要几种垃圾收集算法思想，不讨论它的具体实现过程，因为垃圾收集算法的实现涉及大量的程序细节，而且各个平台的虚拟机操作内存的方法又各不相同。">
+<meta name="twitter:image" content="http://yoursite.com/img/MarkClear.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/08/19/Java垃圾收集算法/"/>
+
+
+
+
+
+  <title>Java垃圾收集算法 | Charse's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Charse's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/19/Java垃圾收集算法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charse">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Charse's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java垃圾收集算法</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-08-19T11:11:45+08:00">
+                2016-08-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JVM/" itemprop="url" rel="index">
+                    <span itemprop="name">JVM</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本篇文章主要讲解java中的主要几种垃圾收集算法思想，不讨论它的具体实现过程，因为垃圾收集算法的实现涉及大量的程序细节，而且各个平台的虚拟机操作内存的方法又各不相同。<br><a id="more"></a></p>
+<h3 id="1-标记-清除算法"><a href="#1-标记-清除算法" class="headerlink" title="1. 标记-清除算法"></a><strong>1. 标记-清除算法</strong></h3><h4 id="1-1-算法思想"><a href="#1-1-算法思想" class="headerlink" title="1.1  算法思想"></a><strong>1.1  算法思想</strong></h4><p>“标记-清除”(Mark-Sweep)算法是最基础的垃圾收集算法，我们可以顾名思义，大概知道它的算法分为”标记”和”清除”， 这个算法的思想的确也是这样的，这个算法分为”标记”和”清除”两个阶段：首先，标记所有要回收的对象，在标记完成后统一回收所有被标记的对象，它的标记过程就是前文《Java的垃圾收集机制》中的对对象标记判定的过程，之所以说这个算法是最基础的算法，是因为后续的算法是基于这个”标记-清除”算法的对其中的不足进行改进的。<br>标记-清除算法的执行过程如下图:<br><img src="/img/MarkClear.jpg" alt="1"></p>
+<h4 id="1-2-算法缺点"><a href="#1-2-算法缺点" class="headerlink" title="1.2 算法缺点"></a><strong>1.2 算法缺点</strong></h4><p>它的主要不足之处有两点:</p>
+<ul>
+<li>效率问题，标记和清除两个过程的效率都不太高的。</li>
+<li>空间问题，标记清除之后会产生大量不连续的内存碎片，空间碎片太多可能会导致在以后程序运行过程中需要分配较大对象的时候，无法找到足够的连续的内存空间而不得不提前触发另一次垃圾收集的动作。</li>
+</ul>
+<h3 id="2-复制算法"><a href="#2-复制算法" class="headerlink" title="2. 复制算法"></a><strong>2. 复制算法</strong></h3><h4 id="2-1-算法思想"><a href="#2-1-算法思想" class="headerlink" title="2.1 算法思想"></a><strong>2.1 算法思想</strong></h4><p>复制算法的出现是为了解决”标记-清除”算法的效率问题，它将可用的内存按照容量大小分为大小相等的两块，每次只使用其中的一块当这一块的内存用完了，就将还存活着的对象复制到另外一块上面，然后再把使用过的内存空间一次清理掉。这样使得每一次都是对整个半区进行内存回收，内存分配时也就不用考虑内存碎片等复杂问题，只要移动堆顶指针，按顺序分配内存即可。复制算法的执行过程如下图：</p>
+<p><img src="/picture/CopyShuanfa.png" alt="复制算法示意图"></p>
+<h4 id="2-2-算法优点"><a href="#2-2-算法优点" class="headerlink" title="2.2 算法优点"></a><strong>2.2 算法优点</strong></h4><ul>
+<li>解决”标记-清除”算法中的效率问题，实现简单，运行高效。</li>
+</ul>
+<p><strong>现在的商业虚拟机都采用这种收集算法回收新生代</strong>，IBM公司研究表明，新生代中的对象98%是”朝生夕死”的，所以没有必要按照 1:1 的比例来划分内存空间，而是将内存分为一块较大的Eden空间和两块较小的Survivor空间，每次使用Eden和其中的一块Survivor。当回收的时，将Eden和Survivor中还存活着的对象一次性的复制到另外一块Survivor空间上，最后清理掉Eden和刚才使用过的Survivor空间，HotSpot默认使用Eden和Survrivor的大小比例为8：1，也就是说：每次新生代中可用内存空间为整个新生代容量的90%（80% + 10%），只有10%的内存空间会被”浪费”，当然，98%的对象可回收只是一般场景下的数据，我们没有办法保证每次回收都只有不多于10%的对象存活，当Surviror空间不够用时，需要依赖其他内存(这里是指老年代)进行分配担保(Handle Promotion).</p>
+<p>内存的分配担保就好比我们去银行借款，如果我们信誉好，在98%的情况下都能按时还款，那么银行可能会默认我们下一次也能按时按量的偿还贷款，只需要有一个担保人能够保证我不能还款时，可以从他的账户中扣钱，那么银行就认为没有风险了，内存的分配担保也一样，如果另外一块Survivor空间没有足够的空间存放上一次新生代收集下来的存活对象时，这些对象将直接通过分配担保机制进入老年代。关于新生代进行分配担保的内容，在后面介绍垃圾收集器执行规则的时候再细说。</p>
+<h4 id="2-3-算法缺点"><a href="#2-3-算法缺点" class="headerlink" title="2.3 算法缺点"></a><strong>2.3 算法缺点</strong></h4><ul>
+<li>在对象存活率较高时，就要进行较多的复制操作，效率将会变低。</li>
+<li>将内存缩小到原来的一半，消耗比较高。如果不想浪费50%的空间，就需要有额外的空间进行分配担保，以应对被使用的内存中所有对象都100%存活的极端情况，所以在老年代一般不能直接选择这中算法。</li>
+</ul>
+<h3 id="3-标记-整理算法"><a href="#3-标记-整理算法" class="headerlink" title="3. 标记-整理算法"></a><strong>3. 标记-整理算法</strong></h3><p>根据复制算法的不足之处，和老年代的特点，于是提出”标记-整理”算法(Mark-Compact)，标记过程和”标记-清除”算法一样，但是后面不是直接对可回收的对象进行清理，而是让所有存活的对象都向一端进行移动，然后直接清理掉端边界以外的内存，”标记-整理”算法执行示意图如下图:<br><img src="/picture/MarkXZhengLi.png" alt="&quot;标记-整理&quot;算法示意图"></p>
+<h3 id="4-分代收集算法"><a href="#4-分代收集算法" class="headerlink" title="4. 分代收集算法"></a><strong>4. 分代收集算法</strong></h3><p>当前的商业虚拟机的垃圾收集都是采用”分代收集”(Generational Collection)算法，这种并没有什么心的思想，只是根据对象存活的周期的不同将内存划分为几块，一般是把Java堆中分为新生代和老年代，这样就可以根据每个年代的特点采用最适当的收集算法。在新生代中，每次垃圾收集是都发现有大批对象的复制成本就可以完成收集，而老年代中因为对象存活率高、没有额外空间对他进行分配担保，就必须使用”标记-清理”或者”标记-整理”算法来进行回收。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/path/to/wechat-reward-image" alt="Charse WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/path/to/alipay-reward-image" alt="Charse Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/垃圾收集算法/" rel="tag"># 垃圾收集算法</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/08/14/Java的垃圾收集机制/" rel="next" title="Java的垃圾收集机制">
+                <i class="fa fa-chevron-left"></i> Java的垃圾收集机制
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/08/20/HotSpot的垃圾收集机制算法实现/" rel="prev" title="HotSpot的垃圾收集机制算法实现">
+                HotSpot的垃圾收集机制算法实现 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="Charse" />
+          <p class="site-author-name" itemprop="name">Charse</p>
+           
+              <p class="site-description motion-element" itemprop="description">Stay hungry, Stay foolish.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/your-user-name" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/your-user-name" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/your-user-name" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  豆瓣
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/your-user-name" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-标记-清除算法"><span class="nav-number">1.</span> <span class="nav-text">1. 标记-清除算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-算法思想"><span class="nav-number">1.1.</span> <span class="nav-text">1.1  算法思想</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-算法缺点"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 算法缺点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-复制算法"><span class="nav-number">2.</span> <span class="nav-text">2. 复制算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-算法思想"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 算法思想</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-算法优点"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 算法优点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-算法缺点"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 算法缺点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-标记-整理算法"><span class="nav-number">3.</span> <span class="nav-text">3. 标记-整理算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-分代收集算法"><span class="nav-number">4.</span> <span class="nav-text">4. 分代收集算法</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Charse</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

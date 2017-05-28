@@ -1,0 +1,873 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Spring,Java Web," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="Spring自带了一组数据访问框架，集成了多种数据访问技术。不管你是直接通过JDBC还是用Hibernate这样的对象关系映射(object-relational mappingORM)框架框架实现数据持久化，Spring都能够消除持久化代码中那些单调枯燥的数据访问逻辑。我们可以依赖Spring来处理底层的数据访问，这样，就可以专注于应用程序中数据的管理了。">
+<meta name="keywords" content="Spring,Java Web">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring的数据库访问哲学">
+<meta property="og:url" content="http://yoursite.com/2016/11/10/Spring的数据库访问哲学/index.html">
+<meta property="og:site_name" content="Charse&#39;s Blog">
+<meta property="og:description" content="Spring自带了一组数据访问框架，集成了多种数据访问技术。不管你是直接通过JDBC还是用Hibernate这样的对象关系映射(object-relational mappingORM)框架框架实现数据持久化，Spring都能够消除持久化代码中那些单调枯燥的数据访问逻辑。我们可以依赖Spring来处理底层的数据访问，这样，就可以专注于应用程序中数据的管理了。">
+<meta property="og:image" content="http://yoursite.com/picture/SpringJDBC/Spring_DataBase.png">
+<meta property="og:updated_time" content="2017-03-12T02:33:48.143Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring的数据库访问哲学">
+<meta name="twitter:description" content="Spring自带了一组数据访问框架，集成了多种数据访问技术。不管你是直接通过JDBC还是用Hibernate这样的对象关系映射(object-relational mappingORM)框架框架实现数据持久化，Spring都能够消除持久化代码中那些单调枯燥的数据访问逻辑。我们可以依赖Spring来处理底层的数据访问，这样，就可以专注于应用程序中数据的管理了。">
+<meta name="twitter:image" content="http://yoursite.com/picture/SpringJDBC/Spring_DataBase.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/11/10/Spring的数据库访问哲学/"/>
+
+
+
+
+
+  <title>Spring的数据库访问哲学 | Charse's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Charse's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/10/Spring的数据库访问哲学/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charse">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Charse's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Spring的数据库访问哲学</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-11-10T15:36:30+08:00">
+                2016-11-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring/" itemprop="url" rel="index">
+                    <span itemprop="name">Spring</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Spring自带了一组数据访问框架，集成了多种数据访问技术。不管你是直接通过JDBC还是用Hibernate这样的对象关系映射(object-relational mappingORM)框架框架实现数据持久化，Spring都能够消除持久化代码中那些单调枯燥的数据访问逻辑。我们可以依赖Spring来处理底层的数据访问，这样，就可以专注于应用程序中数据的管理了。<br><a id="more"></a></p>
+<h1 id="Spring的数据访问哲学"><a href="#Spring的数据访问哲学" class="headerlink" title="Spring的数据访问哲学"></a><strong>Spring的数据访问哲学</strong></h1><p>Spring的目标之一是允许我们在开发应用的时候，能够遵循面向对象(OO)原则中的”针对接口编程”。Spring对数据访问的支持也不例外。</p>
+<p>为了避免持久化的逻辑分散到应用的各个组件中，最好将数据访问的功能放到一个或多个专注于此项任务的组件中，这样的组件通常称为数据访问对象或Repository. 为了避免应用与特定的数据访问策略耦合在一起，编写良好的Repstitory应该以接口的方式暴露功能，如下图展现可设计数据访问层的合理方式。</p>
+<p><img src="/picture/SpringJDBC/Spring_DataBase.png" alt="Spring的事务架构"></p>
+<p>服务对象本身并不会处理数据访问，而是将数据访问委托给Repository。Repository接口确保其与服务对象的松耦合。<br>服务对象通过接口来访问Repository的好处：</p>
+<ol>
+<li>使得服务对象易于测试，因为他们不再与特定的数据访问是实现绑定在一起。实际上，你可以为这些数据访问接口创建mock实现，这样无需连接数据库就能测试服务对象，而且会显著提升单元测试的效率并排除因数据不一致所造成的测试失败。</li>
+<li>数据访问层是以持久化技术无关的方式来进行访问，持久化方式的选择独立于Repository，同时只有数据访问相关的方法才通过接口进行暴露。这可以实现灵活的设计，并且切换持久化框架对应用程序其他部分所带来的影响是最小的。如果将数据访问层的实现细节渗透到应用程序的其他部分中，那么整个应用程序将于数据访问侧耦合在一起，从而导致僵化的设计。</li>
+</ol>
+<p>接口是实现松耦合代码的关键，并且应将其用于应用程序的各个层，而不仅仅是持久化层。还要说明一点，尽管Spring鼓励使用接口，但这并不是强制的———你可以使用Spring将bean（DAO或其他类型）直接转配到另一个bean的某个属性中，而不是一定要通过接口注入。</p>
+<p>为了将数据访问层与应用程序的其他部分隔离开来，Spring采用的方式之一就是提供统一的异常体系，这个异常体系用在了它支持的所有持久化方案中。</p>
+<h1 id="Spring的数据访问异常体系"><a href="#Spring的数据访问异常体系" class="headerlink" title="Spring的数据访问异常体系"></a><strong>Spring的数据访问异常体系</strong></h1><p>如果你曾经编写过JDBC代码（不使用Spring）,你肯定会意识到如果不强制捕获SQLExecption的话，几乎无法使用JDBC做任何事情，SQLExecption<br>表示在尝试访问数据库的时候出现问题，但是这个异常却没有告诉你在哪里出错了。</p>
+<p>可能导致抛出Execption的常见问题包括:</p>
+<ul>
+<li>应用程序无法连接数据库；</li>
+<li>要执行的查询存在语法错误；</li>
+<li>查询中所使用的表或列不存在；</li>
+<li>视图插入或更行的数据违反了数据库约束。</li>
+</ul>
+<p>SQLExecption的问题在于捕获到它的时候该改如何处理，事实上能够触发SQLExecption的问题通常是不能再catch代码块中解决的，大多数抛出SQLExecption的情况表示发生了致命性的错误，如果应用程序不能够连接到数据库，这个通常意味着应用不能继续使用了，类似的，如果查询时出现了异常，那么运行时程序基本上也是无能为力的了。</p>
+<p>如果无法从SQLExecption中恢复，那么为什么我们还有强制捕获它呢？</p>
+<p>即使对某些SQLExecption有处理方案，我们还是要捕获它，并查看其属性才能够获知问题的根源的更多信息，这个是因为SQLExecption被视为处理数据访问所有问题的通用异常，对于所有的数据访问问题，都会抛出SQLExecption,而不是对每种可能的问题都会有不同的异常类型。</p>
+<p>一些持久化框架提供了相对丰富的异常体系，例如，Hibernate 提供了二十左右的异常，分别对应于特定的数据库访问问题，这样就可以针对想处理的异常编写catch代码块。即便如此，Hibernate的异常是其本身特有的，如果抛出了Hibernate所特有的异常，那我们对Hibernate的使用将会渗透到应用的其他部分，如果不这样做的话，我们就得捕获持久化平台的异常，然后将其作为平台无关的异常再次抛出。</p>
+<p>一方面，JDBC的异常体系过于简单了———实际上，它算不上一个体系，另一方面，Hibernate的异常体系是其本身所独有的，但是，我们需要的数据访问异常要具有描述性而且又与特定的持久化框架无关。Spring 的JDBC异常就完成了这两个目标。</p>
+<h2 id="Spring所提供的平台无关的持久化异常"><a href="#Spring所提供的平台无关的持久化异常" class="headerlink" title="Spring所提供的平台无关的持久化异常"></a><strong>Spring所提供的平台无关的持久化异常</strong></h2><p>Spring JDBC提供的数据访问异常体系解决了以上的两个问题。不同于JDBC，Spring提供了多个数据访问异常，分别描述了他们抛出时所对应的问题。</p>
+<table>
+<thead>
+<tr>
+<th>JDBC 异常</th>
+<th>Spring 的数据访问异常</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BatchUpdateException</td>
+<td>BadSqlGrammarExecption</td>
+</tr>
+<tr>
+<td>DataTruncation</td>
+<td>CannotAcquireLockExecption</td>
+</tr>
+<tr>
+<td>SQLExecption</td>
+<td>DataAccessExecption</td>
+</tr>
+<tr>
+<td>SQLWarning</td>
+<td>QueryTimeoutExecption</td>
+</tr>
+<tr>
+<td>—–</td>
+<td>——-</td>
+</tr>
+</tbody>
+</table>
+<p>上表中只是列出了Spring中的部分异常，实际上Spring为读取和写入数据库的几乎所有错误都提供了异常。尽管Spring的异常体系比JDBC简单的SQLException丰富得多，但是它并没有与特定的持久化方式相关联。这意味着我们可以使用Spring抛出一致的异常，而不用关心所选择的持久化方案，这有助于我们将所选择持久化机制与数据访问层隔离开来。</p>
+<p>上面表中要注意的一点是:这些异常都继承自DataAccessExeecption，DataAcccessException的特殊之处在于它是一个非检查型异常，换句话说，没有必要捕获Spring所抛出的数据库访问异常。DataAccesssExecption 只是Spring处理检查型异常和非检查型异常哲学的一个范例，Spring认为触发异常的很多问题是不能在catch代码k中修复的，Spring使用了非检查型异常，而不是强制开发人员编写catch代码块，这把是否要捕获异常的权利留给了开发人员。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/path/to/wechat-reward-image" alt="Charse WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/path/to/alipay-reward-image" alt="Charse Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spring/" rel="tag"># Spring</a>
+          
+            <a href="/tags/Java-Web/" rel="tag"># Java Web</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/08/Java常用类源码——HashMap源码解析/" rel="next" title="Java常用类源码——HashMap源码解析(JDK1.8)">
+                <i class="fa fa-chevron-left"></i> Java常用类源码——HashMap源码解析(JDK1.8)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/11/11/Spring的事务架构/" rel="prev" title="Spring的事务架构">
+                Spring的事务架构 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="Charse" />
+          <p class="site-author-name" itemprop="name">Charse</p>
+           
+              <p class="site-description motion-element" itemprop="description">Stay hungry, Stay foolish.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/your-user-name" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/your-user-name" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/your-user-name" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  豆瓣
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/your-user-name" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring的数据访问哲学"><span class="nav-number">1.</span> <span class="nav-text">Spring的数据访问哲学</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring的数据访问异常体系"><span class="nav-number">2.</span> <span class="nav-text">Spring的数据访问异常体系</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring所提供的平台无关的持久化异常"><span class="nav-number">2.1.</span> <span class="nav-text">Spring所提供的平台无关的持久化异常</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Charse</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

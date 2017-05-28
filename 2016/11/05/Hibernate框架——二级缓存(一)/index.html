@@ -1,0 +1,920 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hibernate,Java," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="性能分析抓取策略研究对象 研究怎么样提取集合，该策略应该作用于set元上 研究从少的一方加载多的一方">
+<meta name="keywords" content="Hibernate,Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hibernate框架——二级缓存(一)">
+<meta property="og:url" content="http://yoursite.com/2016/11/05/Hibernate框架——二级缓存(一)/index.html">
+<meta property="og:site_name" content="Charse&#39;s Blog">
+<meta property="og:description" content="性能分析抓取策略研究对象 研究怎么样提取集合，该策略应该作用于set元上 研究从少的一方加载多的一方">
+<meta property="og:image" content="http://yoursite.com/picture/hibernate4/fech_join_1.png">
+<meta property="og:image" content="http://yoursite.com/picture/hibernate4/fech_select.png">
+<meta property="og:image" content="http://yoursite.com/picture/hibernate4/Class_Lazy_select_1.png">
+<meta property="og:image" content="http://yoursite.com/picture/hibernate4/Class_Lazy_extre_Select.png">
+<meta property="og:updated_time" content="2017-03-11T14:41:50.693Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hibernate框架——二级缓存(一)">
+<meta name="twitter:description" content="性能分析抓取策略研究对象 研究怎么样提取集合，该策略应该作用于set元上 研究从少的一方加载多的一方">
+<meta name="twitter:image" content="http://yoursite.com/picture/hibernate4/fech_join_1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/11/05/Hibernate框架——二级缓存(一)/"/>
+
+
+
+
+
+  <title>Hibernate框架——二级缓存(一) | Charse's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Charse's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/05/Hibernate框架——二级缓存(一)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charse">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Charse's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Hibernate框架——二级缓存(一)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-11-05T15:09:42+08:00">
+                2016-11-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Hibernate/" itemprop="url" rel="index">
+                    <span itemprop="name">Hibernate</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="性能分析"><a href="#性能分析" class="headerlink" title="性能分析"></a><strong>性能分析</strong></h2><h3 id="抓取策略"><a href="#抓取策略" class="headerlink" title="抓取策略"></a><strong>抓取策略</strong></h3><h3 id="研究对象"><a href="#研究对象" class="headerlink" title="研究对象"></a><strong>研究对象</strong></h3><blockquote>
+<p>研究怎么样提取集合，该策略应该作用于set元上<br> 研究从少的一方加载多的一方</p>
+</blockquote>
+<a id="more"></a>
+<h3 id="案例"><a href="#案例" class="headerlink" title="案例"></a><strong>案例</strong></h3><h4 id="查询id为1-的班级所有的学生"><a href="#查询id为1-的班级所有的学生" class="headerlink" title="查询id为1 的班级所有的学生"></a><strong>查询id为1 的班级所有的学生</strong></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">* 获取cid为1的班级，再获取cid为1的班级的所有的学生</div><div class="line">*/</div><div class="line"><span class="meta">@Test</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testGetClassesAndStudent</span><span class="params">()</span></span>&#123;</div><div class="line">  Session session = HibernateUtils.sessionFactory.getCurrentSession();</div><div class="line">  Transaction transaction = session.beginTransaction();</div><div class="line">  Classes classes = (Classes)session.get(Classes.class, <span class="number">1L</span>);</div><div class="line">  Set&lt;Student&gt; students = classes.getStudents();</div><div class="line">  <span class="keyword">for</span>(Student student:students)&#123;</div><div class="line">	System.out.println(student.getName());</div><div class="line">  &#125;</div><div class="line">  transaction.commit();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Classes中的set节点：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">set</span> <span class="attr">name</span> = <span class="string">"studnet"</span> <span class="attr">cascade</span>=<span class="string">"all"</span> <span class="attr">fetch</span>=<span class="string">"join"</span>&gt;</span><span class="tag">&lt;/<span class="name">set</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>执行上述的代码，在fetch=”join”的配置下，hibernate执行如下的SQL语句：<br><img src="/picture/hibernate4/fech_join_1.png" alt="fetch=&quot;join&quot;"></p>
+<blockquote>
+<p>说明： 通过一条SQL语句：做外连接，把classes与student表的数据全部提取出来。</p>
+</blockquote>
+<p>如果是如下的策略：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">set</span> <span class="attr">name</span>=<span class="string">"students"</span> <span class="attr">cascade</span>=<span class="string">"all"</span> <span class="attr">fetch</span>=<span class="string">"select"</span>&gt;</span><span class="tag">&lt;/<span class="name">set</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>先查询classes,再查询student如下图：<br><img src="/picture/hibernate4/fech_select.png" alt="fetch=select"></p>
+<h4 id="查询所有的班级的所有的学生"><a href="#查询所有的班级的所有的学生" class="headerlink" title="查询所有的班级的所有的学生"></a><strong>查询所有的班级的所有的学生</strong></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">* 获取到所有的班级的所有的学生</div><div class="line">* 如果采用默认的策略,会导致n+1条sql语句,n为classes表中的行数</div><div class="line">*/</div><div class="line"><span class="meta">@Test</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testGetAllClassesAndStudent</span><span class="params">()</span></span>&#123;</div><div class="line">  Session session = sessionFactory.getCurrentSession();</div><div class="line">  Transaction transaction = session.beginTransaction();</div><div class="line">  List&lt;Classes&gt; classesList = session.createQuery(<span class="string">"from Classes"</span>).list();</div><div class="line">  <span class="keyword">for</span>(Classes classes:classesList)&#123;</div><div class="line">  Set&lt;Student&gt; students = classes.getStudents();</div><div class="line">  <span class="keyword">for</span>(Student student:students)&#123;</div><div class="line">    System.out.println(student.getName());</div><div class="line">  &#125;</div><div class="line"> &#125;</div><div class="line"> transaction.commit();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>该需求翻译过来含有子查询<br>        select s.* from student s where s.cid in(select cid from classes)<br>如果含有子查询，必须用subselect<br>改进：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">set</span> <span class="attr">name</span>=<span class="string">"students"</span> <span class="attr">cascade</span>=<span class="string">"all"</span> <span class="attr">fetch</span>=<span class="string">"subselect"</span>&gt;</span><span class="tag">&lt;/<span class="name">set</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>将Classes配置文件中的set节点配置成如上后，hibernate输出如下的SQL信息：<br>！<a href="/picture/hibernate4/fech_allStudnet.png">fetch=subselect</a></p>
+<h4 id="查询班级为1，2，3-4的所有的学生"><a href="#查询班级为1，2，3-4的所有的学生" class="headerlink" title="查询班级为1，2，3,4的所有的学生"></a><strong>查询班级为1，2，3,4的所有的学生</strong></h4><p>Classes配置文件中的set节点：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">set</span> <span class="attr">name</span>=<span class="string">"studnets"</span> <span class="attr">cascade</span>=<span class="string">"all"</span> <span class="attr">fetch</span>=<span class="string">"subselect"</span>&gt;</span><span class="tag">&lt;/<span class="name">set</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">* 查询cid为1,2,3,4的班级的学生</div><div class="line">*/</div><div class="line"><span class="meta">@Test</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testQueryStudentFromClassesIn</span><span class="params">()</span></span>&#123;</div><div class="line">  Session session = sessionFactory.getCurrentSession();</div><div class="line">  Transaction transaction = session.beginTransaction();</div><div class="line">  List&lt;Classes&gt; classesList = session.createQuery(<span class="string">"from Classes where cid in(1,2,3,4)"</span>).list();</div><div class="line">  <span class="keyword">for</span>(Classes classes:classesList)&#123;</div><div class="line">  Set&lt;Student&gt; students = classes.getStudents();</div><div class="line">  <span class="keyword">for</span>(Student student:students)&#123;</div><div class="line">		System.out.println(student.getName());</div><div class="line">   &#125;</div><div class="line">  &#125;</div><div class="line">  transaction.commit();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h3><ol>
+<li>研究对象是集合。</li>
+<li>经过分析，如果SQL语句中包含有了子查询，则用subselect效率比较高。</li>
+<li>如果页面上需要一次性把两张表的数据全部提取出来，用join效率比较高。</li>
+<li>如果select，先查询学生，如果查询班级的个数超过1个，会导致n + 1条SQL语句。</li>
+<li>抓取策略是hibernate提供的一种优化方式而已。</li>
+</ol>
+<h2 id="延迟加载-懒加载"><a href="#延迟加载-懒加载" class="headerlink" title="延迟加载(懒加载)"></a><strong>延迟加载(懒加载)</strong></h2><h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a><strong>概念</strong></h3><p>需要用到数据的时候才要加载。延迟加载的优化措施是优化SQL语句的发出时间。</p>
+<h3 id="种类"><a href="#种类" class="headerlink" title="种类"></a><strong>种类</strong></h3><h4 id="类的延迟加载"><a href="#类的延迟加载" class="headerlink" title="类的延迟加载"></a><strong>类的延迟加载</strong></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Test</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span>  <span class="title">testLoad</span><span class="params">()</span></span>&#123;</div><div class="line">  Session session = HibernateUtils.sessionFactory.openSession();</div><div class="line">  Classes classes = (Classes) session.load(Classes.class, <span class="number">1L</span>);</div><div class="line">  <span class="comment">//没有发出SQL语句</span></div><div class="line">  System.out.println(classes.getCid());</div><div class="line">  <span class="comment">//发出了SQL语句</span></div><div class="line">  System.out.println(classes.getName());</div><div class="line">  session.close();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>hibernate执行的SQL的输出：<br><img src="/picture/hibernate4/Class_Lazy_select_1.png" alt="延迟加载"></p>
+<blockquote>
+<p>说明：</p>
+<ol>
+<li>执行第一条输出classes.getCid()的时候，不发出SQL语句，说明类的延迟加载和主键没有关系。</li>
+<li>执行第二条输出classes.getName()的时候，发出了SQL语句，说明在得到了具体的属性的时候才要发出SQL语句。<br>3.Session.load()方法返回的时候，返回的对象是<code>classes=Classes_$$_javassist_1</code>，是一个代理对象，而该对象是由javassist的jar包生成的，从代码结构可以看出该代理对象是持久化类的子类。</li>
+<li>在Classes.hbm.xml文件中</li>
+</ol>
+</blockquote>
+<pre><code>&lt;class nam=&quot;com.wcc.hibernate.domain.Classes&quot;  lazy=&quot;true&quot;&gt;
+&lt;!--lzay的属性默认是true--&gt;
+</code></pre><ol>
+<li>如果把上述的lazy改成false，则类的延迟加载不起作用了，默认为延迟加载。</li>
+</ol>
+<h4 id="集合的延迟加载"><a href="#集合的延迟加载" class="headerlink" title="集合的延迟加载"></a><strong>集合的延迟加载</strong></h4><p><strong>案例一</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line">* 集合 的延迟加载</div><div class="line">* &lt; set name="students" cascade="all" fetch="subselect" lazy="true"&gt;</div><div class="line">*/</div><div class="line"><span class="meta">@Test</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span>  <span class="title">testCollection</span><span class="params">()</span></span>&#123;</div><div class="line">	Session session = HibernateUtils.sessionFactory.openSession();</div><div class="line">	Classes classes = (Classes) session.get(Classes.class, <span class="number">2L</span>);</div><div class="line">	<span class="comment">//在得到学生集合的时候是没有发出SQL语句的</span></div><div class="line">	Set&lt;Student&gt; set = classes.getStudnets();</div><div class="line">	<span class="comment">//在具体的getDescription 才发出了SQL语句</span></div><div class="line">	<span class="keyword">for</span> (Student student : set) &#123;</div><div class="line">		System.out.println(student.getDescription());</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>说明：<br>1.lazy的取值有三种情况：extra、false、true。</p>
+<ol>
+<li>默认情况下，lazy属性的默认值是true， 此时，集合的延迟加载只有在遍历集合的时候才会发出SQL语句</li>
+<li>lazy的值为false，当加载classes的时候就把student加载出来了</li>
+<li>lazy的值是Extra：是更进一步延迟加载策略，如果求大小，平均数、和等。</li>
+</ol>
+</blockquote>
+<p><strong>案例二</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">*集合的延迟加载</div><div class="line">*&lt;set name="students" cascade="all" fetch="subselect" lazy="extra"&gt;</div><div class="line">*/</div><div class="line"><span class="meta">@Test</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testLayzyExtre</span><span class="params">()</span></span>&#123;</div><div class="line">  Session session = HibernateUtils.sessionFactory.openSession();</div><div class="line">  Classes classes =  (Classes) session.get(Classes.class,  <span class="number">2L</span>);</div><div class="line">  <span class="comment">//得到学生的集合</span></div><div class="line">  Set&lt;Student&gt; set = classes.getStudnets();</div><div class="line">  <span class="comment">//只加载了大小没有加载数据</span></div><div class="line">  System.out.println(set.size());</div><div class="line">  session.close();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>当上述代码中在lazy=”true”的情况下运行的时候，执行set.size()的时候，会执行查询语句，但是我们只需要的是集合的size，当lazy=”extra”时，表示的是更进一步的延迟加载，需要什么就加载什么，当执行到上述的student.size() 的时候，发出如下的SQL语句：<br><img src="/picture/hibernate4/Class_Lazy_extre_Select.png" alt="Class_Lazy_extre_Select.png"><br>该SQL语句只加载了大小，并没有加载具体的数据。</p>
+<h4 id="Many-to-one的延迟加载"><a href="#Many-to-one的延迟加载" class="headerlink" title="Many-to-one的延迟加载"></a><strong>Many-to-one的延迟加载</strong></h4><h3 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a><strong>总结</strong></h3><p><strong>延迟加载是通过什么时候加载SQL语句来优化性能的</strong></p>
+<h3 id="抓取策略和延迟加载的结合"><a href="#抓取策略和延迟加载的结合" class="headerlink" title="抓取策略和延迟加载的结合"></a><strong>抓取策略和延迟加载的结合</strong></h3><h4 id="研究对象-1"><a href="#研究对象-1" class="headerlink" title="研究对象"></a><strong>研究对象</strong></h4><p>set集合</p>
+<ol>
+<li>当fetch为join时，lazy失效。</li>
+<li>当fetch为select时</li>
+<li>如果lazy为true/extra,当遍历集合的时候，发出加载集合的SQL语句，如果lazy为false，当获取班级的时候，发出加载集合的SQL语句</li>
+<li>当fetch为subselect时和上面的情况一致。</li>
+</ol>
+<h2 id="二级缓存"><a href="#二级缓存" class="headerlink" title="二级缓存"></a><strong>二级缓存</strong></h2><h3 id="概念-1"><a href="#概念-1" class="headerlink" title="概念"></a><strong>概念</strong></h3><ul>
+<li>是sessionFactory级别的缓存</li>
+<li>存放的是公有数据：共享数据</li>
+<li>二级缓存的生命周期是随着hibernate容器启动就开了，hibernate销毁，结束。</li>
+<li>hibernate本身对二级缓存没有提供实现，是借助第三方插件实现的。</li>
+</ul>
+<h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a><strong>特点</strong></h3><p>公有数据的特征：</p>
+<ul>
+<li>一般情况下保持不变</li>
+<li>所有的人都能访问</li>
+<li>访问的频率比较高</li>
+<li>安全性不是特别高的数据</li>
+</ul>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a><strong>配置</strong></h3><ol>
+<li><p>在hibernate的配置文件中</p>
+<pre><code><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">      <span class="comment">&lt;!-- 开启 二级缓存 --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"cache.use_second_level_cache"</span>&gt;</span>true<span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!-- 二级缓存的供应商 --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"cache_provider_class"</span>&gt;</span>org.hibernate.cache.EhCacheProvider<span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!-- 开启hibernate 的统计机制 --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"hibernate.generate_statistics"</span>&gt;</span>true<span class="tag">&lt;/<span class="name">property</span>&gt;</span></div></pre></td></tr></table></figure>
+</code></pre></li>
+<li><p>二级缓存分为类的二级缓存和集合的二级缓存</p>
+</li>
+<li>开启哪个类的二级缓存就是在哪一个类的映射文件中进行二级缓存的配置。例如在classes类中进行二级缓存<pre><code><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">      <span class="tag">&lt;<span class="name">class</span> <span class="attr">name</span>=<span class="string">"com.wcc.hibernate.domain.Classes"</span>&gt;</span></div><div class="line">      <span class="comment">&lt;!--在class中增加cache结点--&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">cache</span> <span class="attr">usage</span>=<span class="string">"read-only"</span>/&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">class</span>&gt;</span></div></pre></td></tr></table></figure>
+</code></pre></li>
+</ol>
+<h3 id="案例-1"><a href="#案例-1" class="headerlink" title="案例"></a><strong>案例</strong></h3><h4 id="案例一"><a href="#案例一" class="headerlink" title="案例一"></a><strong>案例一</strong></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Test</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testGet</span><span class="params">()</span></span>&#123;</div><div class="line">  Session session = HibernateUtils.sessionFactory.openSession();</div><div class="line">  Classes classes = (Classes) session.get(Classes.class, <span class="number">1L</span>);</div><div class="line">  <span class="comment">//执行下面这条语句 ，session已经关闭了</span></div><div class="line">  session.close();</div><div class="line">  <span class="comment">// 该session 是一个新session </span></div><div class="line">  session = HibernateUtils.sessionFactory.openSession();</div><div class="line">  <span class="comment">//对同一个对象， 并没有发出SQL语句的</span></div><div class="line">  classes = (Classes) session.get(Classes.class, <span class="number">1L</span>);</div><div class="line">  session.close();</div><div class="line">  <span class="comment">// 说明 当 第二次执行session.get()方法的时候,并没有执行SQL语句</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>说明： 当第二次执行session.get()方法的时候，并没有发出SQL语句。 Session.save()，Session.update()，方法不能让一个对象进入到二级缓存中。</p>
+</blockquote>
+<h4 id="案例二"><a href="#案例二" class="headerlink" title="案例二"></a><strong>案例二</strong></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Test</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testQuery</span><span class="params">()</span></span>&#123;</div><div class="line">  Session session = HibernateUtils.sessionFactory.openSession();</div><div class="line">  <span class="comment">//把class表中的所有的数据放在二级缓存中</span></div><div class="line">  List&lt;Classes&gt;  classes = session.createQuery(<span class="string">"from Classes"</span>).list();</div><div class="line">  System.out.println(sessionFactory.getStatistics().getEntityLoadCount());</div><div class="line">  session.close();</div><div class="line">  session = HibernateUtils.sessionFactory.openSession();</div><div class="line">  List&lt;Classes&gt; classes1 = session.createQuery(<span class="string">"from classes where cid in(1, 2)"</span>).list();</div><div class="line">		</div><div class="line">  <span class="keyword">for</span> (Classes cl : classes1) &#123;</div><div class="line">	Set&lt;Student&gt; set = cl.getStudnets();</div><div class="line">	<span class="keyword">for</span> (Student student : set) &#123;</div><div class="line">	<span class="comment">//不能输出student的名字，获取不到</span></div><div class="line">	System.out.println(student.getName());</div><div class="line">	&#125;</div><div class="line">  &#125;</div><div class="line">  session.close();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>说明：<br>1.执行<code>List&lt;Classes&gt;  classes = session.createQuery(&quot;from Classes&quot;).list();</code>代码的时候，把classes表中的所有的对象进入到了二级缓存中。</p>
+<ol>
+<li>执行<code>List&lt;Classes&gt; classes1 = session.createQuery(&quot;from classes where cid in(1, 2)&quot;).list();</code>的时候，重新从数据库中查找记录。</li>
+<li>所以createQuery(hql).list();方法能把一个对象放入二级缓存中，但是不利于二级缓存获取对象。</li>
+</ol>
+</blockquote>
+<h4 id="案例三-硬盘缓存"><a href="#案例三-硬盘缓存" class="headerlink" title="案例三 硬盘缓存"></a><strong>案例三 硬盘缓存</strong></h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">ehcache</span> <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span> </span></div><div class="line">         <span class="attr">xsi:noNamespaceSchemaLocation</span>=<span class="string">"../config/ehcache.xsd"</span>&gt;</div><div class="line">         </div><div class="line">    <span class="tag">&lt;<span class="name">diskStore</span> <span class="attr">path</span>=<span class="string">"e:\\TEMP1"</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">defaultCache</span></span></div><div class="line">            <span class="attr">maxElementsInMemory</span>=<span class="string">"12"</span></div><div class="line">            <span class="attr">eternal</span>=<span class="string">"false"</span></div><div class="line">            <span class="attr">timeToIdleSeconds</span>=<span class="string">"1200"</span></div><div class="line">            <span class="attr">timeToLiveSeconds</span>=<span class="string">"1200"</span></div><div class="line">            <span class="attr">overflowToDisk</span>=<span class="string">"false"</span></div><div class="line">            <span class="attr">maxElementsOnDisk</span>=<span class="string">"10000000"</span></div><div class="line">            <span class="attr">diskPersistent</span>=<span class="string">"false"</span></div><div class="line">            <span class="attr">diskExpiryThreadIntervalSeconds</span>=<span class="string">"120"</span></div><div class="line">            <span class="attr">memoryStoreEvictionPolicy</span>=<span class="string">"LRU"</span></div><div class="line">            /&gt;</div><div class="line">            </div><div class="line">   	<span class="tag">&lt;<span class="name">Cache</span></span></div><div class="line">            <span class="attr">name</span>=<span class="string">"com.wcc.hibernate.domain.Classes"</span></div><div class="line">            <span class="attr">maxElementsInMemory</span>=<span class="string">"3"</span> </div><div class="line">            <span class="attr">eternal</span>=<span class="string">"false"</span></div><div class="line">            <span class="attr">timeToIdleSeconds</span>=<span class="string">"120"</span></div><div class="line">            <span class="attr">timeToLiveSeconds</span>=<span class="string">"120"</span></div><div class="line">            <span class="attr">overflowToDisk</span>=<span class="string">"true"</span></div><div class="line">            <span class="attr">maxElementsOnDisk</span>=<span class="string">"10000000"</span></div><div class="line">            <span class="attr">diskPersistent</span>=<span class="string">"false"</span></div><div class="line">            <span class="attr">diskExpiryThreadIntervalSeconds</span>=<span class="string">"120"</span></div><div class="line">            <span class="attr">memoryStoreEvictionPolicy</span>=<span class="string">"LRU"</span></div><div class="line">            /&gt;</div><div class="line"><span class="tag">&lt;/<span class="name">ehcache</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>从上面的配置可以看出，classes对象在内存中存放的数量最多为3个，多余的对象将存在磁盘上。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">@Test</div><div class="line">public void  testOverToDIsk() throws Exception&#123;</div><div class="line">  Session session = HibernateUtils.sessionFactory.openSession();</div><div class="line">  List&lt;Classes&gt;  classes = session.createQuery("from Classes").list();</div><div class="line">  session.close();</div><div class="line">  Thread.sleep(1000l);</div><div class="line">&#125;</div><div class="line">```查找classes表中所有的对象，在内存中放置3个对象，剩余的对象将被存放在磁盘上。</div><div class="line"></div><div class="line">#### **案例：集合的二级缓存**</div><div class="line">除了在配置文件中的class节点里面配置cache，在set节点中也是可以进行配置的，如下面的在Classeshm.xml文件中的Set节点中添加cache节点。</div><div class="line">```xml</div><div class="line">&lt;cache usage="read-only"/&gt;</div></pre></td></tr></table></figure>
+<p>上面相当于开启了classes类中的set集合的二级缓存。</p>
+<h4 id="读写策略"><a href="#读写策略" class="headerlink" title="读写策略"></a><strong>读写策略</strong></h4><h5 id="Usage"><a href="#Usage" class="headerlink" title="Usage"></a><strong>Usage</strong></h5><ul>
+<li>Ready-only :只能把一个对象放入到二级缓存中，不能修改。</li>
+<li>Read-write :能把一个对象放入到二级缓存中，也能修改。</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/path/to/wechat-reward-image" alt="Charse WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/path/to/alipay-reward-image" alt="Charse Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Hibernate/" rel="tag"># Hibernate</a>
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/04/Hibernate框架——关系操作(一)/" rel="next" title="Hibernate框架——关系操作(一)">
+                <i class="fa fa-chevron-left"></i> Hibernate框架——关系操作(一)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/11/05/Hibernate框架——关系操作(二)/" rel="prev" title="Hibernate框架——关系操作(二)">
+                Hibernate框架——关系操作(二) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="Charse" />
+          <p class="site-author-name" itemprop="name">Charse</p>
+           
+              <p class="site-description motion-element" itemprop="description">Stay hungry, Stay foolish.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/your-user-name" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/your-user-name" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/your-user-name" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  豆瓣
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/your-user-name" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#性能分析"><span class="nav-number">1.</span> <span class="nav-text">性能分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#抓取策略"><span class="nav-number">1.1.</span> <span class="nav-text">抓取策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#研究对象"><span class="nav-number">1.2.</span> <span class="nav-text">研究对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#案例"><span class="nav-number">1.3.</span> <span class="nav-text">案例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#查询id为1-的班级所有的学生"><span class="nav-number">1.3.1.</span> <span class="nav-text">查询id为1 的班级所有的学生</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查询所有的班级的所有的学生"><span class="nav-number">1.3.2.</span> <span class="nav-text">查询所有的班级的所有的学生</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查询班级为1，2，3-4的所有的学生"><span class="nav-number">1.3.3.</span> <span class="nav-text">查询班级为1，2，3,4的所有的学生</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">1.4.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#延迟加载-懒加载"><span class="nav-number">2.</span> <span class="nav-text">延迟加载(懒加载)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#概念"><span class="nav-number">2.1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#种类"><span class="nav-number">2.2.</span> <span class="nav-text">种类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#类的延迟加载"><span class="nav-number">2.2.1.</span> <span class="nav-text">类的延迟加载</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#集合的延迟加载"><span class="nav-number">2.2.2.</span> <span class="nav-text">集合的延迟加载</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Many-to-one的延迟加载"><span class="nav-number">2.2.3.</span> <span class="nav-text">Many-to-one的延迟加载</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结-1"><span class="nav-number">2.3.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#抓取策略和延迟加载的结合"><span class="nav-number">2.4.</span> <span class="nav-text">抓取策略和延迟加载的结合</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#研究对象-1"><span class="nav-number">2.4.1.</span> <span class="nav-text">研究对象</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二级缓存"><span class="nav-number">3.</span> <span class="nav-text">二级缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#概念-1"><span class="nav-number">3.1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特点"><span class="nav-number">3.2.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置"><span class="nav-number">3.3.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#案例-1"><span class="nav-number">3.4.</span> <span class="nav-text">案例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#案例一"><span class="nav-number">3.4.1.</span> <span class="nav-text">案例一</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#案例二"><span class="nav-number">3.4.2.</span> <span class="nav-text">案例二</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#案例三-硬盘缓存"><span class="nav-number">3.4.3.</span> <span class="nav-text">案例三 硬盘缓存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#读写策略"><span class="nav-number">3.4.4.</span> <span class="nav-text">读写策略</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Usage"><span class="nav-number">3.4.4.1.</span> <span class="nav-text">Usage</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Charse</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

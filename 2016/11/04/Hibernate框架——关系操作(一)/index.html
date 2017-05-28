@@ -1,0 +1,929 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hibernate,Java," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="在之前两篇博文中，介绍了Hibernate框架的基本操作和对象的状态和一级缓存的知识，在本篇博文中将介绍对象之间的关系操作.">
+<meta name="keywords" content="Hibernate,Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hibernate框架——关系操作(一)">
+<meta property="og:url" content="http://yoursite.com/2016/11/04/Hibernate框架——关系操作(一)/index.html">
+<meta property="og:site_name" content="Charse&#39;s Blog">
+<meta property="og:description" content="在之前两篇博文中，介绍了Hibernate框架的基本操作和对象的状态和一级缓存的知识，在本篇博文中将介绍对象之间的关系操作.">
+<meta property="og:image" content="http://yoursite.com/picture/hibernate3/selectclass.png">
+<meta property="og:image" content="http://yoursite.com/picture/hibernate3/selectstudent.png">
+<meta property="og:image" content="http://yoursite.com/picture/hibernate3/selectupdate.png">
+<meta property="og:image" content="http://yoursite.com/picture/hibernate3/remove_null.png">
+<meta property="og:image" content="http://yoursite.com/picture/hibernate3/remove_studnet.png">
+<meta property="og:image" content="http://yoursite.com/picture/hibernate3/save_student_and_classes.png">
+<meta property="og:updated_time" content="2017-03-11T14:31:19.788Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hibernate框架——关系操作(一)">
+<meta name="twitter:description" content="在之前两篇博文中，介绍了Hibernate框架的基本操作和对象的状态和一级缓存的知识，在本篇博文中将介绍对象之间的关系操作.">
+<meta name="twitter:image" content="http://yoursite.com/picture/hibernate3/selectclass.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/11/04/Hibernate框架——关系操作(一)/"/>
+
+
+
+
+
+  <title>Hibernate框架——关系操作(一) | Charse's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Charse's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/04/Hibernate框架——关系操作(一)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charse">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Charse's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Hibernate框架——关系操作(一)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-11-04T20:20:44+08:00">
+                2016-11-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Hibernate/" itemprop="url" rel="index">
+                    <span itemprop="name">Hibernate</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在之前两篇博文中，介绍了Hibernate框架的基本操作和对象的状态和一级缓存的知识，在本篇博文中将介绍对象之间的关系操作.<br><a id="more"></a></p>
+<h1 id="关系操作"><a href="#关系操作" class="headerlink" title="关系操作"></a><strong>关系操作</strong></h1><h2 id="一对多的单项关联"><a href="#一对多的单项关联" class="headerlink" title="一对多的单项关联"></a><strong>一对多的单项关联</strong></h2><h3 id="持久化类和映射文件"><a href="#持久化类和映射文件" class="headerlink" title="持久化类和映射文件"></a><strong>持久化类和映射文件</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Classes</span> <span class="keyword">implements</span> <span class="title">Serializable</span></span>&#123;</div><div class="line">	<span class="keyword">private</span> Long cid;</div><div class="line">	<span class="keyword">private</span> String name;</div><div class="line">	<span class="keyword">private</span> String description;</div><div class="line">	<span class="keyword">private</span> Set&lt;Student&gt; studnets;</div><div class="line">	<span class="comment">// set和get方法因为版面，省略不写</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span>  <span class="keyword">implements</span> <span class="title">Serializable</span></span>&#123;</div><div class="line">	<span class="keyword">private</span> Long sid;</div><div class="line">	<span class="keyword">private</span> String name;</div><div class="line">	<span class="keyword">private</span> String description;</div><div class="line">	<span class="keyword">private</span> Classes classes;</div><div class="line">	<span class="comment">// set和get方法因为版面，省略不写</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看到只能通过Classes查找到Student，但是不能通过student查找到Classes。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version="1.0" encoding="utf-8"?&gt;</div><div class="line"><span class="meta">&lt;!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"</span></div><div class="line">"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd"&gt;</div><div class="line"><span class="tag">&lt;<span class="name">hibernate-mapping</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">class</span> <span class="attr">name</span>=<span class="string">"com.wcc.hibernate.domain.Classes"</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">id</span> <span class="attr">name</span>= <span class="string">"cid"</span>  <span class="attr">length</span> = <span class="string">"5"</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">generator</span> <span class="attr">class</span>=<span class="string">"increment"</span>&gt;</span><span class="tag">&lt;/<span class="name">generator</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">id</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">length</span>=<span class="string">"20"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"description"</span> <span class="attr">length</span>=<span class="string">"20"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line">		<span class="comment">&lt;!-- </span></div><div class="line">			cascade 级联</div><div class="line">				save-update : 当保存或者更新classes的时候，级联操作student</div><div class="line">				inverse  ：维护关系</div><div class="line">						true  不维护关系</div><div class="line">						false 维护关系</div><div class="line">						default  默认设置为false		</div><div class="line">		 --&gt;</div><div class="line">		<span class="tag">&lt;<span class="name">set</span> <span class="attr">name</span>=<span class="string">"students"</span>  <span class="attr">cascade</span>=<span class="string">"save-update"</span>&gt;</span></div><div class="line">				<span class="comment">&lt;!--	key 代表外键 : 用来关联classes 和student表，用于在hibernate底层生成SQL语句。 --&gt;</span></div><div class="line">				 <span class="tag">&lt;<span class="name">key</span>&gt;</span></div><div class="line">				 	<span class="tag">&lt;<span class="name">column</span> <span class="attr">name</span>=<span class="string">"cid"</span>&gt;</span><span class="tag">&lt;/<span class="name">column</span>&gt;</span></div><div class="line">				 <span class="tag">&lt;/<span class="name">key</span>&gt;</span></div><div class="line">				<span class="comment">&lt;!-- 建立类与类之间的关联，用于客户端的编码 --&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">one-to-many</span> <span class="attr">class</span>=<span class="string">"com.wcc.hibernate.domain.Student"</span>/&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">set</span>&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">class</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">hibernate-mapping</span>&gt;</span></div></pre></td></tr></table></figure>
+<blockquote>
+<p>从映射文件可以看出，set元素描述了两个方面的内容：</p>
+<ol>
+<li>key从外键的角度描述了两者之间的关系，用于生成SQL语句。</li>
+<li>one-to-many 从类与类的角度描述了两者的关系，用于客户端的编码</li>
+</ol>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 保存班级的同时保存学生</span></div><div class="line">	<span class="meta">@Test</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testSaveStudentAndStudnt</span><span class="params">()</span></span>&#123;</div><div class="line">  Session session=HibernateUtils.sessionFactory.getCurrentSession();</div><div class="line">  Transaction transaction = session.beginTransaction();</div><div class="line">		</div><div class="line">  <span class="comment">//创建一个Class对象</span></div><div class="line">  Classes classes = <span class="keyword">new</span>  Classes();</div><div class="line">  <span class="comment">//classes.setCid(2L);</span></div><div class="line">  classes.setName(<span class="string">"java"</span>);</div><div class="line">  classes.setDescription(<span class="string">"java基础"</span>);</div><div class="line">		</div><div class="line">  <span class="comment">//创建学生的集合</span></div><div class="line">  Set&lt;Student&gt; students = <span class="keyword">new</span> HashSet&lt;Student&gt;();</div><div class="line">	</div><div class="line">  <span class="comment">//创建两个学生</span></div><div class="line">  Student student = <span class="keyword">new</span> Student();</div><div class="line">  student.setName(<span class="string">"毕向东"</span>);</div><div class="line">  student.setDescription(<span class="string">"java大师"</span>);</div><div class="line">		</div><div class="line">  Student student2 = <span class="keyword">new</span> Student();</div><div class="line">  student2.setName(<span class="string">"王昭珽"</span>);</div><div class="line">  student2.setDescription(<span class="string">"web大师"</span>);		</div><div class="line">		</div><div class="line">  students.add(student);</div><div class="line">  students.add(student2);</div><div class="line">  <span class="comment">//通过Class建立classes与student之间的关联</span></div><div class="line">  classes.setStudnets(students);</div><div class="line">  session.save(classes);</div><div class="line">  transaction.commit();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>说明<br>1、在hibernate中，通过国session.save方法保存一个持久化对象，这种方式称为显式保存。<br>2、在hibernate中，通过级联的方式来操作保存一个对象，这样的方式称为隐式保存。<br>3、对student对象进行隐式的保存操作，是因为studnet是一个临时状态的对象，在数据库中有没对应的记录，所以应该对student执行insert语句。</p>
+</blockquote>
+<p><strong>更新班级级联更新学生</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">* 更新班级的时候级联学生</div><div class="line">*/</div><div class="line"><span class="meta">@Test</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testUpdateStudentAndClasses</span><span class="params">()</span></span>&#123;</div><div class="line">  Session session = HibernateUtils.sessionFactory.getCurrentSession();</div><div class="line">  Transaction transaction = session.beginTransaction();</div><div class="line">  <span class="comment">//获取cid为2的classes</span></div><div class="line">  Classes classes = (Classes) session.get(Classes.class, <span class="number">2L</span>);</div><div class="line">  <span class="comment">//获取该班级的所有学生</span></div><div class="line">  Set&lt;Student&gt; set = classes.getStudnets();</div><div class="line">  <span class="keyword">for</span> (Student student : set) &#123;</div><div class="line">	student.setDescription(<span class="string">"好孩子"</span>);</div><div class="line">  &#125;</div><div class="line">  transaction.commit();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>说明:</p>
+<ol>
+<li>当执行Classes classes = (Classes)session.get(Classes.class, 2L);的时候产生如下的SQL语句。<br><img src="/picture/hibernate3/selectclass.png" alt="输出Classes的查询"></li>
+</ol>
+</blockquote>
+<p>2.当执行Set<student> set = classes.getStudnets();的时候，产生了如下SQL语句<br><img src="/picture/hibernate3/selectstudent.png" alt="输出Student的查询"></student></p>
+<ol>
+<li>当执行    transaction.commit();的时候执行如下的SQL语句。该语句有两条，得到的set集合中有两条记录。<br><img src="/picture/hibernate3/selectupdate.png" alt="学生的update"></li>
+<li>没有发出更新classess的update语句，因为classes的属性没有发生改变。</li>
+</ol>
+<p><strong>总结</strong><br><strong>Cascade:</strong><br><strong>Save-update</strong><br>在session.save/update 一个对象的时候，级联操作关联对象，关联对象或者执行save语句或者执行update语句或者什么都不执行<br><strong>Delete</strong><br>在session.delete一个对象的时候，级联删除关联对象<br><strong>All</strong><br>save-update和delete的结合</p>
+<h3 id="在次讨论session-flush"><a href="#在次讨论session-flush" class="headerlink" title="在次讨论session.flush"></a><strong>在次讨论session.flush</strong></h3><ol>
+<li>检查session一级缓存中所放入持久化对象的状态，决定发出insert语句或者update语句。</li>
+<li>会检查所有的持久化对象关联对象，如果有级联操作，则对关联对象进行insert语句或update语句。</li>
+</ol>
+<h3 id="关系操作-1"><a href="#关系操作-1" class="headerlink" title="关系操作"></a><strong>关系操作</strong></h3><h4 id="让一个新的学生加入已经存在的班级"><a href="#让一个新的学生加入已经存在的班级" class="headerlink" title="让一个新的学生加入已经存在的班级"></a><strong>让一个新的学生加入已经存在的班级</strong></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">	</div><div class="line"><span class="comment">//关系操作  让一个新的学生加入已经存在的班级</span></div><div class="line"><span class="meta">@Test</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testNewStudentAddClasses</span><span class="params">()</span></span>&#123;</div><div class="line">  Session session = HibernateUtils.sessionFactory.getCurrentSession();</div><div class="line">  Transaction transaction =  session.beginTransaction();</div><div class="line">  Student student = <span class="keyword">new</span> Student();</div><div class="line">  student.setName(<span class="string">"王小臭"</span>);</div><div class="line">  student.setDescription(<span class="string">"好厉害"</span>);</div><div class="line">  Classes classes =  (Classes) session.get(Classes.class, <span class="number">2L</span>);</div><div class="line">  <span class="comment">//得到该班的所有学生， 将新的学生添加大班级中</span></div><div class="line">  classes.getStudents().add(student);</div><div class="line">  <span class="comment">/*</span></div><div class="line">  这里面要进行session.save(student);吗？ 这里是如果想让hibernate隐式对的操作，那么就在映射文件中set元素的cascade 属性为save-update*/</div><div class="line">  transaction.commit();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>说明：</p>
+<ol>
+<li>当执行 Classes classes = (Classes)session.get(Classes.class, 2L);语句的时候，hibernate会发出加载classes的SQL语句。</li>
+<li>当执行classes.getStudents().add(student);的时候，会发出加载classes班级中的所有的学生的SQL语句</li>
+<li>因为Classes.hbm.xml 文件中set元素的cascade属性设置了save-update，所以在更新classes的时候，要检查classes中的student集合，发现集合中多了一个对象，所以要对该对象进行insert语句。<br>4.当执行session.flush的时候，会发出维护关系的update语句，因为classes负责维护classes与student之间的关系。</li>
+</ol>
+</blockquote>
+<p>Classes.hbm.xml文件中的set元素：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"> <span class="comment">&lt;!--cascade ：级联</span></div><div class="line">	  save-update : 当保存或者更新classes的时候，级联操作student</div><div class="line">     inverse ：维护关系</div><div class="line">	   true  不维护关系</div><div class="line">	   false 维护关系</div><div class="line">	   default  默认设置为false:inverse属性没有写，保持默认值，维护classess与studnet 之间的关系--&gt;</div><div class="line"><span class="tag">&lt;<span class="name">set</span> <span class="attr">name</span>=<span class="string">"students"</span>  <span class="attr">cascade</span>=<span class="string">"save-update"</span>&gt;</span></div><div class="line">	<span class="comment">&lt;!-- key 代表外键 : 用来关联classes 和student表，用于在hibernate底层生成SQL语句。--&gt;</span></div><div class="line">	 <span class="tag">&lt;<span class="name">key</span>&gt;</span></div><div class="line">	 	<span class="tag">&lt;<span class="name">column</span> <span class="attr">name</span>=<span class="string">"cid"</span>&gt;</span><span class="tag">&lt;/<span class="name">column</span>&gt;</span></div><div class="line">	 <span class="tag">&lt;/<span class="name">key</span>&gt;</span></div><div class="line">	<span class="comment">&lt;!-- 建立类与类之间的关联，用于客户端的编码 --&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">one-to-many</span> <span class="attr">class</span>=<span class="string">"com.wcc.hibernate.domain.Student"</span>/&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">set</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<h4 id="重新建立关系1"><a href="#重新建立关系1" class="headerlink" title="重新建立关系1"></a><strong>重新建立关系1</strong></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"> <span class="comment">//重新更新关系</span></div><div class="line"><span class="meta">@Test</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span>  <span class="title">testChangRealtive</span><span class="params">()</span></span>&#123;</div><div class="line">  Session session = HibernateUtils.sessionFactory.getCurrentSession();</div><div class="line">  Transaction transaction  = session.beginTransaction();</div><div class="line">  <span class="comment">//先找到一个学生的对象</span></div><div class="line">  Student student = (Student) session.get(Student.class,  <span class="number">1L</span>);</div><div class="line">  Classes classes = (Classes) session.get(Classes.class, <span class="number">1L</span>);</div><div class="line">  Classes classes2 = (Classes) session.get(Classes.class,<span class="number">2L</span>);</div><div class="line">  <span class="comment">// 先要解除原来的关系，</span></div><div class="line">  classes.getStudents().remove(student);</div><div class="line">  <span class="comment">//再将这个学生和其他的班级进行关联</span></div><div class="line">  classes2.getStudents().add(student);</div><div class="line">  <span class="comment">/*</span></div><div class="line">  因为我们这里拿到的全是持久化对象，所以，</div><div class="line">  不用进行Session.save（）的操作。</div><div class="line">  */</div><div class="line">  transaction.commit();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>说明：</p>
+<ul>
+<li>执行    classes.getStudents().remove(student);的时候，发出维护关系的SQL语句<br><img src="/picture/hibernate3/remove_null.png" alt="remove_null"><br>因为解除了关系了，所以cid为null</li>
+<li>classes2.getStudents().add(student);的时候，发出更新的操作。<br><img src="/picture/hibernate3/remove_studnet.png" alt="remove_studnet"><br>因为建立了关系，所以更新了外键</li>
+</ul>
+</blockquote>
+<ul>
+<li>从上面的代码和SQL语句可以看出，外键变了两次，但是不需要改变两次，请看下面的优化版的重新建立关系。</li>
+</ul>
+<h4 id="重新建立关系2"><a href="#重新建立关系2" class="headerlink" title="重新建立关系2"></a><strong>重新建立关系2</strong></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//重新更新关系</span></div><div class="line"><span class="meta">@Test</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span>  <span class="title">testChangRealtive</span><span class="params">()</span></span>&#123;</div><div class="line">  Session session = HibernateUtils.sessionFactory.getCurrentSession();</div><div class="line">  Transaction transaction  = session.beginTransaction();</div><div class="line">  <span class="comment">//先找到一个学生的对象</span></div><div class="line">  Student student = (Student) session.get(Student.class,  <span class="number">1L</span>);</div><div class="line">  Classes classes = (Classes) session.get(Classes.class, <span class="number">1L</span>);</div><div class="line">  <span class="comment">// 建立学生的新的班级关系</span></div><div class="line">  classes.getStudents().add(student);</div><div class="line">  <span class="comment">/*因为我们这里拿到的全是持久化对象，所以，不用进行Session.save（）的操作。</span></div><div class="line">  */</div><div class="line">  transaction.commit();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>说明：只需要建立关系就可以了，因为发出的是更新外键的SQL语句，把外键的值改变了就可以了。</p>
+</blockquote>
+<h4 id="解除一个学生和一个班级之间的关系"><a href="#解除一个学生和一个班级之间的关系" class="headerlink" title="解除一个学生和一个班级之间的关系"></a><strong>解除一个学生和一个班级之间的关系</strong></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">* 已经存在一个班级，已经存在一个学生，</div><div class="line">* 解除该学生和改班级之间的关系</div><div class="line">*/</div><div class="line"><span class="meta">@Test</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testReleaseR</span><span class="params">()</span></span>&#123;</div><div class="line">  Session session = HibernateUtils.sessionFactory.getCurrentSession();</div><div class="line">  Transaction transaction = session.beginTransaction();</div><div class="line"><span class="comment">/**</span></div><div class="line"> * 基础cid 为2 和sid为2 的关系</div><div class="line">*/</div><div class="line">  Student student =  (Student) session.get(Student.class, <span class="number">2L</span>);</div><div class="line">  Classes classes = (Classes) session.get(Classes.class, <span class="number">2L</span>);</div><div class="line">  <span class="comment">// 得到该班级class 然后在从学生的集合中删除该学生</span></div><div class="line">  <span class="comment">//即可以解除该学生与之前的关系</span></div><div class="line">  classes.getStudents().remove(student);</div><div class="line">  transaction.commit();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="解除该班级和所有学生之间的关系"><a href="#解除该班级和所有学生之间的关系" class="headerlink" title="解除该班级和所有学生之间的关系"></a><strong>解除该班级和所有学生之间的关系</strong></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">* 解除该班级和所有学生之间的关系</div><div class="line">*/</div><div class="line"><span class="meta">@Test</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testRealseAll</span><span class="params">()</span></span>&#123;</div><div class="line">  Session session = HibernateUtils.sessionFactory.getCurrentSession();</div><div class="line">  Transaction transaction = session.getTransaction();</div><div class="line">  Classes classes = (Classes) session.get(Classes.class,<span class="number">2L</span>);</div><div class="line">  <span class="comment">//classes.getStduents().clear(); 这样操作是查询出学生之后，一个个清除，效率是不高的。</span></div><div class="line">  classes.setStudents(<span class="keyword">null</span>);<span class="comment">//这样写就是不查询的，效率是最高的。</span></div><div class="line">  transaction.commit();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>一般来说hibernate发出的SQL语句越少的话，效率是越高的，当执行 classes.setStudents(null) 的时候，不需要根据学生进行加载了，这样执行效率会更加的高效一些。</p>
+</blockquote>
+<h4 id="删除班级"><a href="#删除班级" class="headerlink" title="删除班级"></a><strong>删除班级</strong></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 删除班级</div><div class="line"> * &lt;set name= "students" save="save-update"&gt;</div><div class="line">*/</div><div class="line"><span class="meta">@Test</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testDeleteClasses</span><span class="params">()</span></span>&#123;</div><div class="line">  Session session  = HibernateUtils.sessionFactory.getCurrentSession();</div><div class="line">  Transaction transaction = session.beginTransaction();</div><div class="line">  Classes classes = (Classes) session.get(Classes.class, <span class="number">2L</span>);</div><div class="line">  session.delete(classes);</div><div class="line">  transaction.commit();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>说明：</p>
+<ol>
+<li>classes负责维护关系。</li>
+<li>在执行session.flush的时候，在删除班级之前，解除该班级和所有的学生之间的关系（Student表中的外键全变为null，即解除了关系）。 如果你设置在配置文件中的set 节点中inverse  为true（即不维护表之间的关系），那么在删除班级的时候是不会进行Student表的外键解除约束的，这样就会报错。在这种情况下，只能先去删除学生，再去删除班级了，所以说，不同的配置，就对应不同的代码和逻辑的操作。</li>
+<li>解除关系以后，再删除班级。</li>
+<li>上诉的代码是：先查询班级，再查询该班级中的每一个学生，再根据每一个学生的sid删除每一个学生，这样的效率比较低。</li>
+</ol>
+</blockquote>
+<h4 id="删除班级级联删除学生"><a href="#删除班级级联删除学生" class="headerlink" title="删除班级级联删除学生"></a><strong>删除班级级联删除学生</strong></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">* 删除班级，级联删除学生</div><div class="line">* &lt;set name="students" save="all" &gt; </div><div class="line">*/</div><div class="line"><span class="meta">@Test</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testDeleteCalsses</span><span class="params">()</span></span>&#123;</div><div class="line">  Session session = HibernateUtils.sessionFactory.getCurrentSession();</div><div class="line">  Transaction transaction = session.beginTransaction();</div><div class="line">  Classes classes = (Classes) session.get(Classes.class, <span class="number">2L</span>);</div><div class="line">  session.delete(classes);</div><div class="line">  transaction.commit();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="在hibernate中Cascade-与inverse的区别"><a href="#在hibernate中Cascade-与inverse的区别" class="headerlink" title="在hibernate中Cascade 与inverse的区别"></a><strong>在hibernate中Cascade 与inverse的区别</strong></h3><ul>
+<li>cascade描述的是对象与对象之间的关系， cascade和外键没有关系，在Studen表中，sid、name、description和cascade有关系，但是cid和cascade没有关系。</li>
+<li>inverse描述的是对象与外键之间的关系，inverse只和cid有关系，如果维护，则发出update语句(更新外键的SQL语句)，如果不维护，则不管。</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h3><ul>
+<li>只能通过classes操作student</li>
+<li>只要classes维护关系，就会发出维护关系的update语句，所以让classes维护关系效率比较低。</li>
+<li>让student维护效率比较高（让较多的一方维护效率更高）</li>
+<li>Session.flush的时候，hibernate内部做的事情<br>1、检查一级缓存中所有的持久化对象，决定发出insert语句还是update语句<br>2、检查持久化对象的关联对象，看持久化对象的映射文件中的cascade，决定关联对象是否发出insert语句或者update语句或者delete语句<br>3、检查持久化对象的映射文件的针对关联对象的inverse属性，来决定是否维护关系，如果维护关系，则发出update语句(维护关系的语句)</li>
+</ul>
+<h2 id="一对多双向关联"><a href="#一对多双向关联" class="headerlink" title="一对多双向关联"></a><strong>一对多双向关联</strong></h2><p>Classes对象<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Classes</span> <span class="keyword">implements</span> <span class="title">Serializable</span></span>&#123;</div><div class="line">   <span class="keyword">private</span> Long cid;</div><div class="line">   <span class="keyword">private</span> String name;</div><div class="line">   <span class="keyword">private</span> String description;</div><div class="line">   <span class="keyword">private</span> Set&lt;Student&gt; studnets;</div><div class="line">   ...</div><div class="line">   <span class="comment">//省略 set和get方法</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Student对象</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span>  <span class="keyword">implements</span> <span class="title">Serializable</span></span>&#123;</div><div class="line">	<span class="keyword">private</span> Long sid;</div><div class="line">	<span class="keyword">private</span> String name;</div><div class="line">	<span class="keyword">private</span> String description;</div><div class="line">	<span class="keyword">private</span> Classes classes;</div><div class="line">	<span class="comment">//省略set和get方法</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Student映射文件如下，其中可以发现配置中 Classes中有一个外键，Student建立关联的时候也有一个外键，那么会不会有冲突呢?事实上是，通过谁建立关系，就看谁的映射文件，那么就使用按个外键。不会进行冲突的。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version="1.0" encoding="utf-8"?&gt;</div><div class="line"><span class="meta">&lt;!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"</span></div><div class="line">"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd"&gt;</div><div class="line"><span class="tag">&lt;<span class="name">hibernate-mapping</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">class</span> <span class="attr">name</span>=<span class="string">"com.wcc.hibernate.domain.Student"</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">id</span> <span class="attr">name</span>=<span class="string">"sid"</span> <span class="attr">length</span>=<span class="string">"5"</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">generator</span> <span class="attr">class</span>=<span class="string">"increment"</span>&gt;</span><span class="tag">&lt;/<span class="name">generator</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">id</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">length</span> = <span class="string">"20"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"description"</span> <span class="attr">length</span> = <span class="string">"20"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line">		<span class="comment">&lt;!--	column 为外键--&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">many-to-one</span> <span class="attr">name</span>=<span class="string">"classes"</span> <span class="attr">column</span>=<span class="string">"cid"</span> <span class="attr">class</span>=<span class="string">"com.wcc.hibernate.domain.Classes"</span> <span class="attr">cascade</span>=<span class="string">"save-update"</span></span></div><div class="line">		&gt;</div><div class="line">		<span class="tag">&lt;/<span class="name">many-to-one</span>&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">class</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">hibernate-mapping</span>&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="操作"><a href="#操作" class="headerlink" title="操作"></a><strong>操作</strong></h3><p><strong>保存学生，级联保存班级</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">  保存学生，级联保存班级</div><div class="line">*/</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testSaveStudent_Cascade_SaveClass</span><span class="params">()</span></span>&#123;</div><div class="line">  Session session = sessionFactory.getCurrentSession();</div><div class="line">  Transaction transaction = session.beginTransaction();</div><div class="line">  Student student = <span class="keyword">new</span> Student();</div><div class="line">  student.setName(<span class="string">"cc"</span>);</div><div class="line">  Classes classes = <span class="keyword">new</span> Classes();</div><div class="line">  classes.setName(<span class="string">"皇马"</span>);</div><div class="line">  <span class="comment">// 通过sudent建立student与classess 之间的联系</span></div><div class="line">  student.setClasses(classes);</div><div class="line">  session.save(student);</div><div class="line">  transaction.commit();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>说明：</p>
+<ol>
+<li>studnet.setClasses(classes)是通过student建立student与classes之间的关联，所以看外键时是看Student.hubm.xml文件，不看Classes文件了。</li>
+<li>在Student.hbm.xml文件中，设置了针对classes的级联<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">many-to-one</span> <span class="attr">name</span>=<span class="string">"classes"</span> <span class="attr">column</span>=<span class="string">"cid"</span> <span class="attr">class</span>=<span class="string">"com.wcc.hibernate.domain.Classes"</span> <span class="attr">cascade</span>=<span class="string">"save-update"</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">many-to-one</span>&gt;</span></div></pre></td></tr></table></figure>
+</li>
+</ol>
+</blockquote>
+<p>3.在保存学生的时候级联保存了班级<br>4.保存学生相当于维护了关系。在保存学生的时候，cid有值了，不需要发出维护关系的update语句。<br><img src="/picture/hibernate3/save_student_and_classes.png" alt="保存班级级联保存学生"></p>
+<h4 id="新建一个学生，并且和一个已存在的班级级联"><a href="#新建一个学生，并且和一个已存在的班级级联" class="headerlink" title="新建一个学生，并且和一个已存在的班级级联"></a><strong>新建一个学生，并且和一个已存在的班级级联</strong></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">* 新建一个学生，并且和一个已存在的班级关联</div><div class="line">*/</div><div class="line"><span class="meta">@Test</span></div><div class="line"><span class="function"><span class="keyword">public</span>  <span class="keyword">void</span> <span class="title">testSaveStudent_BuildR</span><span class="params">()</span></span>&#123;</div><div class="line">  Session session = HibernateUtils.sessionFactory.getCurrentSession();</div><div class="line">  Transaction transaction = session.beginTransaction();</div><div class="line">  Student student = <span class="keyword">new</span> Student();</div><div class="line">  student.setName(<span class="string">"王小模"</span>);</div><div class="line">  student.setDescription(<span class="string">"好好的"</span>);</div><div class="line">  <span class="comment">//将班级提取出来</span></div><div class="line">  Classes classes =  (Classes) session.get(Classes.class, <span class="number">2L</span>);</div><div class="line">  <span class="comment">//通过学生来进行与班级的关系操作</span></div><div class="line">  student.setClasses(classes);</div><div class="line">  <span class="comment">// 保存到了 student</span></div><div class="line">  session.save(student);</div><div class="line">  transaction.commit();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="学生转班操作"><a href="#学生转班操作" class="headerlink" title="学生转班操作"></a><strong>学生转班操作</strong></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">* 学生转班</div><div class="line">* */</div><div class="line"><span class="meta">@Test</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testTransfran</span><span class="params">()</span></span>&#123;</div><div class="line">  Session session = HibernateUtils.sessionFactory.getCurrentSession();</div><div class="line">  Transaction transaction = session.beginTransaction();</div><div class="line">  Student student = (Student) session.get(Student.class, <span class="number">2L</span>);</div><div class="line">  Classes classes = (Classes) session.get(Classes.class, <span class="number">1L</span>);</div><div class="line">  <span class="comment">// 学生转班级</span></div><div class="line">  student.setClasses(classes);</div><div class="line">  transaction.commit();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>说明： 从上述的语句可以看出不仅更新了外键，而且把其他的属性也更新了，所以更新关系指的就是更新student 对象本身的操作。</p>
+</blockquote>
+<h4 id="解除一个班级和一个学生之间的关系"><a href="#解除一个班级和一个学生之间的关系" class="headerlink" title="解除一个班级和一个学生之间的关系"></a><strong>解除一个班级和一个学生之间的关系</strong></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">* 解除一个班级和一个学生的关系</div><div class="line">*/</div><div class="line"><span class="meta">@Test</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testRealse</span><span class="params">()</span></span>&#123;</div><div class="line">  Session session = HibernateUtils.sessionFactory.getCurrentSession();</div><div class="line">  Transaction transaction = session.beginTransaction();</div><div class="line">  Student  student = (Student) session.get(Student.class, <span class="number">1L</span>);</div><div class="line">  student.setClasses(<span class="keyword">null</span>);</div><div class="line">  transaction.commit();		</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="解除该班和所有的学生的关系"><a href="#解除该班和所有的学生的关系" class="headerlink" title="解除该班和所有的学生的关系"></a><strong>解除该班和所有的学生的关系</strong></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">* 解除一个班级所有学生的与它的关系</div><div class="line">* */</div><div class="line"><span class="meta">@Test</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testRealseAll</span><span class="params">()</span></span>&#123;</div><div class="line">  Session session = HibernateUtils.sessionFactory.getCurrentSession();</div><div class="line">  Transaction transaction = session.beginTransaction();</div><div class="line">  Classes classes = (Classes) session.get(Classes.class, <span class="number">2L</span>);</div><div class="line">  Set&lt;Student&gt; set =  classes.getStudnets();</div><div class="line">  <span class="comment">//取得该班的所有的学生集合， </span></div><div class="line">  <span class="comment">//然后一个一个的解除该班的学生关系。</span></div><div class="line">  <span class="comment">// 但是，这个的效率说是并不太高的。</span></div><div class="line">  <span class="keyword">for</span> (Student student : set) &#123;</div><div class="line"> 	student.setClasses(<span class="keyword">null</span>);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a><strong>总结</strong></h4><p>一般情况下，一对多，多的一方维护关系效率比较高。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/path/to/wechat-reward-image" alt="Charse WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/path/to/alipay-reward-image" alt="Charse Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Hibernate/" rel="tag"># Hibernate</a>
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/04/Hibernate框架——缓存/" rel="next" title="Hibernate——缓存">
+                <i class="fa fa-chevron-left"></i> Hibernate——缓存
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/11/05/Hibernate框架——二级缓存(一)/" rel="prev" title="Hibernate框架——二级缓存(一)">
+                Hibernate框架——二级缓存(一) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="Charse" />
+          <p class="site-author-name" itemprop="name">Charse</p>
+           
+              <p class="site-description motion-element" itemprop="description">Stay hungry, Stay foolish.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/your-user-name" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/your-user-name" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/your-user-name" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  豆瓣
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/your-user-name" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#关系操作"><span class="nav-number">1.</span> <span class="nav-text">关系操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一对多的单项关联"><span class="nav-number">1.1.</span> <span class="nav-text">一对多的单项关联</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#持久化类和映射文件"><span class="nav-number">1.1.1.</span> <span class="nav-text">持久化类和映射文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在次讨论session-flush"><span class="nav-number">1.1.2.</span> <span class="nav-text">在次讨论session.flush</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关系操作-1"><span class="nav-number">1.1.3.</span> <span class="nav-text">关系操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#让一个新的学生加入已经存在的班级"><span class="nav-number">1.1.3.1.</span> <span class="nav-text">让一个新的学生加入已经存在的班级</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#重新建立关系1"><span class="nav-number">1.1.3.2.</span> <span class="nav-text">重新建立关系1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#重新建立关系2"><span class="nav-number">1.1.3.3.</span> <span class="nav-text">重新建立关系2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解除一个学生和一个班级之间的关系"><span class="nav-number">1.1.3.4.</span> <span class="nav-text">解除一个学生和一个班级之间的关系</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解除该班级和所有学生之间的关系"><span class="nav-number">1.1.3.5.</span> <span class="nav-text">解除该班级和所有学生之间的关系</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#删除班级"><span class="nav-number">1.1.3.6.</span> <span class="nav-text">删除班级</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#删除班级级联删除学生"><span class="nav-number">1.1.3.7.</span> <span class="nav-text">删除班级级联删除学生</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在hibernate中Cascade-与inverse的区别"><span class="nav-number">1.1.4.</span> <span class="nav-text">在hibernate中Cascade 与inverse的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">1.1.5.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一对多双向关联"><span class="nav-number">1.2.</span> <span class="nav-text">一对多双向关联</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#操作"><span class="nav-number">1.2.1.</span> <span class="nav-text">操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#新建一个学生，并且和一个已存在的班级级联"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">新建一个学生，并且和一个已存在的班级级联</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#学生转班操作"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">学生转班操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解除一个班级和一个学生之间的关系"><span class="nav-number">1.2.1.3.</span> <span class="nav-text">解除一个班级和一个学生之间的关系</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解除该班和所有的学生的关系"><span class="nav-number">1.2.1.4.</span> <span class="nav-text">解除该班和所有的学生的关系</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结-1"><span class="nav-number">1.2.1.5.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Charse</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
