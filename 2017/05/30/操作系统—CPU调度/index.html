@@ -1,0 +1,827 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="operating system," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="对于单处理器系统，每次只允许一个进程运行，任何其他进程必须等待，直到CPU空闲能被调度为止，多道程序的目的是在任何时候都有某些进程在运行，以使CPU使用率最大化。">
+<meta name="keywords" content="operating system">
+<meta property="og:type" content="article">
+<meta property="og:title" content="操作系统—CPU调度">
+<meta property="og:url" content="http://yoursite.com/2017/05/30/操作系统—CPU调度/index.html">
+<meta property="og:site_name" content="Charse&#39;s Blog">
+<meta property="og:description" content="对于单处理器系统，每次只允许一个进程运行，任何其他进程必须等待，直到CPU空闲能被调度为止，多道程序的目的是在任何时候都有某些进程在运行，以使CPU使用率最大化。">
+<meta property="og:updated_time" content="2017-05-30T08:18:48.602Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="操作系统—CPU调度">
+<meta name="twitter:description" content="对于单处理器系统，每次只允许一个进程运行，任何其他进程必须等待，直到CPU空闲能被调度为止，多道程序的目的是在任何时候都有某些进程在运行，以使CPU使用率最大化。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/05/30/操作系统—CPU调度/"/>
+
+
+
+
+
+  <title>操作系统—CPU调度 | Charse's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Charse's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/30/操作系统—CPU调度/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charse">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Charse's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">操作系统—CPU调度</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-30T16:15:00+08:00">
+                2017-05-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Operating-system/" itemprop="url" rel="index">
+                    <span itemprop="name">Operating system</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>对于单处理器系统，每次只允许一个进程运行，任何其他进程必须等待，直到CPU空闲能被调度为止，多道程序的目的是在任何时候都有某些进程在运行，以使CPU使用率最大化。<br><a id="more"></a></p>
+<h2 id="CPU-I-O区间周期"><a href="#CPU-I-O区间周期" class="headerlink" title="CPU-I/O区间周期"></a>CPU-I/O区间周期</h2><p>CPU的成功调度依赖于进程的如下属性：<strong>进程执行由CPU 执行</strong>和<strong>I/O等待周期</strong>。<br>进程在这两个状态之间切换，进程执行从 CPU 区间开始，在这之后是 I/O 区间，接着是另一个 CPU 区间，然后是另一个I/O区间，如此进行下去，最终，最后的CPU 区间通过系统请求终止执行。</p>
+<h2 id="CPU调度程序"><a href="#CPU调度程序" class="headerlink" title="CPU调度程序"></a>CPU调度程序</h2><p><strong>每当CPU空闲时，操作系统就必须从就绪队列中选择一个进程来执行，进程选择由短期调度程序 或 CPU 调度程序执行，调度程序从内存中选择一个能够执行的进程，并为之分配CPU。</strong></p>
+<p><strong>就绪队列不必是先进先出（FIFO）队列。正如研究各种调度算法时将看到的，就绪队列可实现为FIFO队列、优先队列、树或简单的无序链表，不过，从概念上讲，就绪队列内的所有进程都要排队以等待在CPU上运行，队列中的记录通常为进程控制块。</strong></p>
+<h2 id="调度算法（重要）"><a href="#调度算法（重要）" class="headerlink" title="调度算法（重要）"></a><strong>调度算法（重要）</strong></h2><p>CPU 调度处理是从就绪队列中选择进程并为之分配CPU的问题。</p>
+<h3 id="先到先服务调度-FCFS"><a href="#先到先服务调度-FCFS" class="headerlink" title="先到先服务调度(FCFS)"></a><strong>先到先服务调度(FCFS)</strong></h3><p><strong>先到先服务(first-come, first-served(FCFS))</strong><br>采用这种方案，先请求CPU的进程先分配到CPU，FCFS 策略可以用FIFO队列来实现。<strong>当一个进程进入到就绪队列，其PCB链接到队列的尾部，当CPU空闲时，CPU分配给位于队列头的进程，接着该运行进程从队列中删除。采用 FCFS策略的平均等待时间通常是比较长的</strong>。<br><strong>FCFS 调度算法是非抢占的</strong>，一旦CPU被分配给了一个进程，该进程就会保持CPU直到释放CPU为止，即程序终止或是请求 I/O. FCFS 算法对于分布式系统（每个用户需要定时地得到一定的CPU时间）是特别麻烦的。允许一个进程保持CPU 时间过长将是个严重的错误。</p>
+<h3 id="最短作业优先调度-SJF"><a href="#最短作业优先调度-SJF" class="headerlink" title="最短作业优先调度(SJF)"></a><strong>最短作业优先调度(SJF)</strong></h3><p><strong>最短作业优先调度算法(shortest-job-first (SJF) scheduling algorithm)</strong>。<br>这一算法将每个进程与其下一个CPU区间段相关联，当CPU为空闲时，他会赋给具有最短CPU区间的进程。如果两个进程具有相同长度，那么可以使用FCFS调度来处理。<br><strong>SJF 调度算法可以证明为最佳的，这是因为对于给定的一组进程，SJF 算法的平均等待时间最小，通过将短进程移到长进程之前，短进程等待时间的减少大于长进程等待时间的增加，因而，平均等待时间减少了。</strong></p>
+<h3 id="优先级调度"><a href="#优先级调度" class="headerlink" title="优先级调度"></a><strong>优先级调度</strong></h3><p>SJF 算法可以作为通用优先级调度算法的一个特例。每个进程都有一个优先级与其关联。具有最高优先级的进程会分配到CPU，具有相同优先级的进程按FCFS顺序。SJF算法属于简单优先级算法，其优先级(p)为下一个(预测的)CPU区间的倒数，CPU区间越大，则优先级越小，反之亦然。</p>
+<p>优先级可通过内部或外部方式来定义，内部定义优先级使用一些测量数据以计算进程优先级。例如，时间极限，内存要求，打开文件的数量和平均I/O区间与平均CPU区间之比都可以用于计算优先级。</p>
+<p>优先级调度算法的一个主要问题是无阻塞 或饥饿，可以运行但缺乏CPU的进程可以认为是阻塞的，它在等待CPU。</p>
+<h3 id="轮转法调度-RR"><a href="#轮转法调度-RR" class="headerlink" title="轮转法调度(RR)"></a><strong>轮转法调度(RR)</strong></h3><p><strong>轮转法（round-robin, RR）调度算法是专门为分时系统设计的，它类似于FCFS调度，但是增加了抢占以切换进程</strong>。定义一个较小时间单元，称之为<strong>时间片</strong>, 时间片通常为 10 - 100 ms， <strong>将就绪队列作为循环队列。CPU 调度程序循环就绪队列，为每一个进程分配不超过一个时间片的CPU</strong>。</p>
+<p>为了实现RR调度，将就绪队列保存为进程的FIFO队列，新进程增加到就绪队列的尾部，CPU调度程序从就绪队列中选择第一个程序，设置定时器在一个时间片之后中断，再分派该进程。<br>接下来将可能发生两种情况，进程可能只需要小于时间片的CPU区间，对于这种情况，进程本身会自动释放CPU，调度程序接着处理就绪队列的下一个进程，否则，如果当前运行进程的CPU区间比时间片要长，定时器会中断并产生操作系统中断，然后进程上下文切换，将进程加入到就绪队列的尾部，接着CPU调度程序会选择就绪队列中的下一个进程。</p>
+<p><strong>RR调度算法是可抢占的，</strong>对于RR调度算法，队列中没有进程被分超过一个时间片的CPU时间(除非它是唯一可运行的进程)，如果进程的CPU区间超过了一个时间片，那么该进程会被抢占，而被放回就绪队列。<br>R<strong>R算法的性能很大程度上依赖域时间片的大小，在极端情况下，如果时间片非常大，那么RR算法与FCFS算法一样，如果时间片很小(如毫秒)，</strong>那么RR算法称为处理器共享，（从理论上来说）n个进程对于用户都有它自己的处理器，速度为真正处理数度的 1/n。这种方法用在 Control Data Corporation(CDC)的硬件上，可以用一组硬件和10组寄存器实现 10 个外设处理器。硬件为一组寄存器执行一个指令，然后为下一组执行，这种循环不断进行，形成10个慢处理器器而不是1个块处理器。</p>
+<h3 id="多级队列调度"><a href="#多级队列调度" class="headerlink" title="多级队列调度"></a><strong>多级队列调度</strong></h3><p>多级队列调度算法将就绪队列分成多个独立队列，根据进程的属性，如内存大小，进程优先级、进程类型、一个进程被永久地分配到一个队列，每个队列有自己的调度算法。这种算法的优点是低调度开销，缺点是不够灵活。</p>
+<h3 id="多级反馈队列调度"><a href="#多级反馈队列调度" class="headerlink" title="多级反馈队列调度"></a><strong>多级反馈队列调度</strong></h3><p>多级反馈队列调度算法，允许进程在队列之间移动，主要思想是根据不同CPU区间的特点以区分进程，如果进程使用过多的CPU时间，那么它会被移到更低的优先级队列。</p>
+<h2 id="多处理器调度"><a href="#多处理器调度" class="headerlink" title="多处理器调度"></a>多处理器调度</h2><p>之前讨论的是单处理器系统内的CPU 问题，<strong>如果有多个CPU，则负载分配成为可能，但调度问题也相应的变得更加复杂。与单处理器中的CPU调度算法一样，没有最好的解决方案。</strong></p>
+<h3 id="多处理器调度的方法"><a href="#多处理器调度的方法" class="headerlink" title="多处理器调度的方法"></a>多处理器调度的方法</h3><p>在一个多处理器中，CPU调度的一种方法是让一个处理器(主服务器)处理所有的调度决定、I/O处理以及其他系统活动，其他的处理器只执行用户代码。这种<strong>非对称多处理</strong>方法更为简单，因为只有一个处理器访问系统数据结构，减轻了数据共享的需要。<br>另一种方法是使用<strong>对称处理器</strong>方法<strong>，即每个处理器自我调度，所有进程可能处于一个共同的就绪队列中，或每个处理器都有它自己的私有就绪队列。无论如何，调度通过每个处理器检查共同就绪队列并选择一个进程来执行</strong>。如果多处理器试图访问和更新一个共同数据结构，那么每个处理器必须编程：必须保证两个处理器不能选择同一个进程，且进程不会从队列中丢失。</p>
+<h3 id="处理器亲和性"><a href="#处理器亲和性" class="headerlink" title="处理器亲和性"></a>处理器亲和性</h3><p>考虑一下，当一个进程在一个特定处理器上运行时，缓存中会发生什么？进程最近访问的数据进入处理器缓存，结果是进程所进行的连续内存访问通常在缓存中得以满足。现在可以考虑一下，如果进程移到其他处理器上时，会发生什么：被迁移的第一个处理器的缓存中的内容必须为无效，而将要迁移的第二个处理器的缓存需要重新构建。由于使缓存无效或重新构建的代价高，绝大多数SMP系统试图避免将进程从一个处理器移至另一个处理器，而是努力使一个进程在同一个处理器上运行，这被称为处理器亲和性，即一个进程需要对其运行所在的处理器的亲和性。</p>
+<h3 id="负载平衡"><a href="#负载平衡" class="headerlink" title="负载平衡"></a>负载平衡</h3><p>负载平衡 设法将工作负载平均地分配到SMP系统中的所有处理器上，值得注意的是，负载平衡通常只是对那些拥有自己私有的可执行进程的处理器而言是必要的。在具有共同队列的系统中，通常不需要负载平衡，因为一但处理器空闲，它立刻从共同队列中取走一个可执行进程，但同样值得注意的是，在绝大多数支持SMP中，每个处理器都具有一个可执行进程的私有队列。<br>负载平衡常会抵消处理器的亲和性的优点。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/path/to/wechat-reward-image" alt="Charse WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/path/to/alipay-reward-image" alt="Charse Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/operating-system/" rel="tag"># operating system</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/30/操作系统—线程/" rel="next" title="操作系统——线程">
+                <i class="fa fa-chevron-left"></i> 操作系统——线程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="Charse" />
+          <p class="site-author-name" itemprop="name">Charse</p>
+           
+              <p class="site-description motion-element" itemprop="description">Stay hungry, Stay foolish.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/your-user-name" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/your-user-name" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/your-user-name" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  豆瓣
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/your-user-name" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#CPU-I-O区间周期"><span class="nav-number">1.</span> <span class="nav-text">CPU-I/O区间周期</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CPU调度程序"><span class="nav-number">2.</span> <span class="nav-text">CPU调度程序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调度算法（重要）"><span class="nav-number">3.</span> <span class="nav-text">调度算法（重要）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#先到先服务调度-FCFS"><span class="nav-number">3.1.</span> <span class="nav-text">先到先服务调度(FCFS)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最短作业优先调度-SJF"><span class="nav-number">3.2.</span> <span class="nav-text">最短作业优先调度(SJF)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优先级调度"><span class="nav-number">3.3.</span> <span class="nav-text">优先级调度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#轮转法调度-RR"><span class="nav-number">3.4.</span> <span class="nav-text">轮转法调度(RR)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多级队列调度"><span class="nav-number">3.5.</span> <span class="nav-text">多级队列调度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多级反馈队列调度"><span class="nav-number">3.6.</span> <span class="nav-text">多级反馈队列调度</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多处理器调度"><span class="nav-number">4.</span> <span class="nav-text">多处理器调度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#多处理器调度的方法"><span class="nav-number">4.1.</span> <span class="nav-text">多处理器调度的方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#处理器亲和性"><span class="nav-number">4.2.</span> <span class="nav-text">处理器亲和性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#负载平衡"><span class="nav-number">4.3.</span> <span class="nav-text">负载平衡</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Charse</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
