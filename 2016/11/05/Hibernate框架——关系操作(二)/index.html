@@ -102,17 +102,17 @@
 
 
 
-<meta name="description" content="前一篇文章中编写了Hibernate的—— 多对多的双向关联Course 类1234567public class Course implements Serializable&amp;#123;	private Long cid;	private String name;	private String description;	private Set&amp;lt;Student&amp;gt; students;	/">
+<meta name="description" content="前一篇文章( Hibernate框架——关系操作(一))中编写了Hibernate的基本操作: 一对多单项关联，一对多双向关联。那么现Hibernate中的多对多的关联操作。 多对多的双向关联Course 类1234567public class Course implements Serializable&amp;#123;	private Long cid;	private String name;">
 <meta name="keywords" content="Hibernate,Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hibernate框架——关系操作(二)">
 <meta property="og:url" content="http://yoursite.com/2016/11/05/Hibernate框架——关系操作(二)/index.html">
 <meta property="og:site_name" content="Charse&#39;s Blog">
-<meta property="og:description" content="前一篇文章中编写了Hibernate的—— 多对多的双向关联Course 类1234567public class Course implements Serializable&amp;#123;	private Long cid;	private String name;	private String description;	private Set&amp;lt;Student&amp;gt; students;	/">
-<meta property="og:updated_time" content="2017-03-11T14:47:50.985Z">
+<meta property="og:description" content="前一篇文章( Hibernate框架——关系操作(一))中编写了Hibernate的基本操作: 一对多单项关联，一对多双向关联。那么现Hibernate中的多对多的关联操作。 多对多的双向关联Course 类1234567public class Course implements Serializable&amp;#123;	private Long cid;	private String name;">
+<meta property="og:updated_time" content="2017-05-30T08:11:35.053Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hibernate框架——关系操作(二)">
-<meta name="twitter:description" content="前一篇文章中编写了Hibernate的—— 多对多的双向关联Course 类1234567public class Course implements Serializable&amp;#123;	private Long cid;	private String name;	private String description;	private Set&amp;lt;Student&amp;gt; students;	/">
+<meta name="twitter:description" content="前一篇文章( Hibernate框架——关系操作(一))中编写了Hibernate的基本操作: 一对多单项关联，一对多双向关联。那么现Hibernate中的多对多的关联操作。 多对多的双向关联Course 类1234567public class Course implements Serializable&amp;#123;	private Long cid;	private String name;">
 
 
 
@@ -372,7 +372,7 @@
       
 
       
-        <p>前一篇文章中编写了Hibernate的——</p>
+        <p>前一篇文章( Hibernate框架——关系操作(一))中编写了Hibernate的基本操作: 一对多单项关联，一对多双向关联。那么现Hibernate中的多对多的关联操作。</p>
 <h2 id="多对多的双向关联"><a href="#多对多的双向关联" class="headerlink" title="多对多的双向关联"></a><strong>多对多的双向关联</strong></h2><p>Course 类<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Course</span> <span class="keyword">implements</span> <span class="title">Serializable</span></span>&#123;</div><div class="line">	<span class="keyword">private</span> Long cid;</div><div class="line">	<span class="keyword">private</span> String name;</div><div class="line">	<span class="keyword">private</span> String description;</div><div class="line">	<span class="keyword">private</span> Set&lt;Student&gt; students;</div><div class="line">	<span class="comment">//set和get 方法由于版面的问题，在此就不再写出。</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>Student类<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span>  <span class="keyword">implements</span> <span class="title">Serializable</span></span>&#123;</div><div class="line">	<span class="keyword">private</span> Long sid;</div><div class="line">	<span class="keyword">private</span> String name;</div><div class="line">	<span class="keyword">private</span> String description;</div><div class="line">	<span class="keyword">private</span> Set&lt;Course&gt;  course;</div><div class="line">	<span class="comment">//set和get 方法由于版面的问题，在此就不再写出。</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p><strong>1. 一对多体现的是类与集合的关系</strong><br><strong>2. 多对一体现的是类与类之间的关系</strong><br><strong>3. 多对多体现的是类与集合之间的关系</strong></p>
@@ -553,7 +553,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-count">15</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -564,7 +564,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">41</span>
+                <span class="site-state-item-count">28</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
