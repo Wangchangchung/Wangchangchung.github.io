@@ -86,7 +86,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Java,JVM,HotSpot垃圾收集算法," />
+  <meta name="keywords" content="Java,JVM,JavaGC," />
 
 
 
@@ -103,13 +103,13 @@
 
 
 <meta name="description" content="1.  枚举根节点从可达性分析中从GC Rooots节点找引用链这个操作为例，可作为GC Roots的节点主要在全局的引用(例如常量和静态属性分)与执行上下文(例如栈帧中的本地变量表)中，现在很多应用仅仅方法区就有数百兆，如果要逐个检查这里面的引用，那么必然会消耗很多时间。">
-<meta name="keywords" content="Java,JVM,HotSpot垃圾收集算法">
+<meta name="keywords" content="Java,JVM,JavaGC">
 <meta property="og:type" content="article">
 <meta property="og:title" content="HotSpot的垃圾收集机制算法实现">
 <meta property="og:url" content="http://yoursite.com/2016/08/20/HotSpot的垃圾收集机制算法实现/index.html">
 <meta property="og:site_name" content="Charse&#39;s Blog">
 <meta property="og:description" content="1.  枚举根节点从可达性分析中从GC Rooots节点找引用链这个操作为例，可作为GC Roots的节点主要在全局的引用(例如常量和静态属性分)与执行上下文(例如栈帧中的本地变量表)中，现在很多应用仅仅方法区就有数百兆，如果要逐个检查这里面的引用，那么必然会消耗很多时间。">
-<meta property="og:updated_time" content="2016-08-19T04:40:09.593Z">
+<meta property="og:updated_time" content="2017-05-30T07:30:33.305Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HotSpot的垃圾收集机制算法实现">
 <meta name="twitter:description" content="1.  枚举根节点从可达性分析中从GC Rooots节点找引用链这个操作为例，可作为GC Roots的节点主要在全局的引用(例如常量和静态属性分)与执行上下文(例如栈帧中的本地变量表)中，现在很多应用仅仅方法区就有数百兆，如果要逐个检查这里面的引用，那么必然会消耗很多时间。">
@@ -338,8 +338,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
+                  <a href="/categories/JVM-JavaGC/" itemprop="url" rel="index">
+                    <span itemprop="name">JVM JavaGC</span>
                   </a>
                 </span>
 
@@ -443,7 +443,7 @@
           
             <a href="/tags/JVM/" rel="tag"># JVM</a>
           
-            <a href="/tags/HotSpot垃圾收集算法/" rel="tag"># HotSpot垃圾收集算法</a>
+            <a href="/tags/JavaGC/" rel="tag"># JavaGC</a>
           
         </div>
       
@@ -540,7 +540,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-count">36</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -551,7 +551,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-count">20</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -562,7 +562,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-count">41</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>

@@ -86,7 +86,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="operating system," />
 
 
 
@@ -103,14 +103,15 @@
 
 
 <meta name="description" content="进程概念进程不只是程序代码，程序代码有时称为文本段，进程还包括当前活动，通过程序计数器的值和处理器寄存器的内容来表示。进程包括 堆(是在进程运行是动态分配的内存)、栈(包括临时数据，如函数参数、返回值地址和局部变量表)和数据段(包括全局变量) 程序本身不是进程：程序只是被动实体，如存储在磁盘上包含一系列指令内容的文件（通常被称为可执行文件），而进程是活动实体，他有一个程序计数器用来表示下一个要执行">
+<meta name="keywords" content="operating system">
 <meta property="og:type" content="article">
-<meta property="og:title" content="操作系统">
+<meta property="og:title" content="操作系统——进程">
 <meta property="og:url" content="http://yoursite.com/2017/05/30/操作系统—进程/index.html">
 <meta property="og:site_name" content="Charse&#39;s Blog">
 <meta property="og:description" content="进程概念进程不只是程序代码，程序代码有时称为文本段，进程还包括当前活动，通过程序计数器的值和处理器寄存器的内容来表示。进程包括 堆(是在进程运行是动态分配的内存)、栈(包括临时数据，如函数参数、返回值地址和局部变量表)和数据段(包括全局变量) 程序本身不是进程：程序只是被动实体，如存储在磁盘上包含一系列指令内容的文件（通常被称为可执行文件），而进程是活动实体，他有一个程序计数器用来表示下一个要执行">
-<meta property="og:updated_time" content="2017-05-30T06:44:07.230Z">
+<meta property="og:updated_time" content="2017-05-30T07:11:34.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="操作系统">
+<meta name="twitter:title" content="操作系统——进程">
 <meta name="twitter:description" content="进程概念进程不只是程序代码，程序代码有时称为文本段，进程还包括当前活动，通过程序计数器的值和处理器寄存器的内容来表示。进程包括 堆(是在进程运行是动态分配的内存)、栈(包括临时数据，如函数参数、返回值地址和局部变量表)和数据段(包括全局变量) 程序本身不是进程：程序只是被动实体，如存储在磁盘上包含一系列指令内容的文件（通常被称为可执行文件），而进程是活动实体，他有一个程序计数器用来表示下一个要执行">
 
 
@@ -145,7 +146,7 @@
 
 
 
-  <title>操作系统 | Charse's Blog</title>
+  <title>操作系统——进程 | Charse's Blog</title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="en">
@@ -302,7 +303,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">操作系统</h1>
+          <h1 class="post-title" itemprop="name headline">操作系统——进程</h1>
         
 
         <div class="post-meta">
@@ -324,6 +325,28 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/operating-system/" itemprop="url" rel="index">
+                    <span itemprop="name">operating system</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -349,8 +372,9 @@
       
 
       
-        <h2 id="进程概念"><a href="#进程概念" class="headerlink" title="进程概念"></a>进程概念</h2><p>进程不只是程序代码，程序代码有时称为<strong>文本段</strong>，进程还包括当前活动，通过程序计数器的值和处理器寄存器的内容来表示。<br>进程包括 堆(是在进程运行是动态分配的内存)、栈(包括临时数据，如函数参数、返回值地址和局部变量表)和数据段(包括全局变量)</p>
+        <h2 id="进程概念"><a href="#进程概念" class="headerlink" title="进程概念"></a>进程概念</h2><p>进程不只是程序代码，程序代码有时称为<strong>文本段</strong>，进程还包括当前活动，通过程序计数器的值和处理器寄存器的内容来表示。进程包括 堆(是在进程运行是动态分配的内存)、栈(包括临时数据，如函数参数、返回值地址和局部变量表)和数据段(包括全局变量)</p>
 <p><strong>程序本身不是进程：程序只是被动实体，如存储在磁盘上包含一系列指令内容的文件（通常被称为可执行文件），而进程是活动实体，他有一个程序计数器用来表示下一个要执行的命令和相关资源集合。当一个可执行文件被装入内存中时，一个程序才能成为进程。</strong></p>
+<a id="more"></a>
 <h3 id="进程的状态"><a href="#进程的状态" class="headerlink" title="进程的状态"></a>进程的状态</h3><ul>
 <li><strong>新的</strong>： 进程正在被创建</li>
 <li><strong>运行</strong>：指令正在被执行</li>
@@ -377,11 +401,12 @@
 <li>父进程与子进程并发执行</li>
 <li>父进程等待，直到某个或全部子进程执行完。</li>
 </ol>
-<p><strong>新进程的地址空间也有两种可能：</strong><br>**1. 子进程是父进程的复制品(具有与父进程相同的程序和数据)</p>
+<p><strong>新进程的地址空间也有两种可能：</strong></p>
 <ol>
-<li>子进程装入另一个新程序**</li>
+<li>子进程是父进程的复制品(具有与父进程相同的程序和数据)</li>
+<li>子进程装入另一个新程序</li>
 </ol>
-<p>在UNIX 系统中，<strong>每个进程都用一个唯一的整数形式的进程 标识符</strong>。<strong>通过 fork() 系统调用，可创建新进程。新进程通过复制原来进程的地址空间而成立。这种机制允许父进程与子进程方便的进行通信。两个进程(父进程和子进程)都继续执行位于系统调用fork() 之后的指令。但是，有一点不同： 对于新(子)进程，系统调用 fork() 的返回值为 0,  而对于父进程，返回值为子进程的进程标识符(非零)。<br>通常，在系统调用 fork() 之后，一个进程会使用系统调用exec(), 以用来取代进程的内存空间。系统调用 exec()将二进制文件装入内存(消除了原来包含系统调用 exec()程序的内存映射)，并开始执行。采用这种方式，两个进程能够相互通信，并能按各自的方法执行，父进程能创建更多的子进程，或者如果在子进程运行时没有什么可做，那么它采用系统调用 wait()把自己的移出就绪等待子进程的终止。</strong></p>
+<p>在UNIX 系统中，<strong>每个进程都用一个唯一的整数形式的进程 标识符</strong>。<strong>通过 fork() 系统调用，可创建新进程。新进程通过复制原来进程的地址空间而成立。这种机制允许父进程与子进程方便的进行通信。两个进程(父进程和子进程)都继续执行位于系统调用fork() 之后的指令。但是，有一点不同： 对于新(子)进程，系统调用 fork() 的返回值为 0,  而对于父进程，返回值为子进程的进程标识符(非零)。</strong><br><strong>通常，在系统调用 fork() 之后，一个进程会使用系统调用exec(), 以用来取代进程的内存空间。系统调用 exec()将二进制文件装入内存(消除了原来包含系统调用 exec()程序的内存映射)，并开始执行。采用这种方式，两个进程能够相互通信，并能按各自的方法执行，父进程能创建更多的子进程，或者如果在子进程运行时没有什么可做，那么它采用系统调用 wait()把自己的移出就绪等待子进程的终止。</strong></p>
 <h3 id="进程终止"><a href="#进程终止" class="headerlink" title="进程终止"></a>进程终止</h3><p><strong>当进程完成执行最后的语句并使用系统调用 exit()请求操作系统删除自身时，进程终止，这时，进程可以返回状态值(通常为整数)到父进程(通过系统调用wait())。所有进程资源(包括物理和虚拟内存，打开文件和I/O缓冲)会被操作系统释放</strong>。</p>
 <p>父进程终止子进程的原因有很多，如：</p>
 <ul>
@@ -403,9 +428,9 @@
 </ul>
 <p><strong>优缺点：</strong></p>
 <ul>
-<li><p>共享内存：<br>优点： 速度快，只有在建立共享内存的时候才调用内核，其后不调用系统内核<br>缺点：实现比消息传递难，有可能会产生冲突。</p>
+<li><p><strong>共享内存</strong>：<br>优点： 速度快，只有在建立共享内存的时候才调用内核，其后不调用系统内核<br>缺点：实现比消息传递难，有可能会产生冲突。</p>
 </li>
-<li><p>消息传递<br>优点： 比共享内存简单<br>缺点： 消息传递通常使用系统调用来实现，因此需要更多的内核介入的时间消耗。</p>
+<li><p><strong>消息传递</strong><br>优点： 比共享内存简单<br>缺点： 消息传递通常使用系统调用来实现，因此需要更多的内核介入的时间消耗。</p>
 </li>
 </ul>
 
@@ -456,6 +481,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/operating-system/" rel="tag"># operating system</a>
+          
+        </div>
+      
 
       
         
@@ -474,6 +505,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/30/操作系统—线程/" rel="prev" title="操作系统——线程">
+                操作系统——线程 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -545,7 +580,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-count">36</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -556,7 +591,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-count">20</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -567,7 +602,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-count">41</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
