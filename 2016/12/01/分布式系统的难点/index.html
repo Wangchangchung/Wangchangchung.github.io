@@ -102,17 +102,17 @@
 
 
 
-<meta name="description" content="分布式系统的难点缺乏全局时钟在单机系统中，程序以这个单机中的时钟为准，控制时序比较容易，在分布式系统中，每一个节点都有自己的时钟，在通过互相发送消息进行协调时，如果任然依赖时序，就会相对比较难处理，保持每一个节点的时钟完全一致可能是直觉上首先想到的办法，如果能够做到，那么一些分布式系统中的工程将会变得简单很多。">
+<meta name="description" content="缺乏全局时钟在单机系统中，程序以这个单机中的时钟为准，控制时序比较容易，在分布式系统中，每一个节点都有自己的时钟，在通过互相发送消息进行协调时，如果任然依赖时序，就会相对比较难处理，保持每一个节点的时钟完全一致可能是直觉上首先想到的办法，如果能够做到，那么一些分布式系统中的工程将会变得简单很多。">
 <meta name="keywords" content="Distributed system">
 <meta property="og:type" content="article">
 <meta property="og:title" content="分布式系统的难点">
 <meta property="og:url" content="http://yoursite.com/2016/12/01/分布式系统的难点/index.html">
 <meta property="og:site_name" content="Charse&#39;s Blog">
-<meta property="og:description" content="分布式系统的难点缺乏全局时钟在单机系统中，程序以这个单机中的时钟为准，控制时序比较容易，在分布式系统中，每一个节点都有自己的时钟，在通过互相发送消息进行协调时，如果任然依赖时序，就会相对比较难处理，保持每一个节点的时钟完全一致可能是直觉上首先想到的办法，如果能够做到，那么一些分布式系统中的工程将会变得简单很多。">
-<meta property="og:updated_time" content="2017-05-30T06:56:37.358Z">
+<meta property="og:description" content="缺乏全局时钟在单机系统中，程序以这个单机中的时钟为准，控制时序比较容易，在分布式系统中，每一个节点都有自己的时钟，在通过互相发送消息进行协调时，如果任然依赖时序，就会相对比较难处理，保持每一个节点的时钟完全一致可能是直觉上首先想到的办法，如果能够做到，那么一些分布式系统中的工程将会变得简单很多。">
+<meta property="og:updated_time" content="2017-05-30T08:32:38.367Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="分布式系统的难点">
-<meta name="twitter:description" content="分布式系统的难点缺乏全局时钟在单机系统中，程序以这个单机中的时钟为准，控制时序比较容易，在分布式系统中，每一个节点都有自己的时钟，在通过互相发送消息进行协调时，如果任然依赖时序，就会相对比较难处理，保持每一个节点的时钟完全一致可能是直觉上首先想到的办法，如果能够做到，那么一些分布式系统中的工程将会变得简单很多。">
+<meta name="twitter:description" content="缺乏全局时钟在单机系统中，程序以这个单机中的时钟为准，控制时序比较容易，在分布式系统中，每一个节点都有自己的时钟，在通过互相发送消息进行协调时，如果任然依赖时序，就会相对比较难处理，保持每一个节点的时钟完全一致可能是直觉上首先想到的办法，如果能够做到，那么一些分布式系统中的工程将会变得简单很多。">
 
 
 
@@ -372,7 +372,7 @@
       
 
       
-        <h1 id="分布式系统的难点"><a href="#分布式系统的难点" class="headerlink" title="分布式系统的难点"></a>分布式系统的难点</h1><h2 id="缺乏全局时钟"><a href="#缺乏全局时钟" class="headerlink" title="缺乏全局时钟"></a>缺乏全局时钟</h2><p>在单机系统中，程序以这个单机中的时钟为准，控制时序比较容易，在分布式系统中，每一个节点都有自己的时钟，在通过互相发送消息进行协调时，如果任然依赖时序，就会相对比较难处理，保持每一个节点的时钟完全一致可能是直觉上首先想到的办法，如果能够做到，那么一些分布式系统中的工程将会变得简单很多。<br><a id="more"></a><br>不过这个方式本身并没有办法实现，因为同步本身就存在时间差，因此我们需要有其他办法来解决这个问题，很多时候我们使用时钟，它可以区分两个动作顺序，而不是一定要知道准确的时钟，对于这种情况，我们可以把这个工作交给一个单独的集群来完成，通过这个集群来区分多个动作的顺序。</p>
+        <h2 id="缺乏全局时钟"><a href="#缺乏全局时钟" class="headerlink" title="缺乏全局时钟"></a>缺乏全局时钟</h2><p>在单机系统中，程序以这个单机中的时钟为准，控制时序比较容易，在分布式系统中，每一个节点都有自己的时钟，在通过互相发送消息进行协调时，如果任然依赖时序，就会相对比较难处理，保持每一个节点的时钟完全一致可能是直觉上首先想到的办法，如果能够做到，那么一些分布式系统中的工程将会变得简单很多。<br><a id="more"></a><br>不过这个方式本身并没有办法实现，因为同步本身就存在时间差，因此我们需要有其他办法来解决这个问题，很多时候我们使用时钟，它可以区分两个动作顺序，而不是一定要知道准确的时钟，对于这种情况，我们可以把这个工作交给一个单独的集群来完成，通过这个集群来区分多个动作的顺序。</p>
 <h2 id="面对故障独立性"><a href="#面对故障独立性" class="headerlink" title="面对故障独立性"></a>面对故障独立性</h2><p>分布式系统由多个节点组成，整个分布式系统完全出问题的概率是存在的，但是咋实践中出现更多的是某个或者某些节点有问题，而其他节点及网络设备等都没有问题。这种情况提醒我们在开发的时候对问题的考虑要更加全面。</p>
 <p>对于单机系统来说，我们如果不使用多进程的方式的话，基本不会遇到独立的故障，就是说在单机系统上的单进程程序，如果是机器问题、OS问题、或者程序自身的问题，基本的结果就是我们的程序整体不能用了，不会出现一些模块不行另外一些模块可以使用的情况。，另一些模块可以的情况我们称之为故障独立性。我们在实现分布式系统的时候，必须要找到应对和解决故障的独立性的办法。</p>
 <h2 id="处理单点故障"><a href="#处理单点故障" class="headerlink" title="处理单点故障"></a>处理单点故障</h2><p>在整个分布式系统中，如果某个角色功能只有某台单机在支撑，那么这个节点称为单点，器发生的故障称为单点故障，也就是常说的SPoF(Single Point of Failure)。我们需要在分布式系统中尽量避免出现单点，尽量保证我们的功能都是由集群完成的，避免单点的关键就是把这个功能从单机实现变为集群实现，当然，这中变化一般会比较困难，否则就不会有太简单问题了，如果不能够把单机实现变为集群实现，那么一般还有另外的两种选择：</p>
@@ -633,7 +633,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#分布式系统的难点"><span class="nav-number">1.</span> <span class="nav-text">分布式系统的难点</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#缺乏全局时钟"><span class="nav-number">1.1.</span> <span class="nav-text">缺乏全局时钟</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#面对故障独立性"><span class="nav-number">1.2.</span> <span class="nav-text">面对故障独立性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#处理单点故障"><span class="nav-number">1.3.</span> <span class="nav-text">处理单点故障</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事务的挑战"><span class="nav-number">1.4.</span> <span class="nav-text">事务的挑战</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#缺乏全局时钟"><span class="nav-number">1.</span> <span class="nav-text">缺乏全局时钟</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#面对故障独立性"><span class="nav-number">2.</span> <span class="nav-text">面对故障独立性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#处理单点故障"><span class="nav-number">3.</span> <span class="nav-text">处理单点故障</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事务的挑战"><span class="nav-number">4.</span> <span class="nav-text">事务的挑战</span></a></li></ol></div>
             
 
           </div>
