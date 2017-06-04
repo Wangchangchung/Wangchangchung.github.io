@@ -286,6 +286,165 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/05/Java常用类源码——Thread源码解析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charse">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Charse's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/12/05/Java常用类源码——Thread源码解析/" itemprop="url">Java常用类源码——Thread源码解析</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-05T21:02:03+08:00">
+                2016-12-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/12/05/Java常用类源码——Thread源码解析/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/05/Java常用类源码——Thread源码解析/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2016/12/05/Java常用类源码——Thread源码解析/" class="leancloud_visitors" data-flag-title="Java常用类源码——Thread源码解析">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Visitors </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="Thread-源码解析"><a href="#Thread-源码解析" class="headerlink" title="Thread 源码解析"></a>Thread 源码解析</h1><p> 线程是在进程中执行的单位，线程的资源开销相对于进程的开销是相对较少的，所以我们一般创建线程执行，而不是进程执行。 下面我们就来了解一下Java Thread类源码，了解一下线程的控制吧！<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2016/12/05/Java常用类源码——Thread源码解析/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/01/分布式系统的难点/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1673,187 +1832,10 @@
 
       
         
-          
-            <p>前一篇文章( Hibernate框架——关系操作(一))中编写了Hibernate的基本操作: 一对多单项关联，一对多双向关联。那么现Hibernate中的多对多的关联操作。</p>
-<h2 id="多对多的双向关联"><a href="#多对多的双向关联" class="headerlink" title="多对多的双向关联"></a><strong>多对多的双向关联</strong></h2><p>Course 类<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Course</span> <span class="keyword">implements</span> <span class="title">Serializable</span></span>&#123;</div><div class="line">	<span class="keyword">private</span> Long cid;</div><div class="line">	<span class="keyword">private</span> String name;</div><div class="line">	<span class="keyword">private</span> String description;</div><div class="line">	<span class="keyword">private</span> Set&lt;Student&gt; students;</div><div class="line">	<span class="comment">//set和get 方法由于版面的问题，在此就不再写出。</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>Student类<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span>  <span class="keyword">implements</span> <span class="title">Serializable</span></span>&#123;</div><div class="line">	<span class="keyword">private</span> Long sid;</div><div class="line">	<span class="keyword">private</span> String name;</div><div class="line">	<span class="keyword">private</span> String description;</div><div class="line">	<span class="keyword">private</span> Set&lt;Course&gt;  course;</div><div class="line">	<span class="comment">//set和get 方法由于版面的问题，在此就不再写出。</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p><strong>1. 一对多体现的是类与集合的关系</strong><br><strong>2. 多对一体现的是类与类之间的关系</strong><br><strong>3. 多对多体现的是类与集合之间的关系</strong></p>
-<p>Course.hbm.xml 配置文件中的set元素<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">set</span> <span class="attr">name</span>=<span class="string">"students"</span>  <span class="attr">table</span>=<span class="string">"student_course"</span>  <span class="attr">cascade</span>=<span class="string">"save-update"</span>&gt;</span></div><div class="line"><span class="comment">&lt;!-- table为关联表， 为了生成关联的sql语句--&gt;</span></div><div class="line">	 <span class="tag">&lt;<span class="name">key</span>&gt;</span></div><div class="line">	 	<span class="tag">&lt;<span class="name">column</span> <span class="attr">name</span>=<span class="string">"cid"</span>&gt;</span><span class="tag">&lt;/<span class="name">column</span>&gt;</span></div><div class="line">	 	<span class="comment">&lt;!--course通过cid与student_course表关联--&gt;</span></div><div class="line">	 <span class="tag">&lt;/<span class="name">key</span>&gt;</span></div><div class="line"></div><div class="line">    <span class="comment">&lt;!--class: 描述类与类之间的关系</span></div><div class="line">        column：student 表通过sid与studnet_course表关联</div><div class="line">    --&gt;</div><div class="line">	<span class="tag">&lt;<span class="name">many-to-many</span> <span class="attr">class</span>=<span class="string">"com.wcc.hibernate.domain.Student"</span> <span class="attr">column</span>=<span class="string">"sid"</span>/&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">set</span>&gt;</span></div></pre></td></tr></table></figure></p>
-<p>Student.hbm.xml 配置文件中的set元素<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">set</span> <span class="attr">name</span>=<span class="string">"courses"</span> <span class="attr">table</span>=<span class="string">"student_course"</span> <span class="attr">cascade</span>=<span class="string">"save-update"</span>&gt;</span></div><div class="line"><span class="comment">&lt;!-- table为关联表， 为了生成关联的sql语句--&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">key</span>&gt;</span></div><div class="line">    	<span class="tag">&lt;<span class="name">column</span> <span class="attr">name</span>=<span class="string">"sid"</span>&gt;</span><span class="tag">&lt;/<span class="name">column</span>&gt;</span></div><div class="line">    	<span class="comment">&lt;!--student通过sid与student_course进行关联--&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">key</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">many-to-many</span> <span class="attr">class</span>=<span class="string">"com.wcc.hibernate.domain.Course"</span>  <span class="attr">column</span>=<span class="string">"cid"</span>&gt;</span></div><div class="line">    <span class="comment">&lt;!--Course表通过cid来与student_course表进行关联--&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">many-to-many</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">set</span>&gt;</span></div></pre></td></tr></table></figure></p>
-<h3 id="关系维护"><a href="#关系维护" class="headerlink" title="关系维护"></a><strong>关系维护</strong></h3><p> <strong>1. 建立关系，相当于在第三张表中插入一行数据。</strong><br> <strong>2. 解除关系，相当于在第三张表中删除一行数据。</strong><br> <strong>3. 重新建立关系，相当于先删除一行数据，再增加一行数据。</strong><br> <strong>4. 多对多，谁维护关系效率都一样。</strong></p>
-<h3 id="操作"><a href="#操作" class="headerlink" title="操作"></a><strong>操作</strong></h3><h4 id="让一个新的学生和一个已经存在的课程发生关联"><a href="#让一个新的学生和一个已经存在的课程发生关联" class="headerlink" title="让一个新的学生和一个已经存在的课程发生关联"></a><strong>让一个新的学生和一个已经存在的课程发生关联</strong></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Test</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testSaveStudent_BuildR</span><span class="params">()</span></span>&#123;</div><div class="line">  Session session = HibernateUtils.sessionFactory.getCurrentSession();</div><div class="line">  Transaction transaction = session.beginTransaction();</div><div class="line">  Course course = (Course) session.get(Course.class, <span class="number">1L</span>);</div><div class="line">  <span class="comment">//  得到cid为1的课程</span></div><div class="line">  <span class="comment">// 创建一个学生</span></div><div class="line">  Student  student = <span class="keyword">new</span> Student();</div><div class="line">  student.setName(<span class="string">"黄晓明"</span>);</div><div class="line">  student.setDescription(<span class="string">"很帅"</span>);</div><div class="line">  <span class="comment">//为这个学生创建一个 课程的集合</span></div><div class="line">  <span class="comment">//course.getStudents().add(student);</span></div><div class="line">  <span class="comment">//通过课程关联学生，这样的操作效率是比较低的，</span></div><div class="line">  <span class="comment">//因为要根据课程查询学生要发出SQL语句。</span></div><div class="line">  Set&lt;Course&gt; courses = <span class="keyword">new</span> HashSet&lt;Course&gt;();</div><div class="line">  <span class="comment">// 添加取出的课程 到课程的集合中</span></div><div class="line">  courses.add(course);</div><div class="line">  <span class="comment">// 给这个学生对象设置课程的集合  </span></div><div class="line">  <span class="comment">//通过学生建立与课程之间的联系。</span></div><div class="line">  student.setCourse(courses);</div><div class="line">  <span class="comment">// 保存这个student对象</span></div><div class="line">  session.save(student);</div><div class="line">  transaction.commit();		</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<blockquote>
-<p>说明：course.getStudents().add(student);是通过课程建立课程与学生之间的关联，执行course.getStudents()的时候，因为要查询该门课程中的所有学生，会发出根据课程查找该学生的SQL语句，这样做的效率比较低。</p>
-</blockquote>
-<h4 id="解除一个学生和一门课程之间的关系"><a href="#解除一个学生和一门课程之间的关系" class="headerlink" title="解除一个学生和一门课程之间的关系"></a><strong>解除一个学生和一门课程之间的关系</strong></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">* 解除一个学生和一门课程之间的关系</div><div class="line">*/</div><div class="line"><span class="meta">@Test</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testReleaseR</span><span class="params">()</span></span>&#123;</div><div class="line">  Session session = HibernateUtils.sessionFactory.getCurrentSession();</div><div class="line">  Transaction transaction =session.beginTransaction();</div><div class="line">	</div><div class="line">  Student student = (Student) session.get(Student.class, <span class="number">1L</span>);</div><div class="line">  Course course = (Course) session.get(Course.class, <span class="number">1L</span>);</div><div class="line">		</div><div class="line">  <span class="comment">//通过学生解除关系</span></div><div class="line">  student.getCourse().remove(course);</div><div class="line">  <span class="comment">//通过课程解除关系</span></div><div class="line">  <span class="comment">//course.getStudents().remove(student);</span></div><div class="line">  transaction.commit();	</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="解除该课程和这门课程所有的学生之间的关系"><a href="#解除该课程和这门课程所有的学生之间的关系" class="headerlink" title="解除该课程和这门课程所有的学生之间的关系"></a><strong>解除该课程和这门课程所有的学生之间的关系</strong></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">*解除该门课程和所有的学生之间的关联</div><div class="line">*/</div><div class="line"><span class="meta">@Test</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testRealseAllR</span><span class="params">()</span></span>&#123;</div><div class="line">  Session session = HibernateUtils.sessionFactory.getCurrentSession();</div><div class="line">  Transaction transaction = session.beginTransaction();</div><div class="line">  Course course = (Course) session.get(Course.class, <span class="number">1L</span>);</div><div class="line">  course.setStudents(<span class="keyword">null</span>);</div><div class="line">  transaction.commit();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="一个学生从一门课程转移到另外一门课程"><a href="#一个学生从一门课程转移到另外一门课程" class="headerlink" title="一个学生从一门课程转移到另外一门课程"></a><strong>一个学生从一门课程转移到另外一门课程</strong></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">* 一个学生从一门课转移到另一门的课程中。</div><div class="line">*/</div><div class="line"><span class="meta">@Test</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testChangeCourse</span><span class="params">()</span></span>&#123;</div><div class="line">  Session session =  HibernateUtils.sessionFactory.getCurrentSession();</div><div class="line">  Transaction  transaction = session.beginTransaction();</div><div class="line">  Course course = (Course) session.get(Course.class, <span class="number">1L</span>);</div><div class="line">  Course course2 = (Course) session.get(Course.class, <span class="number">2L</span>);</div><div class="line">		</div><div class="line">  Student student = (Student) session.get(Student.class, <span class="number">1L</span>);</div><div class="line">  <span class="comment">// 先解这个对象，然后在进行</span></div><div class="line">  student.getCourse().remove(course);</div><div class="line">  <span class="comment">// 添加新的关系课程到这个集合中</span></div><div class="line">  student.getCourse().add(course2);</div><div class="line">  <span class="comment">// 提交</span></div><div class="line">  transaction.commit();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="一对一的双向"><a href="#一对一的双向" class="headerlink" title="一对一的双向"></a><strong>一对一的双向</strong></h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">many-to-one</span> <span class="attr">name</span>=<span class="string">"classes"</span> <span class="attr">column</span>=<span class="string">"cid"</span></span></div><div class="line">    <span class="attr">class</span>=<span class="string">"com.wcc.hibernate.domain.Classes"</span></div><div class="line">    <span class="attr">cascade</span>=<span class="string">"save-update"</span> <span class="attr">unique</span>=<span class="string">"true"</span> &gt;</div><div class="line"><span class="tag">&lt;/<span class="name">many-to-one</span>&gt;</span></div></pre></td></tr></table></figure>
-<blockquote>
-<p>外键在student表中不能出现相同的值，外键是唯一的，所以是一对一的。</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Classes classes = (Classes)session.get(Classes.class,<span class="number">6L</span>);</div><div class="line">student1.setClasses(classes);</div><div class="line">student2.setClasses(classes);</div><div class="line">session.save(student2);</div><div class="line">session.save(student1);</div></pre></td></tr></table></figure>
-<p>以上的代码是不对的，因为上面的代码会导致student1和student2的外键都是为6L，不符合外键也是唯一的约束了。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h3><p> <strong>1. 关系角度</strong><br>      一对多反映的是类与集合的关系<br>      多对一反映的是类与类 之间的关系<br>      多对多反映的是类与集合之间的关系<br><strong>2. 一对多，多的一方维护关系，效率比较高</strong><br><strong>3. 多对多，谁维护效率都一样</strong><br><strong>4. 通过谁建立关系，就看谁的映射文件</strong><br><strong>5. Cascade 与inverse之间的区别（详见上面专门对Cascade与inverse的区别）</strong></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/05/Hibernate框架——二级缓存(一)/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Charse">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Charse's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/11/05/Hibernate框架——二级缓存(一)/" itemprop="url">Hibernate框架——二级缓存(一)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-11-05T15:09:42+08:00">
-                2016-11-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Hibernate/" itemprop="url" rel="index">
-                    <span itemprop="name">Hibernate</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2016/11/05/Hibernate框架——二级缓存(一)/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/05/Hibernate框架——二级缓存(一)/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/2016/11/05/Hibernate框架——二级缓存(一)/" class="leancloud_visitors" data-flag-title="Hibernate框架——二级缓存(一)">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">Visitors </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="性能分析"><a href="#性能分析" class="headerlink" title="性能分析"></a><strong>性能分析</strong></h2><h3 id="抓取策略"><a href="#抓取策略" class="headerlink" title="抓取策略"></a><strong>抓取策略</strong></h3><h3 id="研究对象"><a href="#研究对象" class="headerlink" title="研究对象"></a><strong>研究对象</strong></h3><blockquote>
-<p>研究怎么样提取集合，该策略应该作用于set元上<br> 研究从少的一方加载多的一方</p>
-</blockquote>
+          <p>前一篇文章( Hibernate框架——关系操作(一))中编写了Hibernate的基本操作: 一对多单项关联，一对多双向关联。那么现Hibernate中的多对多的关联操作。<br>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/11/05/Hibernate框架——二级缓存(一)/#more" rel="contents">
+            <a class="btn" href="/2016/11/05/Hibernate框架——关系操作(二)/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -1939,7 +1921,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-count">38</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -1961,7 +1943,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">29</span>
+                <span class="site-state-item-count">28</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
