@@ -102,17 +102,17 @@
 
 
 
-<meta name="description" content="进程概念进程不只是程序代码，程序代码有时称为文本段，进程还包括当前活动，通过程序计数器的值和处理器寄存器的内容来表示。进程包括 堆(是在进程运行是动态分配的内存)、栈(包括临时数据，如函数参数、返回值地址和局部变量表)和数据段(包括全局变量) 程序本身不是进程：程序只是被动实体，如存储在磁盘上包含一系列指令内容的文件（通常被称为可执行文件），而进程是活动实体，他有一个程序计数器用来表示下一个要执行">
+<meta name="description" content="内存必须容纳操作系统和各种用户进程，因此应该尽可能有效的分配内存的各个部分。内存通常分为两个区域，一个用于驻留操作系统，另一个用于用户进程。操作系统可以位于低内存，也可以位于高内存，影响这一决定的主要因素是中断向量的位置，由于中断向量通常位于低内存，因此程序员通常将操作系统页放在低内存。">
 <meta name="keywords" content="Operating system">
 <meta property="og:type" content="article">
-<meta property="og:title" content="操作系统——进程">
-<meta property="og:url" content="http://yoursite.com/2017/05/30/操作系统—进程/index.html">
+<meta property="og:title" content="操作系统--连续内存分配">
+<meta property="og:url" content="http://yoursite.com/2017/06/06/操作系统—连续内存分配/index.html">
 <meta property="og:site_name" content="Charse&#39;s Blog">
-<meta property="og:description" content="进程概念进程不只是程序代码，程序代码有时称为文本段，进程还包括当前活动，通过程序计数器的值和处理器寄存器的内容来表示。进程包括 堆(是在进程运行是动态分配的内存)、栈(包括临时数据，如函数参数、返回值地址和局部变量表)和数据段(包括全局变量) 程序本身不是进程：程序只是被动实体，如存储在磁盘上包含一系列指令内容的文件（通常被称为可执行文件），而进程是活动实体，他有一个程序计数器用来表示下一个要执行">
-<meta property="og:updated_time" content="2017-06-03T02:29:38.399Z">
+<meta property="og:description" content="内存必须容纳操作系统和各种用户进程，因此应该尽可能有效的分配内存的各个部分。内存通常分为两个区域，一个用于驻留操作系统，另一个用于用户进程。操作系统可以位于低内存，也可以位于高内存，影响这一决定的主要因素是中断向量的位置，由于中断向量通常位于低内存，因此程序员通常将操作系统页放在低内存。">
+<meta property="og:updated_time" content="2017-06-06T12:37:25.691Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="操作系统——进程">
-<meta name="twitter:description" content="进程概念进程不只是程序代码，程序代码有时称为文本段，进程还包括当前活动，通过程序计数器的值和处理器寄存器的内容来表示。进程包括 堆(是在进程运行是动态分配的内存)、栈(包括临时数据，如函数参数、返回值地址和局部变量表)和数据段(包括全局变量) 程序本身不是进程：程序只是被动实体，如存储在磁盘上包含一系列指令内容的文件（通常被称为可执行文件），而进程是活动实体，他有一个程序计数器用来表示下一个要执行">
+<meta name="twitter:title" content="操作系统--连续内存分配">
+<meta name="twitter:description" content="内存必须容纳操作系统和各种用户进程，因此应该尽可能有效的分配内存的各个部分。内存通常分为两个区域，一个用于驻留操作系统，另一个用于用户进程。操作系统可以位于低内存，也可以位于高内存，影响这一决定的主要因素是中断向量的位置，由于中断向量通常位于低内存，因此程序员通常将操作系统页放在低内存。">
 
 
 
@@ -140,13 +140,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/05/30/操作系统—进程/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/06/06/操作系统—连续内存分配/"/>
 
 
 
 
 
-  <title>操作系统——进程 | Charse's Blog</title>
+  <title>操作系统--连续内存分配 | Charse's Blog</title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="en">
@@ -286,7 +286,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/30/操作系统—进程/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/06/操作系统—连续内存分配/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Charse">
@@ -303,7 +303,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">操作系统——进程</h1>
+          <h1 class="post-title" itemprop="name headline">操作系统--连续内存分配</h1>
         
 
         <div class="post-meta">
@@ -315,8 +315,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-30T14:24:26+08:00">
-                2017-05-30
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-06-06T20:36:18+08:00">
+                2017-06-06
               </time>
             
 
@@ -356,8 +356,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/05/30/操作系统—进程/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/05/30/操作系统—进程/" itemprop="commentCount"></span>
+                <a href="/2017/06/06/操作系统—连续内存分配/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/06/06/操作系统—连续内存分配/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -365,7 +365,7 @@
 
           
           
-             <span id="/2017/05/30/操作系统—进程/" class="leancloud_visitors" data-flag-title="操作系统——进程">
+             <span id="/2017/06/06/操作系统—连续内存分配/" class="leancloud_visitors" data-flag-title="操作系统--连续内存分配">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -393,67 +393,28 @@
       
 
       
-        <h2 id="进程概念"><a href="#进程概念" class="headerlink" title="进程概念"></a>进程概念</h2><p>进程不只是程序代码，程序代码有时称为<strong>文本段</strong>，进程还包括当前活动，通过程序计数器的值和处理器寄存器的内容来表示。进程包括 堆(是在进程运行是动态分配的内存)、栈(包括临时数据，如函数参数、返回值地址和局部变量表)和数据段(包括全局变量)</p>
-<p><strong>程序本身不是进程：程序只是被动实体，如存储在磁盘上包含一系列指令内容的文件（通常被称为可执行文件），而进程是活动实体，他有一个程序计数器用来表示下一个要执行的命令和相关资源集合。当一个可执行文件被装入内存中时，一个程序才能成为进程。</strong></p>
-<a id="more"></a>
-<h3 id="进程的状态"><a href="#进程的状态" class="headerlink" title="进程的状态"></a>进程的状态</h3><ul>
-<li><strong>新的</strong>： 进程正在被创建</li>
-<li><strong>运行</strong>：指令正在被执行</li>
-<li><strong>等待</strong>：进程等待某个事件的发生(如 I/O 完成或收到信号)</li>
-<li><strong>就绪</strong>：进程等待分配处理器</li>
-<li><strong>终止</strong>：进程完成任务</li>
-</ul>
-<h3 id="进程控制块"><a href="#进程控制块" class="headerlink" title="进程控制块"></a>进程控制块</h3><p><strong>每个进程在操作系统内用进程控制块(process control block, PCB,也称为任务控制块)</strong>来表示。<br>PCB 中记录着进程的相关信息：</p>
+        <p>内存必须容纳操作系统和各种用户进程，因此应该尽可能有效的分配内存的各个部分。<br>内存通常分为两个区域，一个用于驻留操作系统，另一个用于用户进程。操作系统可以位于低内存，也可以位于高内存，影响这一决定的主要因素是中断向量的位置，由于中断向量通常位于低内存，因此程序员通常将操作系统页放在低内存。<br><a id="more"></a></p>
+<h2 id="内存映射与保护"><a href="#内存映射与保护" class="headerlink" title="内存映射与保护"></a>内存映射与保护</h2><p>在说内存分配之前，先说说内存映射与保护的问题，通过采用重定位寄存器(之前的文章中说过)和界限地址寄存器，可以实现这种保护。</p>
+<blockquote>
+<p>重定位寄存器含有最小的物理地址值，界限地址寄存器含有逻辑地址的范围值(例如：重定位=100050， 界限=74500)。有了重定位寄存器和界限地址寄存器，每个逻辑地址必须小于界限地址寄存器。MMU动态的将逻辑地址加上重定位寄存器的值后映射成物理地址，映射后的物理地址再交送内存单元。</p>
+</blockquote>
+<p>当CPU调度器选择一个进程来执行时，作为上下文切换工作的一部分，调度程序会用正确的值来初始化重定位寄存器和界限地址寄存器。由于CPU所产生的每一地址都需要与寄存器进行核对，所以可以保证操作系统和其他用户程序和数据不受该进程的运行所影响。</p>
+<h2 id="内存分配"><a href="#内存分配" class="headerlink" title="内存分配"></a>内存分配</h2><p>现在我们就来讨论一下内存分配，最简单的内存分配方式之一就是将内存分为多个固定大小的<strong>分区(parttiion)</strong>。每个分区只能容纳一个进程，因此，多道程序的程度会受到分区数所限制。如果使用这种多分区方法，当一个分区空闲的时候，可以从输入队列中选择一个进程，以调入到空闲分区，当进程终止时，其分区可以被其他进程所使用。这种方法最初为IBM OS/360 操作系统所使用，不过现在已经不再使用了。</p>
+<p>下面来介绍<strong>可变分区</strong>方案。在可变分区方案里，操作系统有一个<strong>表</strong>,用于记录哪些内存可用和哪些内存已经被使用，在一开始，所有的内存都可用于用户进程，因此可以作为一大块可用内存，称为<strong>孔(hole)</strong>。当有新进程需要内存时，为该进程查找足够大的孔，如果找到，可以从该进程分配所需的内存，孔内未分配的内存可以下次再用。</p>
+<p>随着进程进入系统，它们将被加入到输入队列，操作系统根据所有进程的内存需要和现有可用内存情况来决定哪些进程可以分配内存。当进程分配到空间时，它就装入内存，并开始竞争CPU，当进程终止的时候，它将释放内存，该内存可以被操作系统分配给输入队列中的其他进程。</p>
+<p>在任意的时候，有一组可用孔(块)大小列表和输入队列，操作系统根据调度算法来对输入队列进行排序，内存不断地分配给进程，直到下一个进程的内存需求不能满足为止，这时没有足够大的可用孔来装入进程。操作系统可以等到有足够大的空间。或者往下扫描输入队列以确定是否有其他内存需求较小的进程可以被满足。</p>
+<p>通常，一组不同大小的孔分散在内存中，当新进程需要内存时，系统为该进程查找足够大的孔，如果孔太大，那么就分为两块：一块分配新进程，另一块还回到集合。当进程终止时，它将释放其内存，该内存将还给孔集合，如果新孔与其他孔相邻，那么将这些孔合并成大孔，这时，系统可以检查是否有进程在等待内存空间，新合并的内存空间是否满足等待进程。</p>
+<h2 id="分配方法"><a href="#分配方法" class="headerlink" title="分配方法"></a>分配方法</h2><p>上面讲的这种方法是通用<strong>动态存储分配问题</strong>的一种情况(根据一组空闲孔来分配大小为 n 的请求)。这个问题有许多解决方法，从一组可用孔中选择一个空闲的最常用方法有<strong>首次适应(first-fit)</strong>、<strong>最佳适应(best-fit)</strong>、<strong>最差适应(worst-fit)</strong>。</p>
 <ul>
-<li>进程状态</li>
-<li>程序计数器</li>
-<li>CPU寄存器</li>
-<li>CPU调度信息</li>
-<li>内存管理信息</li>
-<li>记账信息</li>
-<li>I/O状态信息</li>
+<li><strong>首席适应</strong>: 分配第一个足够大的孔，查找可以从头开始，也可以从上次首次适应结束时开始，一旦找到足够大的空闲空间孔，就可以停止。</li>
+<li><strong>最佳适配</strong>: 分配最小的足够大的孔，必须查找整个列表，除非列表按大小排序，这种方法可以产生最小剩余孔。</li>
+<li><strong>最差适应</strong>: 分配最大的孔，同样，必须查找整个列表，除非列表按大小排序，这种方法可以产生最大剩余孔，该孔可能比最佳适应方法产生的比较剩余孔更为有用。</li>
 </ul>
-<h2 id="进程调度"><a href="#进程调度" class="headerlink" title="进程调度"></a>进程调度</h2><h3 id="调度队列"><a href="#调度队列" class="headerlink" title="调度队列"></a>调度队列</h3><p>进程进入系统时，会被加入到作业队列中，该队列包括系统中的所有进程。驻留在内存中就绪的、等待运行的进程保存在<strong>就绪队列</strong>中，该队列通常用<strong>链表</strong>来实现，<strong>其头节点指向链表的第一个和最后一个PCB 块的指针。每个PCB包括一个指向就绪队列的下一个PCB的指针域。</strong></p>
-<h3 id="Linux-中的进程表示"><a href="#Linux-中的进程表示" class="headerlink" title="Linux 中的进程表示"></a>Linux 中的进程表示</h3><p>Linux 系统中进程的控制块是通过C 结构task_struct来表示的。这个结构包含了表示一个进程和所需要的所有信息，包括进程的状态、调度和内存管理信息、打开文件列表和指向父进程和所有子进程的指针(创建进程的进程是父进程，被进程创建的进程为子进程)。stask_struct的这些字段包括:<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">pid_t</span> pid;  <span class="comment">//  是一个整数值</span></div><div class="line"><span class="keyword">long</span> state;</div><div class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> time_slice;</div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">files_struct</span> *<span class="title">files</span>;</span></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">mm_struct</span> *<span class="title">mm</span>;</span></div></pre></td></tr></table></figure></p>
-<p><strong>在Linux 内核中，所有活动的进程是通过一个名为 task_struct 的双向链表来表示的，内核为当前正在运行的进程保存了一个指针(current )</strong></p>
-<h3 id="上下文切换"><a href="#上下文切换" class="headerlink" title="上下文切换"></a>上下文切换</h3><p><strong>将CPU 切换到另一个进程需要保存当前进程的状态并恢复另一个进程的状态，这一任务称为上下文切换</strong></p>
-<h2 id="进程操作"><a href="#进程操作" class="headerlink" title="进程操作"></a>进程操作</h2><p>Linux 中 <strong>ps</strong> 命令可以得到一个进程列表。输入 ps -el 将会列出系统中所有当前活动进程的完整信息<br>当进程创建新进程时，有两种执行可能：</p>
-<ol>
-<li>父进程与子进程并发执行</li>
-<li>父进程等待，直到某个或全部子进程执行完。</li>
-</ol>
-<p><strong>新进程的地址空间也有两种可能：</strong></p>
-<ol>
-<li>子进程是父进程的复制品(具有与父进程相同的程序和数据)</li>
-<li>子进程装入另一个新程序</li>
-</ol>
-<p>在UNIX 系统中，<strong>每个进程都用一个唯一的整数形式的进程 标识符</strong>。<strong>通过 fork() 系统调用，可创建新进程。新进程通过复制原来进程的地址空间而成立。这种机制允许父进程与子进程方便的进行通信。两个进程(父进程和子进程)都继续执行位于系统调用fork() 之后的指令。但是，有一点不同： 对于新(子)进程，系统调用 fork() 的返回值为 0,  而对于父进程，返回值为子进程的进程标识符(非零)。</strong><br><strong>通常，在系统调用 fork() 之后，一个进程会使用系统调用exec(), 以用来取代进程的内存空间。系统调用 exec()将二进制文件装入内存(消除了原来包含系统调用 exec()程序的内存映射)，并开始执行。采用这种方式，两个进程能够相互通信，并能按各自的方法执行，父进程能创建更多的子进程，或者如果在子进程运行时没有什么可做，那么它采用系统调用 wait()把自己的移出就绪等待子进程的终止。</strong></p>
-<h3 id="进程终止"><a href="#进程终止" class="headerlink" title="进程终止"></a>进程终止</h3><p><strong>当进程完成执行最后的语句并使用系统调用 exit()请求操作系统删除自身时，进程终止，这时，进程可以返回状态值(通常为整数)到父进程(通过系统调用wait())。所有进程资源(包括物理和虚拟内存，打开文件和I/O缓冲)会被操作系统释放</strong>。</p>
-<p>父进程终止子进程的原因有很多，如：</p>
-<ul>
-<li>子进程使用了超过它所分配到的一些资源(为判定是否发生这种情况，要求父进程有一个检查子进程状态的机制)</li>
-<li>分配给子进程的任务已经不再需要</li>
-<li>父进程退出，如果父进程终止，那么操作系统不允许子进程继续。</li>
-</ul>
-<h2 id="进程间通信"><a href="#进程间通信" class="headerlink" title="进程间通信"></a>进程间通信</h2><p>与其他进程共享数据的进那么该进程是<strong>协作的</strong>,一个进程不能影响其他进程或被其他进程所影响，那么该进程是<strong>独立的</strong>。<br><strong>进程间信息共享的原因：</strong></p>
-<ul>
-<li><strong>信息共享</strong>：由于多个用户可能对同样的信息感兴趣，所以必须提供环境以允许对这些信息进行并发访问。</li>
-<li><strong>提高运算速度</strong>：如果希望一个特定任务快速执行，那么必须将它分成子任务，每个任务可以与其他子任务并行执行</li>
-<li><strong>模块化</strong>：可能需要按模块化方式构造系统，可将系统功能分成独立进程或线程。</li>
-<li><strong>方便</strong>：单个用户可以同时执行多个任务。</li>
-</ul>
-<p><strong>进程间通信的两种基本模式：</strong> </p>
-<ul>
-<li><strong>共享内存</strong><br>在共享内存模式中，建立起一块供协作进程共享的内存区域，进程通过向此共享区域读或写入数据来交换信息。</li>
-<li><strong>消息传递</strong><br>在消息传递模式中，通过在协作进程间交换消息来实现通信。</li>
-</ul>
-<p><strong>优缺点：</strong></p>
-<ul>
-<li><p><strong>共享内存</strong>：<br>优点： 速度快，只有在建立共享内存的时候才调用内核，其后不调用系统内核<br>缺点：实现比消息传递难，有可能会产生冲突。</p>
-</li>
-<li><p><strong>消息传递</strong><br>优点： 比共享内存简单<br>缺点： 消息传递通常使用系统调用来实现，因此需要更多的内核介入的时间消耗。</p>
-</li>
-</ul>
+<h2 id="碎片"><a href="#碎片" class="headerlink" title="碎片"></a>碎片</h2><p><strong>首次适应方法</strong>和<strong>最佳适应方法</strong>都有<strong>外部碎片问题</strong>,随着进程的装入和移出内存，空闲内存被分为小片段，当所有总的可用内存之和可以满足请求，但并不连续时，这就出现了外部碎片的问题。这个问题可能很严重。在最坏的情况下，每两个进程之间就有空闲块(或浪费)。如果这些内存块是一整块，那么就可以再运行多个进程。</p>
+<p>在首次适应和最佳适应之间的选择可能会影响碎片的量(对一些系统来说首次适应更好，对另一些系统最佳适应更好)。另一个影响因素是从空闲块的哪端开始分配(顶端还是末端)。不管使用哪种算法，外部碎片始终是个问题。</p>
+<p>根据内存空间总的大小和平均进程大小的不同，外部碎片的重要程度页页不同，例如，对采用首次适应方法的统计说明。不管使用什么优化，假定有N个可分配块，那么可能有0.5N个外部为外部碎片。即1/3的内存可能不能使用。这一特性称为<strong>50%规则</strong>。</p>
+<p>一种解决外部碎片的问题的方法是<strong>紧缩(compaction)</strong>,紧缩的目的是移动内存内容，以便所有空间合并成一整块。但紧缩并非总是可能的。如果重定位是静态的，并且在汇编时或装入市进行的，那么就不能紧缩。紧缩仅在重定位是动态并在运行时可采用。如果地址被动态重定位，可以首先移动程序和数据，然后再根据新基地址的值来改变基地址寄存器，如果能采用紧缩，还需要评估其开销，最简单的合并算法是简丹的将所有进程移动到内存的一端，而将所有的孔移到内存的另一端，以便生成一个大的空闲块，这种方案开销较大。</p>
+<p>另一种可能解决碎片问题的方法是允许物理地址空间为非连续。这样只要有物理内存就可以为进程分配，这种方案有两种互补的实现技术: 分页和分段，这两种技术也可以合并。</p>
 
       
     </div>
@@ -517,8 +478,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/05/28/Linux/" rel="next" title="Linux">
-                <i class="fa fa-chevron-left"></i> Linux
+              <a href="/2017/06/04/操作系统-逻辑地址，物理地址/" rel="next" title="操作系统--逻辑地址，物理地址">
+                <i class="fa fa-chevron-left"></i> 操作系统--逻辑地址，物理地址
               </a>
             
           </div>
@@ -526,10 +487,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/05/30/操作系统—线程/" rel="prev" title="操作系统——线程">
-                操作系统——线程 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -555,8 +512,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2017/05/30/操作系统—进程/"
-           data-title="操作系统——进程" data-url="http://yoursite.com/2017/05/30/操作系统—进程/">
+      <div class="ds-thread" data-thread-key="2017/06/06/操作系统—连续内存分配/"
+           data-title="操作系统--连续内存分配" data-url="http://yoursite.com/2017/06/06/操作系统—连续内存分配/">
       </div>
     
   </div>
@@ -714,7 +671,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#进程概念"><span class="nav-number">1.</span> <span class="nav-text">进程概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#进程的状态"><span class="nav-number">1.1.</span> <span class="nav-text">进程的状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#进程控制块"><span class="nav-number">1.2.</span> <span class="nav-text">进程控制块</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程调度"><span class="nav-number">2.</span> <span class="nav-text">进程调度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#调度队列"><span class="nav-number">2.1.</span> <span class="nav-text">调度队列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux-中的进程表示"><span class="nav-number">2.2.</span> <span class="nav-text">Linux 中的进程表示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#上下文切换"><span class="nav-number">2.3.</span> <span class="nav-text">上下文切换</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程操作"><span class="nav-number">3.</span> <span class="nav-text">进程操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#进程终止"><span class="nav-number">3.1.</span> <span class="nav-text">进程终止</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程间通信"><span class="nav-number">4.</span> <span class="nav-text">进程间通信</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#内存映射与保护"><span class="nav-number">1.</span> <span class="nav-text">内存映射与保护</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存分配"><span class="nav-number">2.</span> <span class="nav-text">内存分配</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分配方法"><span class="nav-number">3.</span> <span class="nav-text">分配方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#碎片"><span class="nav-number">4.</span> <span class="nav-text">碎片</span></a></li></ol></div>
             
 
           </div>
