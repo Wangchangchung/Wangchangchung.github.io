@@ -102,17 +102,25 @@
 
 
 
-<meta name="description" content="为什么需要并行我们学习计算机，或者学习每一门语言的时候为什么要学习并行呢？ 而且我们的计算机为什需要并行的处理机制呢？ 其实这里是有原因的。原因有以下几点: 摩尔定律的失效我们都知道，在计算机硬件行业，有著名的摩尔定律: 每18个月，芯片的性能将会提高一倍。 但是事实上并不是这样的，这个定律只是理论上的，因为在过去的10年内，我们的电脑CPU处理器的还停留在4GHZ 上， ![interl.jpg">
+<meta name="description" content="为什么需要并行我们学习计算机，或者学习每一门语言的时候为什么要学习并行呢？ 而且我们的计算机为什需要并行的处理机制呢？ 其实这里是有原因的。原因有以下几点: 摩尔定律的失效我们都知道，在计算机硬件行业，有著名的摩尔定律: 每18个月，芯片的性能将会提高一倍。 但是事实上并不是这样的，这个定律只是理论上的，因为在过去的10年内，我们的电脑CPU处理器的还停留在4GHZ 上，">
 <meta name="keywords" content="-Concurrency">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java并发(一)">
 <meta property="og:url" content="http://yoursite.com/2017/06/13/Java并发(一)/index.html">
 <meta property="og:site_name" content="Charse&#39;s Blog">
-<meta property="og:description" content="为什么需要并行我们学习计算机，或者学习每一门语言的时候为什么要学习并行呢？ 而且我们的计算机为什需要并行的处理机制呢？ 其实这里是有原因的。原因有以下几点: 摩尔定律的失效我们都知道，在计算机硬件行业，有著名的摩尔定律: 每18个月，芯片的性能将会提高一倍。 但是事实上并不是这样的，这个定律只是理论上的，因为在过去的10年内，我们的电脑CPU处理器的还停留在4GHZ 上， ![interl.jpg">
-<meta property="og:updated_time" content="2017-06-13T14:12:48.801Z">
+<meta property="og:description" content="为什么需要并行我们学习计算机，或者学习每一门语言的时候为什么要学习并行呢？ 而且我们的计算机为什需要并行的处理机制呢？ 其实这里是有原因的。原因有以下几点: 摩尔定律的失效我们都知道，在计算机硬件行业，有著名的摩尔定律: 每18个月，芯片的性能将会提高一倍。 但是事实上并不是这样的，这个定律只是理论上的，因为在过去的10年内，我们的电脑CPU处理器的还停留在4GHZ 上，">
+<meta property="og:image" content="http://yoursite.com/picture/java/bingfa/binxing/interl.jpg">
+<meta property="og:image" content="http://yoursite.com/picture/java/bingfa/binxing/tongbuyibu.png">
+<meta property="og:image" content="http://yoursite.com/picture/java/bingfa/binxing/bingxinghebingfa.png">
+<meta property="og:image" content="http://yoursite.com/picture/java/bingfa/binxing/lingjiequ.png">
+<meta property="og:image" content="http://yoursite.com/picture/java/bingfa/binxing/amuda.png">
+<meta property="og:image" content="http://yoursite.com/picture/java/bingfa/binxing/amd.png">
+<meta property="og:image" content="http://yoursite.com/picture/java/bingfa/binxing/Gustafson.png">
+<meta property="og:updated_time" content="2017-06-13T15:19:37.681Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java并发(一)">
-<meta name="twitter:description" content="为什么需要并行我们学习计算机，或者学习每一门语言的时候为什么要学习并行呢？ 而且我们的计算机为什需要并行的处理机制呢？ 其实这里是有原因的。原因有以下几点: 摩尔定律的失效我们都知道，在计算机硬件行业，有著名的摩尔定律: 每18个月，芯片的性能将会提高一倍。 但是事实上并不是这样的，这个定律只是理论上的，因为在过去的10年内，我们的电脑CPU处理器的还停留在4GHZ 上， ![interl.jpg">
+<meta name="twitter:description" content="为什么需要并行我们学习计算机，或者学习每一门语言的时候为什么要学习并行呢？ 而且我们的计算机为什需要并行的处理机制呢？ 其实这里是有原因的。原因有以下几点: 摩尔定律的失效我们都知道，在计算机硬件行业，有著名的摩尔定律: 每18个月，芯片的性能将会提高一倍。 但是事实上并不是这样的，这个定律只是理论上的，因为在过去的10年内，我们的电脑CPU处理器的还停留在4GHZ 上，">
+<meta name="twitter:image" content="http://yoursite.com/picture/java/bingfa/binxing/interl.jpg">
 
 
 
@@ -394,8 +402,8 @@
 
       
         <h2 id="为什么需要并行"><a href="#为什么需要并行" class="headerlink" title="为什么需要并行"></a>为什么需要并行</h2><p>我们学习计算机，或者学习每一门语言的时候为什么要学习并行呢？ 而且我们的计算机为什需要并行的处理机制呢？ 其实这里是有原因的。原因有以下几点:</p>
-<h3 id="摩尔定律的失效"><a href="#摩尔定律的失效" class="headerlink" title="摩尔定律的失效"></a>摩尔定律的失效</h3><p>我们都知道，在计算机硬件行业，有著名的<strong>摩尔定律: 每18个月，芯片的性能将会提高一倍</strong>。 但是事实上并不是这样的，这个定律只是理论上的，因为在过去的10年内，我们的电脑CPU处理器的还停留在4GHZ 上，</p>
-<p>![interl.jpg-37.3kB][1]</p>
+<h3 id="摩尔定律的失效"><a href="#摩尔定律的失效" class="headerlink" title="摩尔定律的失效"></a>摩尔定律的失效</h3><p>我们都知道，在计算机硬件行业，有著名的<strong>摩尔定律: 每18个月，芯片的性能将会提高一倍</strong>。 但是事实上并不是这样的，这个定律只是理论上的，因为在过去的10年内，我们的电脑CPU处理器的还停留在4GHZ 上，<br><a id="more"></a></p>
+<p><img src="/picture/java/bingfa/binxing/interl.jpg" alt="interl.jpg-37.3kB"></p>
 <blockquote>
 <p>Intel CEO Baret在2004年的时候单膝跪地，对取消4GH<br>Z计划感到抱歉， 然而2004年秋季，Intell 宣布彻底取消4GHZ计划。</p>
 </blockquote>
@@ -407,12 +415,12 @@
 <h3 id="并行计算还出于业务模型的需要"><a href="#并行计算还出于业务模型的需要" class="headerlink" title="并行计算还出于业务模型的需要"></a>并行计算还出于业务模型的需要</h3><p>当然，并不是有所的原因都归结于摩尔定律的失效，还是有出于业务模型的需要，当然使用并行一是为了让提高系统性能，另一个原因是让不同的线程承担不同的业务工作，比如HTTP服务器，为每一个Socket连接建立一个处理线程，这样就可以不同的线程就可以处理不同的业务工作，这样简化了任务调度。</p>
 <p>单个处理器的处理速度上，提升已经很难了，但是我们的却需要更快的处理速度，那么该怎么做呢？当然办法总是比问题多的。这就需要用到并行了，所以这就好为什么会出现并行的原因。</p>
 <h2 id="并行的几个重要概念"><a href="#并行的几个重要概念" class="headerlink" title="并行的几个重要概念"></a>并行的几个重要概念</h2><h3 id="同步和异步"><a href="#同步和异步" class="headerlink" title="同步和异步"></a>同步和异步</h3><p><strong>同步</strong>：也就是说，事情必须是一件一件的做，做完当前的事情，才能进行下一件事情。比如说：你是先上幼儿园，上完幼儿园之后再上小学，小学之后再上初中，事情是一件一件完成的。<br><strong>异步</strong>：通俗的说就是，做一件事情时，有一部分，由于某种原因(比如你不会做)，你中途叫你的朋友做，然后告诉你的朋友说，”完成之后通知我哈，我继续完成哈”，然后你就继续做你的事情去了。没有因为这件事而耽搁你的其他事情。所以这就提高了你的工作效率。</p>
-<p>如下图：<br>![同步异步.png-5.7kB][2]<br>从上图可以知道，随着实时间的轨迹，同步一步一步的执行着，在异步中，当一个异步过程调用发出后，调用者不能立即得到结果，实际上会开启一个线程执行这部分内容，这个线程处理完了之后，通过状态，通知和回调来通知调用者来处理。</p>
+<p>如下图：<br><img src="/picture/java/bingfa/binxing/tongbuyibu.png" alt="同步异步.png-5.7kB"><br>从上图可以知道，随着实时间的轨迹，同步一步一步的执行着，在异步中，当一个异步过程调用发出后，调用者不能立即得到结果，实际上会开启一个线程执行这部分内容，这个线程处理完了之后，通过状态，通知和回调来通知调用者来处理。</p>
 <h3 id="并发-Concurrency-和并行-Parallelism"><a href="#并发-Concurrency-和并行-Parallelism" class="headerlink" title="并发(Concurrency)和并行(Parallelism)"></a>并发(Concurrency)和并行(Parallelism)</h3><p><strong>并行(parallel)</strong>：指在同一时刻，有多条指令在多个处理器上同时执行。就好像两个人各拿一把铁锨在挖坑，一小时后，每人一个大坑。所以无论从微观还是从宏观来看，二者都是一起执行的。 </p>
 <p><strong>并发(concurrency)</strong>：指在同一时刻只能有一条指令执行，但多个进程指令被快速的轮换执行，使得在宏观上具有多个进程同时执行的效果，但在微观上并不是同时执行的，只是把时间分成若干段，使多个进程快速交替的执行。这就好像两个人用同一把铁锨，轮流挖坑，一小时后，两个人各挖一个小一点的坑，要想挖两个大一点得坑，一定会用两个小时。 </p>
-<p>![并行和并发.png-4kB][3]<br>所以并发编程的目标是充分的利用处理器的每一个核，以达到最高的处理性能.并行编程的目的也是达到最高的处理速率，如hadoop利用多台处理器进行并行处理。</p>
+<p><img src="/picture/java/bingfa/binxing/bingxinghebingfa.png" alt="并行和并发.png-4kB"><br>所以并发编程的目标是充分的利用处理器的每一个核，以达到最高的处理性能.并行编程的目的也是达到最高的处理速率，如hadoop利用多台处理器进行并行处理。</p>
 <p>单核CPU(单处理器)上，只可能存在并发而不可能存在并行。并行在多处理器系统中存在，而并发可以在单处理器和多处理器系统中都存在，并发能够在单处理器系统中存在是因为并发是并行的假象，并行要求程序能够同时执行多个操作，而并发只是要求程序假装同时执行多个操作（每个小时间片执行一个操作，多个操作快速切换执行</p>
-<h3 id="临界区"><a href="#临界区" class="headerlink" title="临界区"></a>临界区</h3><p>临界区用来表示一种公共资源或者说是共享数据，可以被多个线程使用，但是每一次，只能有一个线程使用它，一旦临界去资源被占用，其他线程想要使用这个资源，就必须等待。<br>![临界区.png-18.4kB][4]<br>这就是我们编程中经常要加锁的地方，java也就是使用使用synchronized 修饰方法或代码块。这里就不再详细做Java 中锁的介绍。</p>
+<h3 id="临界区"><a href="#临界区" class="headerlink" title="临界区"></a>临界区</h3><p>临界区用来表示一种公共资源或者说是共享数据，可以被多个线程使用，但是每一次，只能有一个线程使用它，一旦临界去资源被占用，其他线程想要使用这个资源，就必须等待。<br><img src="/picture/java/bingfa/binxing/lingjiequ.png" alt="临界区.png-18.4kB"><br>这就是我们编程中经常要加锁的地方，java也就是使用使用synchronized 修饰方法或代码块。这里就不再详细做Java 中锁的介绍。</p>
 <h3 id="阻塞-Blocking-和非阻塞-Non-Blocking"><a href="#阻塞-Blocking-和非阻塞-Non-Blocking" class="headerlink" title="阻塞(Blocking)和非阻塞(Non-Blocking)"></a>阻塞(Blocking)和非阻塞(Non-Blocking)</h3><ul>
 <li>阻塞和非阻塞通常用来形容多线程间的相互影响，比如一个线程占用临界区资源，那么其他所有需要这个资源的线程就必须在这个临界区中进行等待，等待会导致线程挂起，这种情况就是阻塞，此时，如果占用资源的线程一直不愿意释放资源，那么其他所有阻塞在这个临界区上的线程都不能工作。</li>
 <li>非阻塞允许多个线程同时进入临界区。</li>
@@ -446,10 +454,10 @@
 <li>可以被并行化的部分</li>
 <li>不可以被并行化的部</li>
 </ul>
-<p>假设一个程序处理磁盘上的文件。这个程序的一小部分用来扫描路径和在内存中创建文件目录。做完这些后，每个文件交个一个单独的线程去处理。扫描路径和创建文件目录的部分不可以被并行化，不过处理文件的过程可以。<br>![阿姆达尔定律.png-15.7kB][5]<br>加速比=优化前系统耗时/优化后系统耗时=500/400=1.25<br>![amd.png-35kB][6]</p>
+<p>假设一个程序处理磁盘上的文件。这个程序的一小部分用来扫描路径和在内存中创建文件目录。做完这些后，每个文件交个一个单独的线程去处理。扫描路径和创建文件目录的部分不可以被并行化，不过处理文件的过程可以。<br><img src="/picture/java/bingfa/binxing/amuda.png" alt="阿姆达尔定律.png-15.7kB"><br>加速比=优化前系统耗时/优化后系统耗时=500/400=1.25<br><img src="/picture/java/bingfa/binxing/amd.png" alt="amd.png-35kB"></p>
 <p>当然，上面的这个计算方法可以用这个上诉的公式得出相同的结果。</p>
 <p>增加CPU处理器的数量并不一定能起到有效的作用<br>提高系统内可并行化的模块比重,合理增加并行处<br>理器数量,才能以最小的投入,得到最大的加速比</p>
-<h3 id="Gustafson定律-古斯塔夫森"><a href="#Gustafson定律-古斯塔夫森" class="headerlink" title="Gustafson定律(古斯塔夫森)"></a>Gustafson定律(古斯塔夫森)</h3><p><strong>古斯塔夫森：</strong>说明处理器个数,串行比例和加速比之间的关系<br>![Gustafson.png-20.8kB][7]</p>
+<h3 id="Gustafson定律-古斯塔夫森"><a href="#Gustafson定律-古斯塔夫森" class="headerlink" title="Gustafson定律(古斯塔夫森)"></a>Gustafson定律(古斯塔夫森)</h3><p><strong>古斯塔夫森：</strong>说明处理器个数,串行比例和加速比之间的关系<br><img src="/picture/java/bingfa/binxing/Gustafson.png" alt="Gustafson.png-20.8kB"></p>
 <p>只要有足够的并行化,那么加速比和CPU个数成正比</p>
 
       
