@@ -1,0 +1,1014 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Netty," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="I/O基础入门Java1.4 之前的早期版本，Java对I/O的支持并不完善，开人员在开发高性能I/O程序时是有非常大的困难的,总结有以下几点:  没有数据缓存区，I/O性能存在问题 没有C或者C++中的Channel概念，只有输入和输出流 同步阻塞I/O通行(BIO)，通常会导致通信线程被长时间阻塞。 文件的字符集有限，硬件移值性不好  因为以上的一些缺陷,所以在很长的一段时间内，服务器端的开发">
+<meta name="keywords" content="Netty">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java中的I&#x2F;O演进之路">
+<meta property="og:url" content="http://yoursite.com/2017/06/24/Java中的I-O演进之路/index.html">
+<meta property="og:site_name" content="Charse&#39;s Blog">
+<meta property="og:description" content="I/O基础入门Java1.4 之前的早期版本，Java对I/O的支持并不完善，开人员在开发高性能I/O程序时是有非常大的困难的,总结有以下几点:  没有数据缓存区，I/O性能存在问题 没有C或者C++中的Channel概念，只有输入和输出流 同步阻塞I/O通行(BIO)，通常会导致通信线程被长时间阻塞。 文件的字符集有限，硬件移值性不好  因为以上的一些缺陷,所以在很长的一段时间内，服务器端的开发">
+<meta property="og:image" content="http://yoursite.com/picture/netty/io/BIO.png">
+<meta property="og:image" content="http://yoursite.com/picture/netty/io/NOBIO.png">
+<meta property="og:image" content="http://yoursite.com/picture/netty/io/IORE.png">
+<meta property="og:image" content="http://yoursite.com/picture/netty/io/SIIO.png">
+<meta property="og:image" content="http://yoursite.com/picture/netty/io/AIO.png">
+<meta property="og:updated_time" content="2017-06-24T12:50:18.279Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java中的I&#x2F;O演进之路">
+<meta name="twitter:description" content="I/O基础入门Java1.4 之前的早期版本，Java对I/O的支持并不完善，开人员在开发高性能I/O程序时是有非常大的困难的,总结有以下几点:  没有数据缓存区，I/O性能存在问题 没有C或者C++中的Channel概念，只有输入和输出流 同步阻塞I/O通行(BIO)，通常会导致通信线程被长时间阻塞。 文件的字符集有限，硬件移值性不好  因为以上的一些缺陷,所以在很长的一段时间内，服务器端的开发">
+<meta name="twitter:image" content="http://yoursite.com/picture/netty/io/BIO.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/06/24/Java中的I-O演进之路/"/>
+
+
+
+
+
+  <title>Java中的I/O演进之路 | Charse's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Charse's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/24/Java中的I-O演进之路/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charse">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Charse's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java中的I/O演进之路</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-06-24T20:11:57+08:00">
+                2017-06-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Netty/" itemprop="url" rel="index">
+                    <span itemprop="name">Netty</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/06/24/Java中的I-O演进之路/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/06/24/Java中的I-O演进之路/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/06/24/Java中的I-O演进之路/" class="leancloud_visitors" data-flag-title="Java中的I/O演进之路">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Visitors </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="I-O基础入门"><a href="#I-O基础入门" class="headerlink" title="I/O基础入门"></a>I/O基础入门</h2><p>Java1.4 之前的早期版本，Java对I/O的支持并不完善，开人员在开发高性能I/O程序时是有非常大的困难的,总结有以下几点:</p>
+<ul>
+<li>没有数据缓存区，I/O性能存在问题</li>
+<li>没有C或者C++中的Channel概念，只有输入和输出流</li>
+<li>同步阻塞I/O通行(BIO)，通常会导致通信线程被长时间阻塞。</li>
+<li>文件的字符集有限，硬件移值性不好</li>
+</ul>
+<p>因为以上的一些缺陷,所以在很长的一段时间内，服务器端的开发领域一直被C++和C长期占据。</p>
+<h3 id="Linux-网络I-O模型简介"><a href="#Linux-网络I-O模型简介" class="headerlink" title="Linux 网络I/O模型简介"></a>Linux 网络I/O模型简介</h3><p>Linux的内核将所有的外部设备都看作一个文件来操作，对一个文件的读写操作会调用内核提供的系统命令，返回一个 file descriptor(fd, 文件描述符)。而对一个socket的读写也会有相应的描述符，称为 socketfd(socket 描述符)，描述符就是一个数字，它指向内核中的一个结构体(文件路径，数据区等属性)。<br><a id="more"></a></p>
+<p><strong>UNIX网络编程对I/O模型的分类，UNIX提供了5种I/O模型</strong></p>
+<ol>
+<li><strong>阻塞IO模型(BIO)</strong>：最常用的I/O模型就是阻塞模型，缺省的情形下，所有的文件操作都是阻塞的。我们以套接字接口为例来讲解此模型:在进程空间中调用recvfrom，其系统调用直到数据包到达且被复制到应用进程的缓冲区或者发生错误的时候才返回，否则，在此期间一直会等待，进程在从调用recvfrom开始到它返回的整段时间都是被阻塞的，因此被称为阻塞I/O模型。 如下图：<br><img src="/picture/netty/io/BIO.png" alt="阻塞I-O模型.png-33.6kB"></li>
+<li><strong>非阻塞(NIO)</strong>： refcvfrom 从应用层到内核的时候，如果该缓冲区没有数据的话，就直接返回一个EWOULDBLOCK错误，一般来说非阻塞I/O模型进行轮寻检查这个状态，看内核是不是有数据到来.<br><img src="/picture/netty/io/NOBIO.png" alt="非阻塞I-O模型.png-44.1kB"></li>
+<li><strong>I/O复用模型</strong>：Linux 提供select/poll，进程通过将一个或多个fd传递给select 或poll系统调用，阻塞在select操作上，这样select/poll可以帮助我们侦测多个fd是否处于就绪状态，select/poll是顺序扫描fd是否就绪，而且支持的fd数量有限，因此它的使用受到一些限制，Linux还提供了一个epoll系统调用，epoll使用基于事件驱动方式代替顺序扫描，因此性能更高，当有fd准备就绪时，就立即回调函数rollback.如下图所示:<br><img src="/picture/netty/io/IORE.png" alt="I-O复用模型.png-40kB"></li>
+<li><strong>信号驱动I/O模型</strong>：首先开启套接口信号驱动I/O功能，并通过系统调用sigaction执行一个信号处理函数(此系统调用立即返回，进程继续工作，它是非阻塞的)。当数据准备就绪时，就为该进程生成一个SIGIO信号，通过信号回调通知应用程序调用recvfrom来读取数据，并通知主循环函数处理数据，如下图：<br><img src="/picture/netty/io/SIIO.png" alt="信号驱动I-O模型.png-45.3kB"></li>
+<li><strong>异步I/O：</strong>告知内核启动某个操作，并让内核在整个操作完成后(包括将数据从内核复制到用户自己的缓冲区)通知我们。这种模型与信号量驱动模型的主要区别是: 信号驱动I/O由内核通知我们何时可以开始一个I/O操作，异步Java NIO的核心类库多路复用器selector 就是基于 epoll 的多路复用技术实现。I/O模型由内核通知我们I/O已经完成。如下图：<br><img src="/picture/netty/io/AIO.png" alt="异步I-O模型.png-35.4kB"></li>
+</ol>
+<h3 id="I-O多路复用技术"><a href="#I-O多路复用技术" class="headerlink" title="I/O多路复用技术"></a>I/O多路复用技术</h3><p>在I/O编程过程中，当需要同时处理多个客户端接入请求时，可以利用多个线程或者I/O多路复用技术进行处理，I/O多路复用技术通过把多个I/O的阻塞复用到同一个select 的阻塞上，从而使得系统在单线程中可以同时处理多个客户端请求，与传统的多线程/多进程，模型比，I/O多路复用的最大优势是系统开销小，系统不需要创建新的额外进程或者线程，也不需要维护这些进程和线程的运行，降低了系统的维护工作量，节省了系统资源，I多路复用的主要应用场景如下：</p>
+<ul>
+<li>服务器需要同时处理多个处于监听状态或者多个连接状态的套接字</li>
+<li>服务器需要同时处理多种网络协议的套接字</li>
+</ul>
+<p>目前支持I/O多路复用的系统调用有select、pselect、poll、epoll, 在Linux网络编程过程中，很长一段时间都使用select做轮询和网络事件通知，然而select的一些固有缺陷导致了它受到了很大的限制，最终Linux不得不在新的内核版本中寻找select的替代方案，最终选择了epoll与select的原理比较类似。</p>
+<p>为了克服 select的缺点， epoll 做了很大的改进:</p>
+<ol>
+<li><strong>支持一个进程打开的socket描述符(FD)不受限制(仅受限于操作系统的最大文件句柄数。</strong><br>select最大的缺陷就是单个进程锁打开的FD是有一定限制的，它由FD_SETSIZE设置，默认值是1024,对于那些需要支持上万个TCP连接的大型服务器来说显然太少了。可以选择修改这个宏然后重新编译内核，不过这会带来网络效率的下降。我们也可以通过选择多个进程的方案(传统的Apache 方案)解决这个问题，不过虽然在Linux上创建进程的代价比较小，但仍然是不可忽视的，另外，进程间的数据交换非常麻烦，对于java来说，由于没有共享内存，需要通过Socket通心或者其他方式进行数据同步，这带来了额外的性能损耗，增加了程序的复杂度，所以这也不是一个完美的解决方案。 但是值得庆幸的是， epoll并没有这个限制，它所支持的FD上限是操作系统的最大文件句柄数，这个数字远远大于1024.例如: 在1GB内存的机器上大约10万个文件句柄左右，具体的值可以通过cat /proc/sys/fs/file -max 查看，通常情况下这个值跟系统的内存关系比较大</li>
+<li><strong>I/O效率不会随着FD数目的增加而线性下降。</strong><br>传统 select/poll的另一个致命的弱点，就是当你拥有一个很大的socket 集合时，由于网络的延时或者链路空闲，任一时刻只有少部分的socket是”活跃”的,但是 select/poll 每次调用都会线性扫描全部的集合，导致效率呈现线性下降。epoll 不存在这个问题，它只会对”活跃”的socket 进行操作——这是因为在内核实现中，epoll 是根据每个fd上面的callback函数实现的。那么，只有”活跃”的socket 才会去主动调用callback函数，其他idle状态的socket则不会。在这点上，epoll实现了一个伪AIO. 针对 epoll和select性能对比的benchmark 测试表明: 如果所有的socket都处于活跃状态——例如一个高速LAN环境，epoll并不比select/poll 效率高太多；相反，如果过多使用epoll_ctl， 效率相比还有稍微地降低。但是一旦使用 idle connections 模拟WAN环境，epoll的效率就远在select/poll 之上了。</li>
+<li><strong>使用mmap加速内核与用户空间的消息传递。</strong><br>无论是select、poll还是epoll都需要内核把FD消息通知给用户空间，如何避免不必要的内存复制就显得非常重要，epoll是通过内核和用户空间mmap同一块内存来实现的。</li>
+<li><strong>epoll的API更加简单</strong></li>
+</ol>
+<h2 id="Java的I-O演进"><a href="#Java的I-O演进" class="headerlink" title="Java的I/O演进"></a>Java的I/O演进</h2><p>在JDK 1.4 推出Java NIO 之前，基于Java 的所有Socket 通信都采用同步阻塞模式(BIO)，这种一请求一问答的通信模型简化了上层的应用开发，但是在性能和可靠性方面却存在巨大的瓶颈。因此很长的一段时间里，大型的应用服务器都采用C 或者 C++ 语言开发，因为他们可以直接使用操作系统中的异步I/O或者AIO能力，当并发访问量增大、响应时间延迟增大之后，采用Java BIO开发的服务端软件只有通过硬件的不断扩容来满足高并发和低延时，它极大的增加了企业的成本，并且随着集群规模的不断膨胀，系统的可维护性也面临巨大的挑战，只有通过采购性能更好的硬件服务器来解决问题，这导致恶性的循环。</p>
+<p>正是Java 传统的BIO的劣性，才使得Java 支持非阻塞I/O的呼声日渐个高涨，最终 JDK 1.4 中提供了新的NIO 类库，Java也可以支持非阻塞I/O了。</p>
+<h3 id="Java-的I-O-发展"><a href="#Java-的I-O-发展" class="headerlink" title="Java 的I/O 发展"></a>Java 的I/O 发展</h3><p>JDK1.4 新增 java.nio 包，提供了很多进行异步I/O开发的API和类库，主要的类和接口如下：</p>
+<ul>
+<li>进行异步I/O操作的缓冲区ByteBuffer等</li>
+<li>进行异步I/O操作的管道Pipe</li>
+<li>进行各种I/O操作(异步或者同步)的Channel，包括ServerSocketChannel和SocketChannel;</li>
+<li>多种字符集的编码能力和解码能力;</li>
+<li>实现非阻塞I/O操作的多路复用器selector;</li>
+<li>基于流行的Perl实现的正则表达式类库;</li>
+<li>基于流行的Perl 实现的正则表达式类库;</li>
+<li>文件通道FileChannel</li>
+</ul>
+<p>新的NIO类库的提供极大的促进基于Java 的异步非阻塞编程的发展和应用,但是，它依然有不完善的地方，特别是对文件系统的处理能力仍显得不足，主要的问题如下：</p>
+<ul>
+<li>没有统一的文件属性(例如读写权限)</li>
+<li>API能力比较弱，例如目录的级联创建和递归遍历，往往需要自己实现</li>
+<li>底层存储系统的一些高级API无法使用</li>
+<li>所有的文件操作都是同步阻塞调用，不支持异步文件读写操作</li>
+</ul>
+<p>2011 年 JDK1.7正式发布，它的一个比较大的亮点是将原来的NIO类库进行了升级，被称为 NIO2.0， 它主要有如下三个方面的改进：</p>
+<ul>
+<li>提供能够批量获取文件属性的API，这些API具有平台无关性，不与特定的文件系统相耦合，另外它还提供了标准文件系统的SPI，供各个服务提供商扩展实现</li>
+<li>提供AIO功能，支持基于文件的异步操作和针对网络套接字的异步操作</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/path/to/wechat-reward-image" alt="Charse WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/path/to/alipay-reward-image" alt="Charse Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Netty/" rel="tag"># Netty</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/13/Java并发(一)/" rel="next" title="Java并发(一)">
+                <i class="fa fa-chevron-left"></i> Java并发(一)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/06/24/Java中的I-O演进之路/"
+           data-title="Java中的I/O演进之路" data-url="http://yoursite.com/2017/06/24/Java中的I-O演进之路/">
+      </div>
+    
+  </div>
+
+
+
+
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="Charse" />
+          <p class="site-author-name" itemprop="name">Charse</p>
+           
+              <p class="site-description motion-element" itemprop="description">Stay hungry, Stay foolish.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">42</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">30</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Wangchangchung" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/5470218610" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.douban.com/people/153537246/" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  豆瓣
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/wang-chang-chun-84" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#I-O基础入门"><span class="nav-number">1.</span> <span class="nav-text">I/O基础入门</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux-网络I-O模型简介"><span class="nav-number">1.1.</span> <span class="nav-text">Linux 网络I/O模型简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#I-O多路复用技术"><span class="nav-number">1.2.</span> <span class="nav-text">I/O多路复用技术</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java的I-O演进"><span class="nav-number">2.</span> <span class="nav-text">Java的I/O演进</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-的I-O-发展"><span class="nav-number">2.1.</span> <span class="nav-text">Java 的I/O 发展</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Charse</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"charsewan"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("hoyPJdam7ySwVSOa3IpHGgpU-gzGzoHsz", "tSe2gMzMGHhTWXbxL4Cr8bgP");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
