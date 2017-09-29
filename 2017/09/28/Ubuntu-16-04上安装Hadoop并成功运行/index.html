@@ -1,0 +1,1078 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java,Hadoop," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="在Java学习的路线图中，分布式计算是一个非常好的一个方向。那么在做分布式计算的工具有许多, 现在最流行的也就是 Hadoop 了。Java 的学习中如果没有接触过Hadoop那么无疑是一个遗憾的事情，如果在面试，求职中有学习过Hadoop，那么这对自己肯定有强势的竞争力的。(这个是阿里面试官对我说的，一位非常好的面试官)。那么我么现在就来尝试一下使用Hadoop吧！">
+<meta name="keywords" content="Java,Hadoop">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ubuntu 16.04上安装Hadoop并成功运行">
+<meta property="og:url" content="http://yoursite.com/2017/09/28/Ubuntu-16-04上安装Hadoop并成功运行/index.html">
+<meta property="og:site_name" content="Charse&#39;s Blog">
+<meta property="og:description" content="在Java学习的路线图中，分布式计算是一个非常好的一个方向。那么在做分布式计算的工具有许多, 现在最流行的也就是 Hadoop 了。Java 的学习中如果没有接触过Hadoop那么无疑是一个遗憾的事情，如果在面试，求职中有学习过Hadoop，那么这对自己肯定有强势的竞争力的。(这个是阿里面试官对我说的，一位非常好的面试官)。那么我么现在就来尝试一下使用Hadoop吧！">
+<meta property="og:image" content="http://yoursite.com/picture/hadoop/start/localhostin.jpg">
+<meta property="og:image" content="http://yoursite.com/picture/hadoop/start/loscfail.jpg">
+<meta property="og:image" content="http://yoursite.com/picture/hadoop/start/pyhoonupdate.jpg">
+<meta property="og:image" content="http://yoursite.com/picture/hadoop/start/baseh.jpg">
+<meta property="og:image" content="http://yoursite.com/picture/hadoop/start/javavwersin.jpg">
+<meta property="og:image" content="http://yoursite.com/picture/hadoop/start/domhadoop.jpg">
+<meta property="og:image" content="http://yoursite.com/picture/hadoop/start/hadoopversion.jpg">
+<meta property="og:image" content="http://yoursite.com/picture/hadoop/start/runsingle.jpg">
+<meta property="og:image" content="http://yoursite.com/picture/hadoop/start/outhadooo.jpg">
+<meta property="og:image" content="http://yoursite.com/picture/hadoop/start/image1.png">
+<meta property="og:image" content="http://yoursite.com/picture/hadoop/start/startupnode.jpg">
+<meta property="og:image" content="http://yoursite.com/picture/hadoop/start/web.jpg">
+<meta property="og:image" content="http://yoursite.com/picture/hadoop/start/image_1boulku35me71vg21lri8c1f0e55.png">
+<meta property="og:image" content="http://yoursite.com/picture/hadoop/start/fenbushi.jpg">
+<meta property="og:image" content="http://yoursite.com/picture/hadoop/start/fensbusout.jpg">
+<meta property="og:image" content="http://yoursite.com/picture/hadoop/start/startupnode.jpg">
+<meta property="og:image" content="http://yoursite.com/picture/hadoop/start/RescourMaam.jpg">
+<meta property="og:image" content="http://yoursite.com/picture/hadoop/start/yanweb.jpg">
+<meta property="og:image" content="http://yoursite.com/picture/hadoop/start/stopyan.jpg">
+<meta property="og:updated_time" content="2017-09-29T12:32:45.731Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ubuntu 16.04上安装Hadoop并成功运行">
+<meta name="twitter:description" content="在Java学习的路线图中，分布式计算是一个非常好的一个方向。那么在做分布式计算的工具有许多, 现在最流行的也就是 Hadoop 了。Java 的学习中如果没有接触过Hadoop那么无疑是一个遗憾的事情，如果在面试，求职中有学习过Hadoop，那么这对自己肯定有强势的竞争力的。(这个是阿里面试官对我说的，一位非常好的面试官)。那么我么现在就来尝试一下使用Hadoop吧！">
+<meta name="twitter:image" content="http://yoursite.com/picture/hadoop/start/localhostin.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/09/28/Ubuntu-16-04上安装Hadoop并成功运行/"/>
+
+
+
+
+
+  <title>Ubuntu 16.04上安装Hadoop并成功运行 | Charse's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Charse's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/28/Ubuntu-16-04上安装Hadoop并成功运行/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charse">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Charse's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Ubuntu 16.04上安装Hadoop并成功运行</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-09-28T21:13:06+08:00">
+                2017-09-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Hadoop/" itemprop="url" rel="index">
+                    <span itemprop="name">Hadoop</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/09/28/Ubuntu-16-04上安装Hadoop并成功运行/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/09/28/Ubuntu-16-04上安装Hadoop并成功运行/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/09/28/Ubuntu-16-04上安装Hadoop并成功运行/" class="leancloud_visitors" data-flag-title="Ubuntu 16.04上安装Hadoop并成功运行">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Visitors </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在Java学习的路线图中，分布式计算是一个非常好的一个方向。那么在做分布式计算的工具有许多, 现在最流行的也就是 Hadoop 了。<br>Java 的学习中如果没有接触过Hadoop那么无疑是一个遗憾的事情，如果在面试，求职中有学习过Hadoop，那么这对自己肯定有强势的竞争力的。(这个是阿里面试官对我说的，一位非常好的面试官)。<br>那么我么现在就来尝试一下使用Hadoop吧！</p>
+<a id="more"></a>
+<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>操作系统: Ubuntu 16.04<br>Hadoop 版本： Hadoop 2.7.4<br>这个使用教程在 Ubuntu 更高的版本以及Hadoop 2.0开始的版本都是使用的。<br>如果使用的操作系统是 CentOS/RedHat 系统，那么请看这篇的文章进行</p>
+<blockquote>
+<p>Hadoop版本<br>Hadoop 有两个主要版本，Hadoop 1.x.y 和 Hadoop 2.x.y 系列，比较老的教材上用的可能是 0.20 这样的版本。Hadoop 2.x 版本在不断更新，本教程均可适用。如果需安装 0.20，1.2.1这样的版本，本教程也可以作为参考，主要差别在于配置项，配置请参考官网教程或其他教程。<br>新版是兼容旧版的，书上旧版本的代码应该能够正常运行（我自己没验证，欢迎验证反馈）</p>
+</blockquote>
+<h2 id="创建Hadoop用户"><a href="#创建Hadoop用户" class="headerlink" title="创建Hadoop用户"></a>创建Hadoop用户</h2><p>如果你是在已有的一个用户存在下， 想安装Hadoop 那么需要创建一个Hadoop 用户，毕竟创建一个新的用户，配置环境相对更加干净一些。<br>那么打开终端，输入下面的命令创建新的用户：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span>sudo useradd -m hadoop -s /bin/bash</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>这个的命令的意思是： 创建一个hadoop 用户，并使用 /bin/bash作为shell</p>
+</blockquote>
+<h3 id="设置密码"><a href="#设置密码" class="headerlink" title="设置密码"></a>设置密码</h3><p>然后，接着上面的操作， 再对这个用户设置设置密码，可以简单设置为 hadoop(可以设置成你想设置的),  注意两次设置为相同的密码。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span>sudo passwd hadoop</div></pre></td></tr></table></figure></p>
+<h3 id="增加管理员权限"><a href="#增加管理员权限" class="headerlink" title="增加管理员权限"></a>增加管理员权限</h3><p>为了我们后续的操作方便。我们这里对之前添加的Hadoop 用户添加管理员的权限。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo adduser hadoop sudo</div></pre></td></tr></table></figure></p>
+<p>这样我们就成功的设置了个该用户的管理员权限。</p>
+<p>最后我们我用Hadoop 用户登录我们的电脑了，所以我们注销当前用户，注销后，在登录的界面中使用刚刚创建的Hadoop 用户登录。</p>
+<h2 id="更新apt"><a href="#更新apt" class="headerlink" title="更新apt"></a>更新apt</h2><p>使用Hadoop 用户进行登录后，我们先对电脑上的软件进行更新一下，因为如果我们后续安装软件的话，会因为一些软件没有更新而安装失败，所以，这里先使用apt命令对软件进行更新。在shell终端中 执行如下的命令：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span>sudo apt-get update</div></pre></td></tr></table></figure></p>
+<h2 id="安装SSH、配置SSH无密码登陆"><a href="#安装SSH、配置SSH无密码登陆" class="headerlink" title="安装SSH、配置SSH无密码登陆"></a>安装SSH、配置SSH无密码登陆</h2><p>Hadoop 中的集群，单点模式是需要使用到SSH登录,Ubuntu默认参数了SSH client, 此外我们还需要安装SSH Server, 执行如下的命令：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span> sudo apt-get install openssh-server</div></pre></td></tr></table></figure></p>
+<p>安装之后我们就可以使用SSH 登录本机了（通常我们使用SSH登录远程服务器，比如说:远程云服务器，就是使用SSH 命令，同时，也可以借助SSH GUI图形工具登录, 例如 Putty）<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span> ssh localhost</div></pre></td></tr></table></figure></p>
+<p>此时会有如下提示(SSH首次登陆提示)，输入 yes 。然后按提示输入密码 hadoop，这样就登陆到本机了。</p>
+<p><img src="/picture/hadoop/start/localhostin.jpg" alt="localhostin"></p>
+<blockquote>
+<p>如果在执行上面命令的时候出现了一下的问题：</p>
+</blockquote>
+<p><img src="/picture/hadoop/start/loscfail.jpg" alt="loscfail"></p>
+<p>原因是：<br>在Python 3中, ConfigParser 被重命名为 configparser<br>如果默认版本是Python3执行更新操作会报错<br>那么解决方案就是执行如下操作：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo update-alternatives --install /usr/bin/python python /usr/bin/python2 200</div><div class="line">sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 100</div></pre></td></tr></table></figure></p>
+<p>此时登录就可以成功了。<br><img src="/picture/hadoop/start/pyhoonupdate.jpg" alt="loscfail"></p>
+<p>但还是比较麻烦。因为每次的登录都是需要输入密码的。 如果能够记住我们的密码就好了，这样就比较方便了。我们需要配置成SSH无密码登陆比较方便。<br>首先退出刚才的 ssh，就回到了我们原先的终端窗口(也可以重新打开一个终端窗口)，然后利用 ssh-keygen 生成密钥，并将密钥加入到授权中:<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">exit                           # 退出刚才的 ssh localhost</div><div class="line">cd ~/.ssh/                     # 若没有该目录，请先执行一次ssh localhost</div><div class="line">ssh-keygen -t rsa              # 会有提示，都按回车就可以</div><div class="line">cat ./id_rsa.pub &gt;&gt; ./authorized_keys  #</div></pre></td></tr></table></figure></p>
+<p>此时再使用 ssh localhost 命令就无需登录密码了。直接登录。</p>
+<h2 id="安装JAVA环境"><a href="#安装JAVA环境" class="headerlink" title="安装JAVA环境"></a>安装JAVA环境</h2><p>如果你之前的电脑中安装了Java环境，并配置好了环境变量，那么这一步就可以直接跳过。<br>当然，这里不会去重点讲如何在linux 上安装Java， 网上有很多教程，如果你的Linux中还没有Java环境，那么就直接参考网上网的教程， 同时在 /etc/prfile 中配置好环境变量， 这里可以参考这一篇教程：</p>
+<p>配置好环境变量之后，主要还需将我们的Java环境配置在一个地方，不让后面的操作中会出现Hadoop 找不到Java的问题，如果出现这样的问题，请回到这里安装好Java， 并设置好Java环境。<br>在 ~/.bashrc 中配置Java环境<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span> gedit ~/.bashrc</div></pre></td></tr></table></figure></p>
+<p>在文件最前面添加如下单独一行（注意 = 号前后不能有空格），将“JDK安装路径”改为上述命令得到的路径，并保存：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">export JAVA_HOME=JDK安装路径</div></pre></td></tr></table></figure></p>
+<p><img src="/picture/hadoop/start/baseh.jpg" alt="loscfail"></p>
+<p>同样的，需要让这个环境变量生效，执行如下的命令：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span> source ~/.bashrc    # 使变量设置生效</div></pre></td></tr></table></figure></p>
+<p>执行上面的命令之后，看我们设置的环境变量是否是生效的，可以执行 <code>echo $JAVA_HOME</code>,<code>java -version</code>,  查看是否是自己安装的Java路径以及相应的版本。<br><img src="/picture/hadoop/start/javavwersin.jpg" alt="loscfail"><br>以上安装及配置好了之后，就可以安装我们的Hadoop了！</p>
+<h2 id="安装Hadoop"><a href="#安装Hadoop" class="headerlink" title="安装Hadoop"></a>安装Hadoop</h2><p>Hadoop 的安装包从这里可以下载: <a href="http://mirror.bit.edu.cn/apache/hadoop/common/" target="_blank" rel="external">http://mirror.bit.edu.cn/apache/hadoop/common/</a><br>一般选择下载最新的稳定版本，即下载 “stable” 下的 hadoop-2.x.y.tar.gz 这个格式的文件，这是编译好的，另一个包含 src 的则是 Hadoop 源代码，需要进行编译才可使用。这里我下载稳定版本的2.7.4。<br><img src="/picture/hadoop/start/domhadoop.jpg" alt="loscfail"></p>
+<p>下载好了之后，在你想安装的路径下进行解压， 这里选择将Hadoop 安装到/usr/local/中:<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span> sudo tar -zxf ~/下载/hadoop-2.7.4.tar.gz -C /usr/local    # 解压到/usr/local中</div><div class="line"><span class="meta">$</span> cd /usr/local/</div><div class="line"><span class="meta">$</span> sudo mv ./hadoop-2.7.4/ ./hadoop            # 将文件夹名改为hadoop</div><div class="line"><span class="meta">$</span> sudo chown -R hadoop ./hadoop       # 修改文件权限</div></pre></td></tr></table></figure></p>
+<p>解压后，可以用如下的命令查看，我们解压的Hadoop是否是可用的：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span> cd /usr/local/hadoop # 进入Hadoop 目录下</div><div class="line"><span class="meta">$</span> ./bin/hadoop version  # 在该目录下执行该命令</div></pre></td></tr></table></figure></p>
+<p><img src="/picture/hadoop/start/hadoopversion.jpg" alt="loscfail"></p>
+<p>如上图所示，我们的Hadoop就是已经安装好了。下面我们就可以使用Hadoop做一些任务了~！</p>
+<h2 id="Hadoop单击配置（非分布式）"><a href="#Hadoop单击配置（非分布式）" class="headerlink" title="Hadoop单击配置（非分布式）"></a>Hadoop单击配置（非分布式）</h2><p>Hadoop 默认模式为非分布式模式，无需进行其他配置即可运行。非分布式即单 Java 进程，方便进行调试。</p>
+<p>现在我们可以执行例子来感受下 Hadoop 的运行。Hadoop 附带了丰富的例子（运行 ./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-2.6.0.jar 可以看到所有例子），包括 wordcount、terasort、join、grep 等。</p>
+<p>在此我们选择运行 grep 例子，我们将 input 文件夹中的所有文件作为输入，筛选当中符合正则表达式 dfs[a-z.]+ 的单词并统计出现的次数，最后输出结果到 output 文件夹中。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span> cd /usr/local/hadoop</div><div class="line"><span class="meta">$</span> mkdir ./input</div><div class="line"><span class="meta">$</span> cp ./etc/hadoop/*.xml ./input   # 将配置文件作为输入文件</div><div class="line"><span class="meta">$</span> ./bin/hadoop jar</div><div class="line"><span class="meta">$</span> ./share/hadoop/mapreduce/hadoop-mapreduce-examples-*.jar grep ./input ./output 'dfs[a-z.]+'</div><div class="line"><span class="meta">$</span> cat ./output/*          # 查看运行结果</div></pre></td></tr></table></figure></p>
+<p><img src="/picture/hadoop/start/runsingle.jpg" alt="loscfail"></p>
+<p>执行成功后如下所示，输出了作业的相关信息，输出的结果是符合正则的单词 dfsadmin 出现了1次，因为匹配的只有一个：<br><img src="/picture/hadoop/start/outhadooo.jpg" alt="loscfail"></p>
+<blockquote>
+<p>注意，Hadoop 默认不会覆盖结果文件，因此再次运行上面实例会提示出错，需要先将 ./output 删除。</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span> rm -r ./output</div></pre></td></tr></table></figure>
+<h2 id="Hadoop伪分布式配置"><a href="#Hadoop伪分布式配置" class="headerlink" title="Hadoop伪分布式配置"></a>Hadoop伪分布式配置</h2><p>Hadoop 可以在单节点上以伪分布式的方式运行，Hadoop 进程以分离的 Java 进程来运行，节点既作为 NameNode 也作为 DataNode，同时，读取的是 HDFS 中的文件。</p>
+<p>Hadoop 的配置文件位于 /usr/local/hadoop/etc/hadoop/ 中，伪分布式需要修改2个配置文件 core-site.xml 和 hdfs-site.xml 。Hadoop的配置文件是 xml 格式，每个配置以声明 property 的 name 和 value 的方式来实现。</p>
+<p>修改配置文件 core-site.xml (通过 gedit 编辑会比较方便: gedit ./etc/hadoop/core-site.xml)，将当中的</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>修改为下面配置:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&lt;configuration&gt;</div><div class="line">        &lt;property&gt;</div><div class="line">             &lt;name&gt;hadoop.tmp.dir&lt;/name&gt;</div><div class="line">             &lt;value&gt;file:/usr/local/hadoop/tmp&lt;/value&gt;</div><div class="line">             &lt;description&gt;Abase for other temporary directories.&lt;/description&gt;</div><div class="line">        &lt;/property&gt;</div><div class="line">        &lt;property&gt;</div><div class="line">             &lt;name&gt;fs.defaultFS&lt;/name&gt;</div><div class="line">             &lt;value&gt;hdfs://localhost:9000&lt;/value&gt;</div><div class="line">        &lt;/property&gt;</div><div class="line">&lt;/configuration&gt;</div></pre></td></tr></table></figure></p>
+<p>同样的，修改配置文件 hdfs-site.xml：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">property</span>&gt;</span></div><div class="line">             <span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.replication<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">             <span class="tag">&lt;<span class="name">value</span>&gt;</span>1<span class="tag">&lt;/<span class="name">value</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">property</span>&gt;</span></div><div class="line">             <span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.namenode.name.dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">             <span class="tag">&lt;<span class="name">value</span>&gt;</span>file:/usr/local/hadoop/tmp/dfs/name<span class="tag">&lt;/<span class="name">value</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">property</span>&gt;</span></div><div class="line">             <span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.datanode.data.dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">             <span class="tag">&lt;<span class="name">value</span>&gt;</span>file:/usr/local/hadoop/tmp/dfs/data<span class="tag">&lt;/<span class="name">value</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">configuration</span></span></div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>Hadoop配置文件说明</p>
+<p>Hadoop 的运行方式是由配置文件决定的（运行 Hadoop 时会读取配置文件），因此如果需要从伪分布式模式切换回非分布式模式，需要删除 core-site.xml 中的配置项。</p>
+<p>此外，伪分布式虽然只需要配置 fs.defaultFS 和 dfs.replication 就可以运行（官方教程如此），不过若没有配置 hadoop.tmp.dir 参数，则默认使用的临时目录为 /tmp/hadoo-hadoop，而这个目录在重启时有可能被系统清理掉，导致必须重新执行 format 才行。所以我们进行了设置，同时也指定 dfs.namenode.name.dir 和 dfs.datanode.data.dir，否则在接下来的步骤中可能会出错。</p>
+</blockquote>
+<p>配置完成后，执行 NameNode 的格式化:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span>./bin/hdfs namenode -format</div></pre></td></tr></table></figure>
+<p><img src="/picture/hadoop/start/image1.png" alt="loscfaisl"></p>
+<p>如果在这一步时提示 Error: JAVA_HOME is not set and could not be found. 的错误，则说明之前设置 JAVA_HOME 环境变量那边就没设置好，请按教程先设置好 JAVA_HOME 变量，否则后面的过程都是进行不下去的。</p>
+<p>接着开启 NameNode 和 DataNode 守护进程。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./sbin/start-dfs.sh</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>启动时可能会出现如下 WARN 提示：WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform… using builtin-java classes where applicable。该 WARN 提示可以忽略，并不会影响正常使用（该 WARN 可以通过编译 Hadoop 源码解决）。</p>
+</blockquote>
+<p>启动完成后，可以通过命令 jps 来判断是否成功启动，若成功启动则会列出如下进程: “NameNode”、”DataNode” 和 “SecondaryNameNode”（如果 SecondaryNameNode 没有启动，请运行 sbin/stop-dfs.sh 关闭进程，然后再次尝试启动尝试）。如果没有 NameNode 或 DataNode ，那就是配置不成功，请仔细检查之前步骤，或通过查看启动日志排查原因。<br><img src="/picture/hadoop/start/startupnode.jpg" alt="loscfail"></p>
+<p>成功启动后，可以访问 Web 界面 <a href="http://localhost:50070" target="_blank" rel="external">http://localhost:50070</a> 查看 NameNode 和 Datanode 信息，还可以在线查看 HDFS 中的文件。<br><img src="/picture/hadoop/start/web.jpg" alt="loscfail"></p>
+<h2 id="运行Hadoop伪分布式实例"><a href="#运行Hadoop伪分布式实例" class="headerlink" title="运行Hadoop伪分布式实例"></a>运行Hadoop伪分布式实例</h2><p>上面的单机模式，grep 例子读取的是本地数据，伪分布式读取的则是 HDFS 上的数据。要使用 HDFS，首先需要在 HDFS 中创建用户目录：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span> ./bin/hdfs dfs -mkdir -p /user/hadoop</div></pre></td></tr></table></figure></p>
+<p>接着将 ./etc/hadoop 中的 xml 文件作为输入文件复制到分布式文件系统中，即将 /usr/local/hadoop/etc/hadoop 复制到分布式文件系统中的 /user/hadoop/input 中。我们使用的是 hadoop 用户，并且已创建相应的用户目录 /user/hadoop ，因此在命令中就可以使用相对路径如 input，其对应的绝对路径就是 /user/hadoop/input:<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span> ./bin/hdfs dfs -mkdir input</div><div class="line"><span class="meta">$</span> ./bin/hdfs dfs -put ./etc/hadoop/*.xml input</div></pre></td></tr></table></figure></p>
+<p>复制完成后，可以通过如下命令查看文件列表：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ./bin/hdfs dfs -ls input</div></pre></td></tr></table></figure></p>
+<p>伪分布式运行 MapReduce 作业的方式跟单机模式相同，区别在于伪分布式读取的是HDFS中的文件（可以将单机步骤中创建的本地 input 文件夹，输出结果 output 文件夹都删掉来验证这一点）。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span> ./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-*.jar grep input output 'dfs[a-z.]+'</div></pre></td></tr></table></figure></p>
+<p><img src="/picture/hadoop/start/image_1boulku35me71vg21lri8c1f0e55.png" alt="loscfail"></p>
+<p>查看运行结果的命令（查看的是位于 HDFS 中的输出结果）：<br><img src="/picture/hadoop/start/fenbushi.jpg" alt="loscfail"></p>
+<p>结果如下，注意到刚才我们已经更改了配置文件，所以运行结果不同。<br><img src="/picture/hadoop/start/fensbusout.jpg" alt="loscfail"></p>
+<p>我们也可以将运行结果取回到本地：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span> rm -r ./output    # 先删除本地的 output 文件夹（如果存在）</div><div class="line"><span class="meta">$</span> ./bin/hdfs dfs -get output ./output     # 将 HDFS 上的 output 文件夹拷贝到本机</div><div class="line"><span class="meta">$</span> cat ./output/*</div></pre></td></tr></table></figure></p>
+<p>Hadoop 运行程序时，输出目录不能存在，否则会提示错误 “org.apache.hadoop.mapred.FileAlreadyExistsException: Output directory hdfs://localhost:9000/user/hadoop/output already exists” ，因此若要再次执行，需要执行如下命令删除 output 文件夹:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./bin/hdfs dfs -rm -r output    # 删除 output 文件夹</div></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>运行程序时，输出目录不能存在</strong><br>运行 Hadoop 程序时，为了防止覆盖结果，程序指定的输出目录（如 output）不能存在，否则会提示错误，因此运行前需要先删除输出目录。在实际开发应用程序时，可考虑在程序中加上如下代码，能在每次运行时自动删除输出目录，避免繁琐的命令行操作：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Configuration conf = <span class="keyword">new</span> Configuration();</div><div class="line">Job job = <span class="keyword">new</span> Job(conf);</div><div class="line"><span class="comment">/* 删除输出目录 */</span></div><div class="line">Path outputPath = <span class="keyword">new</span> Path(args[<span class="number">1</span>]);</div><div class="line">outputPath.getFileSystem(conf).delete(outputPath, <span class="keyword">true</span>);</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>若要关闭 Hadoop，则运行<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span> ./sbin/stop-dfs.sh</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>注意<br>下次启动 hadoop 时，无需进行 NameNode 的初始化，只需要运行 ./sbin/start-dfs.sh 就可以！</p>
+</blockquote>
+<h2 id="启动YARN"><a href="#启动YARN" class="headerlink" title="启动YARN"></a>启动YARN</h2><p>（伪分布式不启动 YARN 也可以，一般不会影响程序执行）</p>
+<p>有的读者可能会疑惑，怎么启动 Hadoop 后，见不到书上所说的 JobTracker 和 TaskTracker，这是因为新版的 Hadoop 使用了新的 MapReduce 框架（MapReduce V2，也称为 YARN，Yet Another Resource Negotiator）。</p>
+<p>YARN 是从 MapReduce 中分离出来的，负责资源管理与任务调度。YARN 运行于 MapReduce 之上，提供了高可用性、高扩展性，YARN 的更多介绍在此不展开，有兴趣的可查阅相关资料。</p>
+<p>上述通过 ./sbin/start-dfs.sh 启动 Hadoop，仅仅是启动了 MapReduce 环境，我们可以启动 YARN ，让 YARN 来负责资源管理与任务调度。</p>
+<p>首先修改配置文件 mapred-site.xml，这边需要先进行重命名：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span> mv ./etc/hadoop/mapred-site.xml.template ./etc/hadoop/mapred-site.xml</div></pre></td></tr></table></figure></p>
+<p>然后再进行编辑，同样使用 gedit 编辑会比较方便些 gedit ./etc/hadoop/mapred-site.xml ：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">property</span>&gt;</span></div><div class="line">             <span class="tag">&lt;<span class="name">name</span>&gt;</span>mapreduce.framework.name<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">             <span class="tag">&lt;<span class="name">value</span>&gt;</span>yarn<span class="tag">&lt;/<span class="name">value</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>接着修改配置文件 yarn-site.xml：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">property</span>&gt;</span></div><div class="line">             <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.aux-services<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">             <span class="tag">&lt;<span class="name">value</span>&gt;</span>mapreduce_shuffle<span class="tag">&lt;/<span class="name">value</span>&gt;</span></div><div class="line">            <span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>然后就可以启动 YARN 了（需要先执行过 ./sbin/start-dfs.sh）：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span> ./sbin/start-yarn.sh      # 启动YARN</div><div class="line"><span class="meta">$</span> ./sbin/mr-jobhistory-daemon.sh start historyserver  #开启历史服务器，才能在Web中查看任务运行情况</div></pre></td></tr></table></figure>
+<p><img src="/picture/hadoop/start/startupnode.jpg" alt="loscfail"><br>开启后通过 jps 查看，可以看到多了 NodeManager 和 ResourceManager 两个后台进程，如下图所示。<br><img src="/picture/hadoop/start/RescourMaam.jpg" alt="loscfail"></p>
+<p>启动 YARN 之后，运行实例的方法还是一样的，仅仅是资源管理方式、任务调度不同。观察日志信息可以发现，不启用 YARN 时，是 “mapred.LocalJobRunner” 在跑任务，启用 YARN 之后，是 “mapred.YARNRunner” 在跑任务。启动 YARN 有个好处是可以通过 Web 界面查看任务的运行情况：<a href="http://localhost:8088/cluster，如下图所示。" target="_blank" rel="external">http://localhost:8088/cluster，如下图所示。</a><br><img src="/picture/hadoop/start/yanweb.jpg" alt="loscfail"></p>
+<p>但 YARN 主要是为集群提供更好的资源管理与任务调度，然而这在单机上体现不出价值，反而会使程序跑得稍慢些。因此在单机上是否开启 YARN 就看实际情况了。</p>
+<blockquote>
+<p><strong>不启动 YARN 需重命名 mapred-site.xml</strong><br>如果不想启动 YARN，务必把配置文件 mapred-site.xml 重命名，改成 mapred-site.xml.template，需要用时改回来就行。否则在该配置文件存在，而未开启 YARN 的情况下，运行程序会提示 “Retrying connect to server: 0.0.0.0/0.0.0.0:8032” 的错误，这也是为何该配置文件初始文件名为 mapred-site.xml.template。</p>
+</blockquote>
+<p>同样的，关闭 YARN 的脚本如下：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span> ./sbin/stop-yarn.sh</div><div class="line"><span class="meta">$</span> ./sbin/mr-jobhistory-daemon.sh stop historyserver</div></pre></td></tr></table></figure></p>
+<p><img src="/picture/hadoop/start/stopyan.jpg" alt="loscfail"><br>自此，你已经掌握 Hadoop 的配置和基本使用了。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/path/to/wechat-reward-image" alt="Charse WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/path/to/alipay-reward-image" alt="Charse Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/Hadoop/" rel="tag"># Hadoop</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/24/Java中的I-O演进之路/" rel="next" title="Java中的I/O演进之路">
+                <i class="fa fa-chevron-left"></i> Java中的I/O演进之路
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/09/28/Ubuntu-16-04上安装Hadoop并成功运行/"
+           data-title="Ubuntu 16.04上安装Hadoop并成功运行" data-url="http://yoursite.com/2017/09/28/Ubuntu-16-04上安装Hadoop并成功运行/">
+      </div>
+    
+  </div>
+
+
+
+
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="Charse" />
+          <p class="site-author-name" itemprop="name">Charse</p>
+           
+              <p class="site-description motion-element" itemprop="description">Stay hungry, Stay foolish.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">42</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Wangchangchung" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/5470218610" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.douban.com/people/153537246/" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  豆瓣
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/wang-chang-chun-84" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境"><span class="nav-number">1.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建Hadoop用户"><span class="nav-number">2.</span> <span class="nav-text">创建Hadoop用户</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#设置密码"><span class="nav-number">2.1.</span> <span class="nav-text">设置密码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#增加管理员权限"><span class="nav-number">2.2.</span> <span class="nav-text">增加管理员权限</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更新apt"><span class="nav-number">3.</span> <span class="nav-text">更新apt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装SSH、配置SSH无密码登陆"><span class="nav-number">4.</span> <span class="nav-text">安装SSH、配置SSH无密码登陆</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装JAVA环境"><span class="nav-number">5.</span> <span class="nav-text">安装JAVA环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装Hadoop"><span class="nav-number">6.</span> <span class="nav-text">安装Hadoop</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hadoop单击配置（非分布式）"><span class="nav-number">7.</span> <span class="nav-text">Hadoop单击配置（非分布式）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hadoop伪分布式配置"><span class="nav-number">8.</span> <span class="nav-text">Hadoop伪分布式配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运行Hadoop伪分布式实例"><span class="nav-number">9.</span> <span class="nav-text">运行Hadoop伪分布式实例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动YARN"><span class="nav-number">10.</span> <span class="nav-text">启动YARN</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Charse</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"charsewan"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("hoyPJdam7ySwVSOa3IpHGgpU-gzGzoHsz", "tSe2gMzMGHhTWXbxL4Cr8bgP");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
