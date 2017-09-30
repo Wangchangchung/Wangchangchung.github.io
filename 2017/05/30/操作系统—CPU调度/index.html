@@ -109,10 +109,12 @@
 <meta property="og:url" content="http://yoursite.com/2017/05/30/操作系统—CPU调度/index.html">
 <meta property="og:site_name" content="Charse&#39;s Blog">
 <meta property="og:description" content="对于单处理器系统，每次只允许一个进程运行，任何其他进程必须等待，直到CPU空闲能被调度为止，多道程序的目的是在任何时候都有某些进程在运行，以使CPU使用率最大化。">
-<meta property="og:updated_time" content="2017-06-03T04:56:45.850Z">
+<meta property="og:image" content="http://yoursite.com/picture/operatingsystem/cpu/timg.jpg">
+<meta property="og:updated_time" content="2017-09-30T08:38:16.865Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="操作系统——CPU调度">
 <meta name="twitter:description" content="对于单处理器系统，每次只允许一个进程运行，任何其他进程必须等待，直到CPU空闲能被调度为止，多道程序的目的是在任何时候都有某些进程在运行，以使CPU使用率最大化。">
+<meta name="twitter:image" content="http://yoursite.com/picture/operatingsystem/cpu/timg.jpg">
 
 
 
@@ -393,7 +395,7 @@
       
 
       
-        <p>对于单处理器系统，每次只允许一个进程运行，任何其他进程必须等待，直到CPU空闲能被调度为止，多道程序的目的是在任何时候都有某些进程在运行，以使CPU使用率最大化。<br><a id="more"></a></p>
+        <p><img src="/picture/operatingsystem/cpu/timg.jpg" alt="loscfaisl"><br>对于单处理器系统，每次只允许一个进程运行，任何其他进程必须等待，直到CPU空闲能被调度为止，多道程序的目的是在任何时候都有某些进程在运行，以使CPU使用率最大化。<br><a id="more"></a></p>
 <h2 id="CPU-I-O区间周期"><a href="#CPU-I-O区间周期" class="headerlink" title="CPU-I/O区间周期"></a>CPU-I/O区间周期</h2><p>CPU的成功调度依赖于进程的如下属性：<strong>进程执行由CPU 执行</strong>和<strong>I/O等待周期</strong>。<br>进程在这两个状态之间切换，进程执行从 CPU 区间开始，在这之后是 I/O 区间，接着是另一个 CPU 区间，然后是另一个I/O区间，如此进行下去，最终，最后的CPU 区间通过系统请求终止执行。</p>
 <h2 id="CPU调度程序"><a href="#CPU调度程序" class="headerlink" title="CPU调度程序"></a>CPU调度程序</h2><p><strong>每当CPU空闲时，操作系统就必须从就绪队列中选择一个进程来执行，进程选择由短期调度程序 或 CPU 调度程序执行，调度程序从内存中选择一个能够执行的进程，并为之分配CPU。</strong></p>
 <p><strong>就绪队列不必是先进先出（FIFO）队列。正如研究各种调度算法时将看到的，就绪队列可实现为FIFO队列、优先队列、树或简单的无序链表，不过，从概念上讲，就绪队列内的所有进程都要排队以等待在CPU上运行，队列中的记录通常为进程控制块。</strong></p>
@@ -568,7 +570,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">42</span>
+                <span class="site-state-item-count">43</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

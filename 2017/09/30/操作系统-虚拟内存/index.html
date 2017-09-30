@@ -1,0 +1,1030 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Operating system," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前面所讲的内存管理策略都是为同一目的：同时将多个进程存放在内存中，以便允许多道程序设计，不过这些策略都需要在进程执行之前将这个进程放进内存中。 虚拟内存技术允许执行进程不必完全在内存中，这种方案的一个显著的优点就是程序可以比物理内存大，而且，虚拟内存将内存抽象成一个巨大的，同统一的存储数组，进而将用户看到的逻辑内存与物理内存分开，这种技术允许程序员不受内存存储的限制，虚拟内存页允许进程很容易的共享">
+<meta name="keywords" content="Operating system">
+<meta property="og:type" content="article">
+<meta property="og:title" content="操作系统——虚拟内存">
+<meta property="og:url" content="http://yoursite.com/2017/09/30/操作系统-虚拟内存/index.html">
+<meta property="og:site_name" content="Charse&#39;s Blog">
+<meta property="og:description" content="前面所讲的内存管理策略都是为同一目的：同时将多个进程存放在内存中，以便允许多道程序设计，不过这些策略都需要在进程执行之前将这个进程放进内存中。 虚拟内存技术允许执行进程不必完全在内存中，这种方案的一个显著的优点就是程序可以比物理内存大，而且，虚拟内存将内存抽象成一个巨大的，同统一的存储数组，进而将用户看到的逻辑内存与物理内存分开，这种技术允许程序员不受内存存储的限制，虚拟内存页允许进程很容易的共享">
+<meta property="og:image" content="http://yoursite.com/picture/operatingsystem/virtualaddress/pagenoti.jpg">
+<meta property="og:image" content="http://yoursite.com/picture/operatingsystem/virtualaddress/xunidayuwulineicun.png">
+<meta property="og:image" content="http://yoursite.com/picture/operatingsystem/virtualaddress/virtualaddress.png">
+<meta property="og:image" content="http://yoursite.com/picture/operatingsystem/virtualaddress/usevirtualshare.png">
+<meta property="og:image" content="http://yoursite.com/picture/operatingsystem/virtualaddress/fenyedaoneicun.png">
+<meta property="og:image" content="http://yoursite.com/picture/operatingsystem/virtualaddress/pagenotintable.jpg">
+<meta property="og:image" content="http://yoursite.com/picture/operatingsystem/virtualaddress/errorpage.jpg">
+<meta property="og:image" content="http://yoursite.com/picture/operatingsystem/virtualaddress/threadmide.png">
+<meta property="og:image" content="http://yoursite.com/picture/operatingsystem/virtualaddress/threadafter.png">
+<meta property="og:updated_time" content="2017-09-30T08:31:28.220Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="操作系统——虚拟内存">
+<meta name="twitter:description" content="前面所讲的内存管理策略都是为同一目的：同时将多个进程存放在内存中，以便允许多道程序设计，不过这些策略都需要在进程执行之前将这个进程放进内存中。 虚拟内存技术允许执行进程不必完全在内存中，这种方案的一个显著的优点就是程序可以比物理内存大，而且，虚拟内存将内存抽象成一个巨大的，同统一的存储数组，进而将用户看到的逻辑内存与物理内存分开，这种技术允许程序员不受内存存储的限制，虚拟内存页允许进程很容易的共享">
+<meta name="twitter:image" content="http://yoursite.com/picture/operatingsystem/virtualaddress/pagenoti.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/09/30/操作系统-虚拟内存/"/>
+
+
+
+
+
+  <title>操作系统——虚拟内存 | Charse's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Charse's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/30/操作系统-虚拟内存/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charse">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Charse's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">操作系统——虚拟内存</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-09-30T16:03:17+08:00">
+                2017-09-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Operating-system/" itemprop="url" rel="index">
+                    <span itemprop="name">Operating system</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/09/30/操作系统-虚拟内存/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/09/30/操作系统-虚拟内存/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/09/30/操作系统-虚拟内存/" class="leancloud_visitors" data-flag-title="操作系统——虚拟内存">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Visitors </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="/picture/operatingsystem/virtualaddress/pagenoti.jpg" alt="loscfaisl"><br>前面所讲的内存管理策略都是为同一目的：同时将多个进程存放在内存中，以便允许多道程序设计，不过这些策略都需要在进程执行之前将这个进程放进内存中。</p>
+<p><strong>虚拟内存技术允许执行进程不必完全在内存中，这种方案的一个显著的优点就是程序可以比物理内存大，而且，虚拟内存将内存抽象成一个巨大的，同统一的存储数组，进而将用户看到的逻辑内存与物理内存分开，这种技术允许程序员不受内存存储的限制，虚拟内存页允许进程很容易的共享文件和地址空间，还为创建进程提供了有效的机制,</strong>但是，虚拟内存的实现并不容易，如果使用不当可能会大大的降低性能。</p>
+<a id="more"></a>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>内存管理算法都基于一个基本要求: 执行指令必须在物理内存中，满足这一要求的第一种方法是将整个进程放入在内存中，动态载入能帮助减轻这一限制，但是它需要程序员特别的小心并且需要一些额外的工作。</p>
+<p>指令必须都在物理内存的这一限制，这似乎是必需和合理的，但也是不幸的，因为这使得程序的大小被限制的物理内存的大小以内。事实上研究实际程序会发现，在许多情况下并不需要将整个程序放到内存中。</p>
+<ul>
+<li>程序通常有处理异常错误条件的代码，由于这些错误即使有也是很少发生，所以这中代码几乎不执行。</li>
+<li>数组、链表和表通常分配了比实际所需要的更多的内存。</li>
+<li>程序的某些选项或功能很少使用。</li>
+<li>程序不再受现有的物理内存空间限制。用户可以为一个巨大的虚拟地址空间( address space)编写程序。简化了编程工作量。</li>
+<li>因为每个用户程序使用了更少的物理内存，所以更多的程序可以同时执行，CPU使用率也相应增加，而响应时间或周转时间并不增加。</li>
+<li>由于载入或交换每个用户程序到内存所需的I/O会更少，用户程序会运行得更快</li>
+</ul>
+<p><strong>虚拟内存(virtual memory)</strong>将用户逻辑内存与物理内存分开，这在现有的物理内存有限的情况下，为程序员提供了巨大的虚拟内存如图。<br><img src="/picture/operatingsystem/virtualaddress/xunidayuwulineicun.png" alt="loscfaisl"><br>虚拟内存使编程更加容易，因为程序员不再需要担心可用的有限物理内存空间，只需要关注所要解决的问题。</p>
+<p>进程的虚拟地址空间就是进程如何在内存中存放的逻辑(或虚拟)试图，通常，该视图为进程从某一逻辑地址(如地址0)开始，连续存放，如图:<br><img src="/picture/operatingsystem/virtualaddress/virtualaddress.png" alt="loscfaisl"></p>
+<p>如上图：允许随着动态内存分配，堆可向上生长，类似的，还允许随着子程序的不断调用，栈可以向下生长，堆与栈之间的巨大空白空间(或洞)为虚拟地址的一部分，只有在堆与栈生长时，才需要实际多的物理页，包括空白的虚拟地址空间称为<strong>稀地址空间</strong><br>采用希地址空间的优点是: </p>
+<blockquote>
+<p>随着程序的执行，栈或堆段的生长或需要载入的动态链接库(或共享对象)时，这些空白可以填充。</p>
+</blockquote>
+<p>除了将逻辑内存与物理内存分开，虚拟内存页允许文件和内存通过共享页为两个或多个进程所共享，这带来了如下的优点：</p>
+<ul>
+<li>通过将共享对象映射到虚拟地址空间，系统库可为多个进程锁共享，虽然每个进程都认为共享库是其虚拟地址空间的一部分，而共享库所用的物理内存的实际页是为所有的进程所共享。通常，库是按只读方式来链接每个进程空间。</li>
+<li>类似的，虚拟内存允许进程共享内存，两个或多个进程之间可以通过共享内存来通信，虚拟内存允许一个进程创建内存区域，以便与其他进程进行共享，共享该内存区域的进程认为它是其虚拟地址空间的一部分。而事实上这部分是共享的，如图所示：<br><img src="/picture/operatingsystem/virtualaddress/usevirtualshare.png" alt="loscfaisl"></li>
+<li>虚拟内存可允许在用系统调用fork() 创建进程期间共享页，从而加快进程创建。</li>
+</ul>
+<h2 id="按需调用"><a href="#按需调用" class="headerlink" title="按需调用"></a>按需调用</h2><p>一个执行程序是如何从磁盘载入内存的呢？<br>有以下几种方式:</p>
+<ul>
+<li>将整个程序载入到内存中，这种方法的问题是可能开始并不需要整个程序在内存中。</li>
+<li>按需要时才调入相应的页，这种技术称为<strong>按需调页(demand paging)</strong>,常为虚拟内存系统所采用。对于按需调页虚拟内存，只有程序执行需要时才载入页，那些从未访问的页不会调入到物理内存。</li>
+</ul>
+<p>按需调页系统类似于使用交换系统的分页系统，进程驻留在第二级存储器上(通常为磁盘)。当需要执行进程时，将它换入内存，不过，不是将整个进程换入内存，而是使用<strong>懶惰交换(lazy swapper)。</strong>懶惰只有在需要页时，才将它调入内存，由于将进程看做是一系列的页，而不是一个大的连续空间，因此使用交换丛技术上来讲并不正确。<br>交换程序(swapper)对整个进程进行操作，而<strong>调页程序(pager)</strong>只是对进程的单个进行操作，因此，在讨论有关按需调页时，需要使用调页程序而不是交换程序。<br><img src="/picture/operatingsystem/virtualaddress/fenyedaoneicun.png" alt="loscfaisl"></p>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>当换入进程时，调页程序推测在该程序再次换出之前会用到哪些页，调页程序不是调入整个进程，而是把那些必要的页调入内存中，这样调页程序就避免了读入那些不使用的页，减少了交换的时间和所需的物理内存空间。<br>对这种方案，需要一定形式的硬件支持来区分哪些页在内存中，哪些页在磁盘上，不过，现在当该未设置为”有效”的时,该值表示相关的页既合法且还在内存中，当该位设置为”无效”的时候，该值表示相关的页为无效的(也就是，不在进程的逻辑空间内)。或者有效但是在磁盘上，对于调入内存的页，其页表条目的设置与平常一样，但是对于不在内存中的页，其页表条目设置为无效，包含该也在磁盘上的地址，这种情况如图所示:<br><img src="/picture/operatingsystem/virtualaddress/pagenotintable.jpg" alt="loscfaisl"></p>
+<p>注意，如果进程从不是图访问标记为无效的页，那么并没有什么影响，因此，如果推测正确并且只调入所有真正需要的页，那么进程就可如同所有的页都已调入一样正常运行，当进程执行和访问哪些驻留在内存中的页时，执行会正常进行.<br>但是当进程试图访问那些尚未调入到内存的页时，情况又会怎么样呢?　对标记为无效的访问会产生<strong>页错误陷阱(page-fault trap)</strong>.分页硬件，在通过页表转换地址时，将发现已设置了无效位，会陷入操作系统．这种陷阱是由于操作系统未能将所需的页调入内存引起的．处理这种页错误的程序比较简单:</p>
+<ol>
+<li>检查进程的内部页表(通常与PCB一起保存)，已确定该引用是合法还是非法的地址访问．</li>
+<li>如果引用非法，那么终止进程，如果引用有效但是尚未调入页面，那么现在应调入</li>
+<li>找到一个空闲帧(例如:从空闲帧链表中选取一个)</li>
+<li>调度一个磁盘操作，以便将所需要的页调入刚分配的帧</li>
+<li>当磁盘读操作完成后，修改进程的内部表和页表，以表示该页已经在内存中．</li>
+<li>重新开始因陷阱而中断的指令．进程现在能访问所需的页，就好像它似乎总在内存中<br><img src="/picture/operatingsystem/virtualaddress/errorpage.jpg" alt="loscfaisl"><br>一种极端的情况就是所有的页都不在内存中，就开始执行进程，当操作系统将指令指针指向进程的第一条指令的时，由于其所在的页并不在内存中，进程立即出现页错误，当页调入内存时，进程继续执行，并不断地出现错误直到所有的页均在内存中，这时，进程可以继续执行且不出现错误，这种方案称为纯粹按需调页(pure demand paging)：　只有在需要时才将页调入内存.</li>
+</ol>
+<h3 id="按需调页的性能"><a href="#按需调页的性能" class="headerlink" title="按需调页的性能"></a>按需调页的性能</h3><p>按需调页堆计算机系统的性能有重要影响．为了说明起见，下面计算一下按需调页内存的有效访问时间(effective access time)．对绝大多数计算机系统而言，内存访问时间(用ma表示)的范围为10-200ns. 只要没有出现页错误，那么有效访问时间等于内存访问时间．然而，如果出现页错误，那么就必须先从磁盘中读入相关页，在访问所需要的字</p>
+<p>设　P　为页错误的概率(0 &lt;= p　&lt;= 1).希望p接近于0,即页错误很少，那么有效访问时间为:</p>
+<p><strong>有效访问时间　＝　(1-p) <em> ma + p </em> 页错误时间</strong></p>
+<p>为了计算有效访问时间，必须知道处理页错误需要多少时间，页错误会引起如下序列的动作产生:</p>
+<ol>
+<li>陷入到操作系统</li>
+<li>保存用户寄存器和进程状态</li>
+<li>确定中断是否为页错误</li>
+<li>检查页引用是否合法并确定所在磁盘的位置</li>
+<li>从磁盘读入页到空闲帧中</li>
+</ol>
+<p>a. 在该磁盘队列中等待,直到处理完读请求<br>b. 等待磁盘的寻道和/或延迟时间<br>c. 开始将磁盘的页传到空闲帧</p>
+<ol>
+<li>在等待时，将CPU分配给其他用户(CPU调度，可选)</li>
+<li>从I/O子系统接收到中断(以显示I/O完成)</li>
+<li>保护其他用户的寄存器和进程状态(如果执行了第６步)</li>
+<li>确定中断是否来自磁盘</li>
+<li>修正页表和其他表以表示所需页现在已在内存中</li>
+<li>等待CPU再次分配给本进程</li>
+<li>恢复用户寄存器, 进程状态和新页表，再重新执行中断的指令</li>
+</ol>
+<p>##　写时复制<br>前面中描述了一个进程如何采用按需调页，仅调入包括第一条指令的页，从而能很快的开始执行，但是，通过采用类似页面共享的技术，采用系统调用　fork　创建进程的开始阶段可能不需要按需调页，这种技术提供了快速进程创建，且最小化新创建进程必须分配的新页面的数量</p>
+<p>回想一下系统调用fork()　是将子进程创建为父进程的复制品，传统上，fork()　为子系统进程创建一个父进程地址空间的副本,　复制属于父进程的页，然而，由于许多子进程在创建之后通常马上会执行系统调用exec(),所以父进程地址空间的复制可能没有必要，因此，可以使用一种称为写时复制(copy-on-write)的技术. 这种方法允许父进程与子进程开始时共享同一页面，这些页面标记为写时复制页，即如果任何一个进程需要对页进行写操作，那么就创建一个共享的副本．写时赋值如下图所示:<br><img src="/picture/operatingsystem/virtualaddress/threadmide.png" alt="loscfaisl"><br>进程1修改页C之后<br><img src="/picture/operatingsystem/virtualaddress/threadafter.png" alt="loscfaisl"></p>
+<p>例如: 假设子进程试图修改含有部分栈的页，且操作系统能识别出该被设置为写时复制页，那么操作系统就会创建一个该页的副本，并将它映射到子进程的地址空间．这样子进程就会修改其复制页，而不是复进程的页，采用写时复制技术，很显然只有能被进程修改的页才会被复制；所有非修改页可为父进程和子进程共享，注意只有可能修改的页才会被写时复制，不能修改的页(即包含可执行的代码页)可以为父进程和子进程所共享．写时复制是一重常用的技术，被许多的操作系统所采纳．</p>
+<p>当确定一个页要采用写时复制时，从哪里分配空闲页是非常重要的,许多操作系统为这类请求提供了空闲缓冲池(pool)．这些空闲页在进程栈或堆必须扩展时可用于分配，或用于管理写时复制页，操作系统通常采用”按需填零(zero-fill-on-demand)”的技术可以分配这些页，按需填零页在需要分配之前先填零，因此清除了以前的内容．</p>
+<p>许多UNIX版本(包括Solaris集合Linux)也提供了系统调用fork()的变种－－vfork()(虚拟内存fork)．vfork()　操作系统不同于写时复制fork().　vfork()会将父进程挂起，子进程使用父进程的地址空间．由于vfork()不使用写时复制，因此如果子进程修改父进程地址空间的任何页，那么这些修改过的页在父进程重启时是可见的，所以，vfork() 必须小心使用，以确保子进程不修改父进程的地址空间．vfork()主要用于在子进程被创建后立即调用exec()的情况，由于没有出现复制那样的页面，vfrok() 是一种非常有效的进程创建的方法，有时用于实现UNIX命令行shell的接口</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/path/to/wechat-reward-image" alt="Charse WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/path/to/alipay-reward-image" alt="Charse Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Operating-system/" rel="tag"># Operating system</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/28/Ubuntu-16-04上安装Hadoop并成功运行/" rel="next" title="Ubuntu 16.04上安装Hadoop并成功运行">
+                <i class="fa fa-chevron-left"></i> Ubuntu 16.04上安装Hadoop并成功运行
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/09/30/操作系统-虚拟内存/"
+           data-title="操作系统——虚拟内存" data-url="http://yoursite.com/2017/09/30/操作系统-虚拟内存/">
+      </div>
+    
+  </div>
+
+
+
+
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="Charse" />
+          <p class="site-author-name" itemprop="name">Charse</p>
+           
+              <p class="site-description motion-element" itemprop="description">Stay hungry, Stay foolish.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">43</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Wangchangchung" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/5470218610" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.douban.com/people/153537246/" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  豆瓣
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/wang-chang-chun-84" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#按需调用"><span class="nav-number">2.</span> <span class="nav-text">按需调用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本概念"><span class="nav-number">3.</span> <span class="nav-text">基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#按需调页的性能"><span class="nav-number">3.1.</span> <span class="nav-text">按需调页的性能</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Charse</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"charsewan"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("hoyPJdam7ySwVSOa3IpHGgpU-gzGzoHsz", "tSe2gMzMGHhTWXbxL4Cr8bgP");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
