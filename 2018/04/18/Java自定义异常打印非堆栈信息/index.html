@@ -1,0 +1,943 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java, Stack" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="在学习Java的过程中，想必大家都一定学习过异常这个篇章，异常的基本特性和使用这里就不再多讲了。想必大家都能够理解看懂，并正确使用。 但是，光学会基本异常处理和使用不够的，在工作中出现异常并不可怕，有时候是需要使用异常来驱动业务的处理，例如: 在使用唯一约束的数据库的时候，如果插入一条重复的数据，那么可以通过捕获唯一约束异常DuplicateKeyException来进行处理，这个时候，在serv">
+<meta name="keywords" content="Java, Stack">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java自定义异常打印非堆栈信息">
+<meta property="og:url" content="http://yoursite.com/2018/04/18/Java自定义异常打印非堆栈信息/index.html">
+<meta property="og:site_name" content="Charse&#39;s Blog">
+<meta property="og:description" content="在学习Java的过程中，想必大家都一定学习过异常这个篇章，异常的基本特性和使用这里就不再多讲了。想必大家都能够理解看懂，并正确使用。 但是，光学会基本异常处理和使用不够的，在工作中出现异常并不可怕，有时候是需要使用异常来驱动业务的处理，例如: 在使用唯一约束的数据库的时候，如果插入一条重复的数据，那么可以通过捕获唯一约束异常DuplicateKeyException来进行处理，这个时候，在serv">
+<meta property="og:updated_time" content="2018-04-18T14:41:14.112Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java自定义异常打印非堆栈信息">
+<meta name="twitter:description" content="在学习Java的过程中，想必大家都一定学习过异常这个篇章，异常的基本特性和使用这里就不再多讲了。想必大家都能够理解看懂，并正确使用。 但是，光学会基本异常处理和使用不够的，在工作中出现异常并不可怕，有时候是需要使用异常来驱动业务的处理，例如: 在使用唯一约束的数据库的时候，如果插入一条重复的数据，那么可以通过捕获唯一约束异常DuplicateKeyException来进行处理，这个时候，在serv">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/04/18/Java自定义异常打印非堆栈信息/"/>
+
+
+
+
+
+  <title>Java自定义异常打印非堆栈信息 | Charse's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Charse's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/18/Java自定义异常打印非堆栈信息/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charse">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Charse's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java自定义异常打印非堆栈信息</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-18T22:38:53+08:00">
+                2018-04-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/04/18/Java自定义异常打印非堆栈信息/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/04/18/Java自定义异常打印非堆栈信息/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/04/18/Java自定义异常打印非堆栈信息/" class="leancloud_visitors" data-flag-title="Java自定义异常打印非堆栈信息">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Visitors </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在学习Java的过程中，想必大家都一定学习过异常这个篇章，异常的基本特性和使用这里就不再多讲了。想必大家都能够理解看懂，并正确使用。</p>
+<p>但是，光学会基本异常处理和使用不够的，在工作中出现异常并不可怕，有时候是需要使用异常来驱动业务的处理，例如: 在使用唯一约束的数据库的时候，如果插入一条重复的数据，那么可以通过捕获唯一约束异常<code>DuplicateKeyException</code>来进行处理，这个时候，在server层中就可以向调用层抛出对应的状态，上层根据对应的状态再进行处理，所以有时候异常对业务来说，是一个驱动方式。</p>
+<p>有的捕获异常之后会将异常进行输出，不知道细心的同学有没有注意到一点，输出的异常是什么东西呢？<br><a id="more"></a><br>下面来看一个常见的异常：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">java.lang.ArithmeticException: / by zero</div><div class="line"></div><div class="line">	at greenhouse.ExceptionTest.testException(ExceptionTest.java:<span class="number">16</span>)</div><div class="line">	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)</div><div class="line">	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:<span class="number">39</span>)</div><div class="line">	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:<span class="number">25</span>)</div><div class="line">	at java.lang.reflect.Method.invoke(Method.java:<span class="number">597</span>)</div><div class="line">	at org.junit.runners.model.FrameworkMethod$<span class="number">1</span>.runReflectiveCall(FrameworkMethod.java:<span class="number">44</span>)</div><div class="line">	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:<span class="number">15</span>)</div><div class="line">	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:<span class="number">41</span>)</div><div class="line">	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:<span class="number">20</span>)</div><div class="line">	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:<span class="number">76</span>)</div><div class="line">	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:<span class="number">50</span>)</div><div class="line">	at org.junit.runners.ParentRunner$<span class="number">3</span>.run(ParentRunner.java:<span class="number">193</span>)</div><div class="line">	at org.junit.runners.ParentRunner$<span class="number">1</span>.schedule(ParentRunner.java:<span class="number">52</span>)</div><div class="line">	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:<span class="number">191</span>)</div><div class="line">	at org.junit.runners.ParentRunner.access$<span class="number">000</span>(ParentRunner.java:<span class="number">42</span>)</div><div class="line">	at org.junit.runners.ParentRunner$<span class="number">2</span>.evaluate(ParentRunner.java:<span class="number">184</span>)</div><div class="line">	at org.junit.runners.ParentRunner.run(ParentRunner.java:<span class="number">236</span>)</div><div class="line">	at org.junit.runner.JUnitCore.run(JUnitCore.java:<span class="number">157</span>)</div><div class="line">	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:<span class="number">68</span>)</div><div class="line">	at com.intellij.rt.execution.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:<span class="number">47</span>)</div><div class="line">	at com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:<span class="number">242</span>)</div><div class="line">	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:<span class="number">70</span>)</div></pre></td></tr></table></figure></p>
+<p>一个空指针异常:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">java.lang.NullPointerException</div><div class="line">	at greenhouse.ExceptionTest.testException(ExceptionTest.java:16)</div><div class="line">	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)</div><div class="line">	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)</div><div class="line">	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)</div><div class="line">	at java.lang.reflect.Method.invoke(Method.java:597)</div><div class="line">	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:44)</div><div class="line">	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:15)</div><div class="line">	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:41)</div><div class="line">	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:20)</div><div class="line">	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:76)</div><div class="line">	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:50)</div><div class="line">	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:193)</div><div class="line">	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:52)</div><div class="line">	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:191)</div><div class="line">	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:42)</div><div class="line">	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:184)</div><div class="line">	at org.junit.runners.ParentRunner.run(ParentRunner.java:236)</div><div class="line">	at org.junit.runner.JUnitCore.run(JUnitCore.java:157)</div><div class="line">	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:68)</div><div class="line">	at com.intellij.rt.execution.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:47)</div><div class="line">	at com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:242)</div><div class="line">	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:70)</div></pre></td></tr></table></figure></p>
+<p>大家有没有发现一个特点，就是异常的输出是中能够精确的输出异常出现的地点，还有后面一大堆的执行过程类调用，也都打印出来了，这些信息从哪儿来呢？ 这些信息是从栈中获取的，在打印异常日志的时候，会从栈中去获取这些调用信息。能够精确的定位异常出现的异常当然是好，但是我们有时候考虑到程序的性能，以及一些需求时，我们有时候并不需要完全的打印这些信息，并且去方法调用栈中获取相应的信息，是有性能消耗的，对于一些性能要求高的程序，我们完全可以在这一个方面为程序性能做一个提升。</p>
+<p>所以如何避免输出这些堆栈信息呢？ 那么自定义异常就可以解决这个问题：</p>
+<p>首先，自动异常需要继承RuntimeException, 然后，再通过是重写<code>fillInStackTrace</code>, <code>toString</code> 方法， 例如，下面我定义一个<code>AppException</code>异常:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.green.monitor.common.exception;</div><div class="line"></div><div class="line"><span class="keyword">import</span> java.text.MessageFormat;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 自定义异常类</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AppException</span> <span class="keyword">extends</span> <span class="title">RuntimeException</span> </span>&#123;</div><div class="line"></div><div class="line">	<span class="keyword">private</span> <span class="keyword">boolean</span> isSuccess = <span class="keyword">false</span>;</div><div class="line">	<span class="keyword">private</span> String key;</div><div class="line">	<span class="keyword">private</span> String info;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">AppException</span><span class="params">(String key)</span> </span>&#123;</div><div class="line">		<span class="keyword">super</span>(key);</div><div class="line">		<span class="keyword">this</span>.key = key;</div><div class="line">		<span class="keyword">this</span>.info = key;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">AppException</span><span class="params">(String key, String message)</span> </span>&#123;</div><div class="line">		<span class="keyword">super</span>(MessageFormat.format(<span class="string">"&#123;0&#125;[&#123;1&#125;]"</span>, key, message));</div><div class="line">		<span class="keyword">this</span>.key = key;</div><div class="line">		<span class="keyword">this</span>.info = message;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">AppException</span><span class="params">(String message, String key, String info)</span> </span>&#123;</div><div class="line">		<span class="keyword">super</span>(message);</div><div class="line">		<span class="keyword">this</span>.key = key;</div><div class="line">		<span class="keyword">this</span>.info = info;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isSuccess</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="keyword">return</span> isSuccess;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getKey</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="keyword">return</span> key;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setKey</span><span class="params">(String key)</span> </span>&#123;</div><div class="line">		<span class="keyword">this</span>.key = key;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getInfo</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="keyword">return</span> info;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setInfo</span><span class="params">(String info)</span> </span>&#123;</div><div class="line">		<span class="keyword">this</span>.info = info;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> Throwable <span class="title">fillInStackTrace</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="keyword">return</span> MessageFormat.format(<span class="string">"&#123;0&#125;[&#123;1&#125;]"</span>,<span class="keyword">this</span>.key,<span class="keyword">this</span>.info);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>那么为什么要重写<code>fillInStackTrace</code>, 和 <code>toString</code> 方法呢？ 我们首先来看源码是怎么一回事.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RuntimeException</span> <span class="keyword">extends</span> <span class="title">Exception</span> </span>&#123;</div><div class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = -<span class="number">7034897190745766939L</span>;</div><div class="line"></div><div class="line">    <span class="comment">/** Constructs a new runtime exception with &lt;code&gt;null&lt;/code&gt; as its</span></div><div class="line">     * detail message.  The cause is not initialized, and may subsequently be</div><div class="line">     * initialized by a call to &#123;<span class="doctag">@link</span> #initCause&#125;.</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">RuntimeException</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="keyword">super</span>();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/** Constructs a new runtime exception with the specified detail message.</span></div><div class="line">     * The cause is not initialized, and may subsequently be initialized by a</div><div class="line">     * call to &#123;<span class="doctag">@link</span> #initCause&#125;.</div><div class="line">     *</div><div class="line">     * <span class="doctag">@param</span>   message   the detail message. The detail message is saved for </div><div class="line">     *          later retrieval by the &#123;<span class="doctag">@link</span> #getMessage()&#125; method.</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">RuntimeException</span><span class="params">(String message)</span> </span>&#123;</div><div class="line">	<span class="keyword">super</span>(message);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Constructs a new runtime exception with the specified detail message and</div><div class="line">     * cause.  &lt;p&gt;Note that the detail message associated with</div><div class="line">     * &lt;code&gt;cause&lt;/code&gt; is &lt;i&gt;not&lt;/i&gt; automatically incorporated in</div><div class="line">     * this runtime exception's detail message.</div><div class="line">     *</div><div class="line">     * <span class="doctag">@param</span>  message the detail message (which is saved for later retrieval</div><div class="line">     *         by the &#123;<span class="doctag">@link</span> #getMessage()&#125; method).</div><div class="line">     * <span class="doctag">@param</span>  cause the cause (which is saved for later retrieval by the</div><div class="line">     *         &#123;<span class="doctag">@link</span> #getCause()&#125; method).  (A &lt;tt&gt;null&lt;/tt&gt; value is</div><div class="line">     *         permitted, and indicates that the cause is nonexistent or</div><div class="line">     *         unknown.)</div><div class="line">     * <span class="doctag">@since</span>  1.4</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">RuntimeException</span><span class="params">(String message, Throwable cause)</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>(message, cause);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/** Constructs a new runtime exception with the specified cause and a</span></div><div class="line">     * detail message of &lt;tt&gt;(cause==null ? null : cause.toString())&lt;/tt&gt;</div><div class="line">     * (which typically contains the class and detail message of</div><div class="line">     * &lt;tt&gt;cause&lt;/tt&gt;).  This constructor is useful for runtime exceptions</div><div class="line">     * that are little more than wrappers for other throwables.</div><div class="line">     *</div><div class="line">     * <span class="doctag">@param</span>  cause the cause (which is saved for later retrieval by the</div><div class="line">     *         &#123;<span class="doctag">@link</span> #getCause()&#125; method).  (A &lt;tt&gt;null&lt;/tt&gt; value is</div><div class="line">     *         permitted, and indicates that the cause is nonexistent or</div><div class="line">     *         unknown.)</div><div class="line">     * <span class="doctag">@since</span>  1.4</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">RuntimeException</span><span class="params">(Throwable cause)</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>(cause);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><code>RuntimeException</code>是继承<code>Exception</code>,但是它里面去只是调用了父类的方法，本身是没有做什么其余的操作。那么继续看<code>Exception</code>里面是怎么回事呢？<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Exception</span> <span class="keyword">extends</span> <span class="title">Throwable</span> </span>&#123;</div><div class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = -<span class="number">3387516993124229948L</span>;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Constructs a new exception with &lt;code&gt;null&lt;/code&gt; as its detail message.</div><div class="line">     * The cause is not initialized, and may subsequently be initialized by a</div><div class="line">     * call to &#123;<span class="doctag">@link</span> #initCause&#125;.</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Exception</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="keyword">super</span>();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Constructs a new exception with the specified detail message.  The</div><div class="line">     * cause is not initialized, and may subsequently be initialized by</div><div class="line">     * a call to &#123;<span class="doctag">@link</span> #initCause&#125;.</div><div class="line">     *</div><div class="line">     * <span class="doctag">@param</span>   message   the detail message. The detail message is saved for </div><div class="line">     *          later retrieval by the &#123;<span class="doctag">@link</span> #getMessage()&#125; method.</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Exception</span><span class="params">(String message)</span> </span>&#123;</div><div class="line">	<span class="keyword">super</span>(message);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Constructs a new exception with the specified detail message and</div><div class="line">     * cause.  &lt;p&gt;Note that the detail message associated with</div><div class="line">     * &lt;code&gt;cause&lt;/code&gt; is &lt;i&gt;not&lt;/i&gt; automatically incorporated in</div><div class="line">     * this exception's detail message.</div><div class="line">     *</div><div class="line">     * <span class="doctag">@param</span>  message the detail message (which is saved for later retrieval</div><div class="line">     *         by the &#123;<span class="doctag">@link</span> #getMessage()&#125; method).</div><div class="line">     * <span class="doctag">@param</span>  cause the cause (which is saved for later retrieval by the</div><div class="line">     *         &#123;<span class="doctag">@link</span> #getCause()&#125; method).  (A &lt;tt&gt;null&lt;/tt&gt; value is</div><div class="line">     *         permitted, and indicates that the cause is nonexistent or</div><div class="line">     *         unknown.)</div><div class="line">     * <span class="doctag">@since</span>  1.4</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Exception</span><span class="params">(String message, Throwable cause)</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>(message, cause);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Constructs a new exception with the specified cause and a detail</div><div class="line">     * message of &lt;tt&gt;(cause==null ? null : cause.toString())&lt;/tt&gt; (which</div><div class="line">     * typically contains the class and detail message of &lt;tt&gt;cause&lt;/tt&gt;).</div><div class="line">     * This constructor is useful for exceptions that are little more than</div><div class="line">     * wrappers for other throwables (for example, &#123;<span class="doctag">@link</span></div><div class="line">     * java.security.PrivilegedActionException&#125;).</div><div class="line">     *</div><div class="line">     * <span class="doctag">@param</span>  cause the cause (which is saved for later retrieval by the</div><div class="line">     *         &#123;<span class="doctag">@link</span> #getCause()&#125; method).  (A &lt;tt&gt;null&lt;/tt&gt; value is</div><div class="line">     *         permitted, and indicates that the cause is nonexistent or</div><div class="line">     *         unknown.)</div><div class="line">     * <span class="doctag">@since</span>  1.4</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Exception</span><span class="params">(Throwable cause)</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>(cause);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>从源码中可以看到, <code>Exception</code>里面也是直接调用了父类的方法，和<code>RuntimeException</code>一样，自己其实并没有做什么。 那么直接来看<code>Throwable</code>里面是怎么一回事:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Throwable</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="title">Throwable</span><span class="params">(String message)</span> </span>&#123;</div><div class="line">        fillInStackTrace();</div><div class="line">        detailMessage = message;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">     <span class="comment">/**</span></div><div class="line">     * Fills in the execution stack trace. This method records within this</div><div class="line">     * &lt;code&gt;Throwable&lt;/code&gt; object information about the current state of</div><div class="line">     * the stack frames for the current thread.</div><div class="line">     *</div><div class="line">     * <span class="doctag">@return</span>  a reference to this &lt;code&gt;Throwable&lt;/code&gt; instance.</div><div class="line">     * <span class="doctag">@see</span>     java.lang.Throwable#printStackTrace()</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">native</span> Throwable <span class="title">fillInStackTrace</span><span class="params">()</span></span>;</div><div class="line">    </div><div class="line">       <span class="comment">/**</span></div><div class="line">     * Provides programmatic access to the stack trace information printed by</div><div class="line">     * &#123;<span class="doctag">@link</span> #printStackTrace()&#125;.  Returns an array of stack trace elements,</div><div class="line">     * each representing one stack frame.  The zeroth element of the array</div><div class="line">     * (assuming the array's length is non-zero) represents the top of the</div><div class="line">     * stack, which is the last method invocation in the sequence.  Typically,</div><div class="line">     * this is the point at which this throwable was created and thrown.</div><div class="line">     * The last element of the array (assuming the array's length is non-zero)</div><div class="line">     * represents the bottom of the stack, which is the first method invocation</div><div class="line">     * in the sequence.</div><div class="line">     *</div><div class="line">     * &lt;p&gt;Some virtual machines may, under some circumstances, omit one</div><div class="line">     * or more stack frames from the stack trace.  In the extreme case,</div><div class="line">     * a virtual machine that has no stack trace information concerning</div><div class="line">     * this throwable is permitted to return a zero-length array from this</div><div class="line">     * method.  Generally speaking, the array returned by this method will</div><div class="line">     * contain one element for every frame that would be printed by</div><div class="line">     * &lt;tt&gt;printStackTrace&lt;/tt&gt;.</div><div class="line">     *</div><div class="line">     * <span class="doctag">@return</span> an array of stack trace elements representing the stack trace</div><div class="line">     *         pertaining to this throwable.</div><div class="line">     * <span class="doctag">@since</span>  1.4</div><div class="line">     */</div><div class="line">    <span class="keyword">public</span> StackTraceElement[] getStackTrace() &#123;</div><div class="line">        <span class="keyword">return</span> (StackTraceElement[]) getOurStackTrace().clone();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">synchronized</span> StackTraceElement[] getOurStackTrace() &#123;</div><div class="line">        <span class="comment">// Initialize stack trace if this is the first call to this method</span></div><div class="line">        <span class="keyword">if</span> (stackTrace == <span class="keyword">null</span>) &#123;</div><div class="line">            <span class="keyword">int</span> depth = getStackTraceDepth();</div><div class="line">            stackTrace = <span class="keyword">new</span> StackTraceElement[depth];</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i &lt; depth; i++)</div><div class="line">                stackTrace[i] = getStackTraceElement(i);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> stackTrace;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Returns the number of elements in the stack trace (or 0 if the stack</div><div class="line">     * trace is unavailable).</div><div class="line">     *</div><div class="line">     * package-protection for use by SharedSecrets.</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">native</span> <span class="keyword">int</span> <span class="title">getStackTraceDepth</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Returns the specified element of the stack trace.</div><div class="line">     *</div><div class="line">     * package-protection for use by SharedSecrets.</div><div class="line">     *</div><div class="line">     * <span class="doctag">@param</span> index index of the element to return.</div><div class="line">     * <span class="doctag">@throws</span> IndexOutOfBoundsException if &lt;tt&gt;index &amp;lt; 0 ||</div><div class="line">     *         index &amp;gt;= getStackTraceDepth() &lt;/tt&gt;</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">native</span> StackTraceElement <span class="title">getStackTraceElement</span><span class="params">(<span class="keyword">int</span> index)</span></span>;</div><div class="line">    </div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Returns a short description of this throwable.</div><div class="line">     * The result is the concatenation of:</div><div class="line">     * &lt;ul&gt;</div><div class="line">     * &lt;li&gt; the &#123;<span class="doctag">@linkplain</span> Class#getName() name&#125; of the class of this object</div><div class="line">     * &lt;li&gt; ": " (a colon and a space)</div><div class="line">     * &lt;li&gt; the result of invoking this object's &#123;<span class="doctag">@link</span> #getLocalizedMessage&#125;</div><div class="line">     *      method</div><div class="line">     * &lt;/ul&gt;</div><div class="line">     * If &lt;tt&gt;getLocalizedMessage&lt;/tt&gt; returns &lt;tt&gt;null&lt;/tt&gt;, then just</div><div class="line">     * the class name is returned.</div><div class="line">     *</div><div class="line">     * <span class="doctag">@return</span> a string representation of this throwable.</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</div><div class="line">        String s = getClass().getName();</div><div class="line">        String message = getLocalizedMessage();</div><div class="line">        <span class="keyword">return</span> (message != <span class="keyword">null</span>) ? (s + <span class="string">": "</span> + message) : s;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>从源码中可以看到，到<code>Throwable</code>就几乎到头了， 在<code>fillInStackTrace()</code> 方法是一个<code>native</code>方法，这方法也就是会调用底层的C语言，返回一个<code>Throwable</code>对象, <code>toString</code> 方法，返回的是<code>throwable</code>的简短描述信息， 并且在<code>getStackTrace</code> 方法和 <code>getOurStackTrace</code> 中调用的都是<code>native</code>方法<code>getStackTraceElement</code>, 而这个方法是返回指定的栈元素信息，所以这个过程肯定是消耗性能的，那么我们自定义异常中的重写<code>toString</code>方法和<code>fillInStackTrace</code>方法就可以不从栈中去获取异常信息，直接输出，这样对系统和程序来说，相对就没有那么”重”, 是一个优化性能的非常好的办法。那么如果出现自定义异常那么是什么样的呢？请看下面吧:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Test</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testException</span><span class="params">()</span></span>&#123;</div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			String str =<span class="keyword">null</span>;</div><div class="line">			System.out.println(str.charAt(<span class="number">0</span>));</div><div class="line">		&#125;<span class="keyword">catch</span> (Exception e)&#123;</div><div class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> AppException(<span class="string">"000001"</span>,<span class="string">"空指针异常"</span>);</div><div class="line">		&#125;</div><div class="line">	&#125;</div></pre></td></tr></table></figure></p>
+<p>那么在异常异常的时候，系统将会打印我们自定义的异常信息:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">000001[空指针异常]</div><div class="line"></div><div class="line">Process finished with exit code -1</div></pre></td></tr></table></figure></p>
+<p>所以特别简洁，优化了系统程序性能，让程序不这么“重”, 所以对于性能要求特别要求的系统。赶紧自己的自定义异常吧！</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/path/to/wechat-reward-image" alt="Charse WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/path/to/alipay-reward-image" alt="Charse Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/JVM/" rel="tag"># JVM</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/08/Spring配置动态数据源/" rel="next" title="Spring配置动态数据源">
+                <i class="fa fa-chevron-left"></i> Spring配置动态数据源
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2018/04/18/Java自定义异常打印非堆栈信息/"
+           data-title="Java自定义异常打印非堆栈信息" data-url="http://yoursite.com/2018/04/18/Java自定义异常打印非堆栈信息/">
+      </div>
+    
+  </div>
+
+
+
+
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="Charse" />
+          <p class="site-author-name" itemprop="name">Charse</p>
+           
+              <p class="site-description motion-element" itemprop="description">Stay hungry, Stay foolish.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">49</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Wangchangchung" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/5470218610" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.douban.com/people/153537246/" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  豆瓣
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/wang-chang-chun-84" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Charse</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"charsewan"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("hoyPJdam7ySwVSOa3IpHGgpU-gzGzoHsz", "tSe2gMzMGHhTWXbxL4Cr8bgP");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
