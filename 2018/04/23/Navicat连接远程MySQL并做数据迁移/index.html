@@ -86,7 +86,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Netty," />
+  <meta name="keywords" content="MySQL," />
 
 
 
@@ -102,23 +102,23 @@
 
 
 
-<meta name="description" content="I/O基础入门Java1.4 之前的早期版本，Java对I/O的支持并不完善，开人员在开发高性能I/O程序时是有非常大的困难的,总结有以下几点:  没有数据缓存区，I/O性能存在问题 没有C或者C++中的Channel概念，只有输入和输出流 同步阻塞I/O通行(BIO)，通常会导致通信线程被长时间阻塞。 文件的字符集有限，硬件移值性不好  因为以上的一些缺陷,所以在很长的一段时间内，服务器端的开发">
-<meta name="keywords" content="Netty">
+<meta name="description" content="对学生党而言，在开发自己项目的时候，肯定有用过云服务器， 一个云服务器。说白了就是一个有公网IP的电脑，暴露在公网上。现在大部分的运服务器中都没有安装数据库，通常我都是自己安装MySQL数据库(当然，有钱的同学可以直接去购买云数据库，这样就可以方便的进行管理了，其实这又是一个各种云的一种增值服务而以). 当我们在linux服务器上操作数据库的时候，肯定是相当的麻烦，如何能够做到方便，高效的工作呢？">
+<meta name="keywords" content="MySQL">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java中的I&#x2F;O演进之路">
-<meta property="og:url" content="http://yoursite.com/2017/06/24/Java中的I-O演进之路/index.html">
+<meta property="og:title" content="Navicat连接远程MySQL并做数据迁移">
+<meta property="og:url" content="http://yoursite.com/2018/04/23/Navicat连接远程MySQL并做数据迁移/index.html">
 <meta property="og:site_name" content="Charse&#39;s Blog">
-<meta property="og:description" content="I/O基础入门Java1.4 之前的早期版本，Java对I/O的支持并不完善，开人员在开发高性能I/O程序时是有非常大的困难的,总结有以下几点:  没有数据缓存区，I/O性能存在问题 没有C或者C++中的Channel概念，只有输入和输出流 同步阻塞I/O通行(BIO)，通常会导致通信线程被长时间阻塞。 文件的字符集有限，硬件移值性不好  因为以上的一些缺陷,所以在很长的一段时间内，服务器端的开发">
-<meta property="og:image" content="http://yoursite.com/picture/netty/io/BIO.png">
-<meta property="og:image" content="http://yoursite.com/picture/netty/io/NOBIO.png">
-<meta property="og:image" content="http://yoursite.com/picture/netty/io/IORE.png">
-<meta property="og:image" content="http://yoursite.com/picture/netty/io/SIIO.png">
-<meta property="og:image" content="http://yoursite.com/picture/netty/io/AIO.png">
-<meta property="og:updated_time" content="2017-06-24T12:50:18.279Z">
+<meta property="og:description" content="对学生党而言，在开发自己项目的时候，肯定有用过云服务器， 一个云服务器。说白了就是一个有公网IP的电脑，暴露在公网上。现在大部分的运服务器中都没有安装数据库，通常我都是自己安装MySQL数据库(当然，有钱的同学可以直接去购买云数据库，这样就可以方便的进行管理了，其实这又是一个各种云的一种增值服务而以). 当我们在linux服务器上操作数据库的时候，肯定是相当的麻烦，如何能够做到方便，高效的工作呢？">
+<meta property="og:image" content="http://yoursite.com/picture/mysql/cloudpic_ai.jpg">
+<meta property="og:image" content="http://i4.bvimg.com/641253/430f7e11b55b8f28.png">
+<meta property="og:image" content="http://i2.bvimg.com/641253/222307b6c824f026.png">
+<meta property="og:image" content="http://i1.bvimg.com/641253/0ccc127ed18e91b6.png">
+<meta property="og:image" content="http://i1.bvimg.com/641253/3aaf5dfd7cfce5b5.png">
+<meta property="og:updated_time" content="2018-04-23T15:18:07.705Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java中的I&#x2F;O演进之路">
-<meta name="twitter:description" content="I/O基础入门Java1.4 之前的早期版本，Java对I/O的支持并不完善，开人员在开发高性能I/O程序时是有非常大的困难的,总结有以下几点:  没有数据缓存区，I/O性能存在问题 没有C或者C++中的Channel概念，只有输入和输出流 同步阻塞I/O通行(BIO)，通常会导致通信线程被长时间阻塞。 文件的字符集有限，硬件移值性不好  因为以上的一些缺陷,所以在很长的一段时间内，服务器端的开发">
-<meta name="twitter:image" content="http://yoursite.com/picture/netty/io/BIO.png">
+<meta name="twitter:title" content="Navicat连接远程MySQL并做数据迁移">
+<meta name="twitter:description" content="对学生党而言，在开发自己项目的时候，肯定有用过云服务器， 一个云服务器。说白了就是一个有公网IP的电脑，暴露在公网上。现在大部分的运服务器中都没有安装数据库，通常我都是自己安装MySQL数据库(当然，有钱的同学可以直接去购买云数据库，这样就可以方便的进行管理了，其实这又是一个各种云的一种增值服务而以). 当我们在linux服务器上操作数据库的时候，肯定是相当的麻烦，如何能够做到方便，高效的工作呢？">
+<meta name="twitter:image" content="http://yoursite.com/picture/mysql/cloudpic_ai.jpg">
 
 
 
@@ -146,13 +146,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/06/24/Java中的I-O演进之路/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/04/23/Navicat连接远程MySQL并做数据迁移/"/>
 
 
 
 
 
-  <title>Java中的I/O演进之路 | Charse's Blog</title>
+  <title>Navicat连接远程MySQL并做数据迁移 | Charse's Blog</title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="en">
@@ -292,7 +292,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/24/Java中的I-O演进之路/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/23/Navicat连接远程MySQL并做数据迁移/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Charse">
@@ -309,7 +309,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Java中的I/O演进之路</h1>
+          <h1 class="post-title" itemprop="name headline">Navicat连接远程MySQL并做数据迁移</h1>
         
 
         <div class="post-meta">
@@ -321,8 +321,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-06-24T20:11:57+08:00">
-                2017-06-24
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-23T22:51:40+08:00">
+                2018-04-23
               </time>
             
 
@@ -344,8 +344,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Netty/" itemprop="url" rel="index">
-                    <span itemprop="name">Netty</span>
+                  <a href="/categories/MySQL/" itemprop="url" rel="index">
+                    <span itemprop="name">MySQL</span>
                   </a>
                 </span>
 
@@ -362,8 +362,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/06/24/Java中的I-O演进之路/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/06/24/Java中的I-O演进之路/" itemprop="commentCount"></span>
+                <a href="/2018/04/23/Navicat连接远程MySQL并做数据迁移/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/04/23/Navicat连接远程MySQL并做数据迁移/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -371,7 +371,7 @@
 
           
           
-             <span id="/2017/06/24/Java中的I-O演进之路/" class="leancloud_visitors" data-flag-title="Java中的I/O演进之路">
+             <span id="/2018/04/23/Navicat连接远程MySQL并做数据迁移/" class="leancloud_visitors" data-flag-title="Navicat连接远程MySQL并做数据迁移">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -399,61 +399,34 @@
       
 
       
-        <h2 id="I-O基础入门"><a href="#I-O基础入门" class="headerlink" title="I/O基础入门"></a>I/O基础入门</h2><p>Java1.4 之前的早期版本，Java对I/O的支持并不完善，开人员在开发高性能I/O程序时是有非常大的困难的,总结有以下几点:</p>
-<ul>
-<li>没有数据缓存区，I/O性能存在问题</li>
-<li>没有C或者C++中的Channel概念，只有输入和输出流</li>
-<li>同步阻塞I/O通行(BIO)，通常会导致通信线程被长时间阻塞。</li>
-<li>文件的字符集有限，硬件移值性不好</li>
-</ul>
-<p>因为以上的一些缺陷,所以在很长的一段时间内，服务器端的开发领域一直被C++和C长期占据。</p>
-<h3 id="Linux-网络I-O模型简介"><a href="#Linux-网络I-O模型简介" class="headerlink" title="Linux 网络I/O模型简介"></a>Linux 网络I/O模型简介</h3><p>Linux的内核将所有的外部设备都看作一个文件来操作，对一个文件的读写操作会调用内核提供的系统命令，返回一个 file descriptor(fd, 文件描述符)。而对一个socket的读写也会有相应的描述符，称为 socketfd(socket 描述符)，描述符就是一个数字，它指向内核中的一个结构体(文件路径，数据区等属性)。<br><a id="more"></a></p>
-<p><strong>UNIX网络编程对I/O模型的分类，UNIX提供了5种I/O模型</strong></p>
-<ol>
-<li><strong>阻塞IO模型(BIO)</strong>：最常用的I/O模型就是阻塞模型，缺省的情形下，所有的文件操作都是阻塞的。我们以套接字接口为例来讲解此模型:在进程空间中调用recvfrom，其系统调用直到数据包到达且被复制到应用进程的缓冲区或者发生错误的时候才返回，否则，在此期间一直会等待，进程在从调用recvfrom开始到它返回的整段时间都是被阻塞的，因此被称为阻塞I/O模型。 如下图：<br><img src="/picture/netty/io/BIO.png" alt="阻塞I-O模型.png-33.6kB"></li>
-<li><strong>非阻塞(NIO)</strong>： refcvfrom 从应用层到内核的时候，如果该缓冲区没有数据的话，就直接返回一个EWOULDBLOCK错误，一般来说非阻塞I/O模型进行轮寻检查这个状态，看内核是不是有数据到来.<br><img src="/picture/netty/io/NOBIO.png" alt="非阻塞I-O模型.png-44.1kB"></li>
-<li><strong>I/O复用模型</strong>：Linux 提供select/poll，进程通过将一个或多个fd传递给select 或poll系统调用，阻塞在select操作上，这样select/poll可以帮助我们侦测多个fd是否处于就绪状态，select/poll是顺序扫描fd是否就绪，而且支持的fd数量有限，因此它的使用受到一些限制，Linux还提供了一个epoll系统调用，epoll使用基于事件驱动方式代替顺序扫描，因此性能更高，当有fd准备就绪时，就立即回调函数rollback.如下图所示:<br><img src="/picture/netty/io/IORE.png" alt="I-O复用模型.png-40kB"></li>
-<li><strong>信号驱动I/O模型</strong>：首先开启套接口信号驱动I/O功能，并通过系统调用sigaction执行一个信号处理函数(此系统调用立即返回，进程继续工作，它是非阻塞的)。当数据准备就绪时，就为该进程生成一个SIGIO信号，通过信号回调通知应用程序调用recvfrom来读取数据，并通知主循环函数处理数据，如下图：<br><img src="/picture/netty/io/SIIO.png" alt="信号驱动I-O模型.png-45.3kB"></li>
-<li><strong>异步I/O：</strong>告知内核启动某个操作，并让内核在整个操作完成后(包括将数据从内核复制到用户自己的缓冲区)通知我们。这种模型与信号量驱动模型的主要区别是: 信号驱动I/O由内核通知我们何时可以开始一个I/O操作，异步Java NIO的核心类库多路复用器selector 就是基于 epoll 的多路复用技术实现。I/O模型由内核通知我们I/O已经完成。如下图：<br><img src="/picture/netty/io/AIO.png" alt="异步I-O模型.png-35.4kB"></li>
-</ol>
-<h3 id="I-O多路复用技术"><a href="#I-O多路复用技术" class="headerlink" title="I/O多路复用技术"></a>I/O多路复用技术</h3><p>在I/O编程过程中，当需要同时处理多个客户端接入请求时，可以利用多个线程或者I/O多路复用技术进行处理，I/O多路复用技术通过把多个I/O的阻塞复用到同一个select 的阻塞上，从而使得系统在单线程中可以同时处理多个客户端请求，与传统的多线程/多进程，模型比，I/O多路复用的最大优势是系统开销小，系统不需要创建新的额外进程或者线程，也不需要维护这些进程和线程的运行，降低了系统的维护工作量，节省了系统资源，I多路复用的主要应用场景如下：</p>
-<ul>
-<li>服务器需要同时处理多个处于监听状态或者多个连接状态的套接字</li>
-<li>服务器需要同时处理多种网络协议的套接字</li>
-</ul>
-<p>目前支持I/O多路复用的系统调用有select、pselect、poll、epoll, 在Linux网络编程过程中，很长一段时间都使用select做轮询和网络事件通知，然而select的一些固有缺陷导致了它受到了很大的限制，最终Linux不得不在新的内核版本中寻找select的替代方案，最终选择了epoll与select的原理比较类似。</p>
-<p>为了克服 select的缺点， epoll 做了很大的改进:</p>
-<ol>
-<li><strong>支持一个进程打开的socket描述符(FD)不受限制(仅受限于操作系统的最大文件句柄数。</strong><br>select最大的缺陷就是单个进程锁打开的FD是有一定限制的，它由FD_SETSIZE设置，默认值是1024,对于那些需要支持上万个TCP连接的大型服务器来说显然太少了。可以选择修改这个宏然后重新编译内核，不过这会带来网络效率的下降。我们也可以通过选择多个进程的方案(传统的Apache 方案)解决这个问题，不过虽然在Linux上创建进程的代价比较小，但仍然是不可忽视的，另外，进程间的数据交换非常麻烦，对于java来说，由于没有共享内存，需要通过Socket通心或者其他方式进行数据同步，这带来了额外的性能损耗，增加了程序的复杂度，所以这也不是一个完美的解决方案。 但是值得庆幸的是， epoll并没有这个限制，它所支持的FD上限是操作系统的最大文件句柄数，这个数字远远大于1024.例如: 在1GB内存的机器上大约10万个文件句柄左右，具体的值可以通过cat /proc/sys/fs/file -max 查看，通常情况下这个值跟系统的内存关系比较大</li>
-<li><strong>I/O效率不会随着FD数目的增加而线性下降。</strong><br>传统 select/poll的另一个致命的弱点，就是当你拥有一个很大的socket 集合时，由于网络的延时或者链路空闲，任一时刻只有少部分的socket是”活跃”的,但是 select/poll 每次调用都会线性扫描全部的集合，导致效率呈现线性下降。epoll 不存在这个问题，它只会对”活跃”的socket 进行操作——这是因为在内核实现中，epoll 是根据每个fd上面的callback函数实现的。那么，只有”活跃”的socket 才会去主动调用callback函数，其他idle状态的socket则不会。在这点上，epoll实现了一个伪AIO. 针对 epoll和select性能对比的benchmark 测试表明: 如果所有的socket都处于活跃状态——例如一个高速LAN环境，epoll并不比select/poll 效率高太多；相反，如果过多使用epoll_ctl， 效率相比还有稍微地降低。但是一旦使用 idle connections 模拟WAN环境，epoll的效率就远在select/poll 之上了。</li>
-<li><strong>使用mmap加速内核与用户空间的消息传递。</strong><br>无论是select、poll还是epoll都需要内核把FD消息通知给用户空间，如何避免不必要的内存复制就显得非常重要，epoll是通过内核和用户空间mmap同一块内存来实现的。</li>
-<li><strong>epoll的API更加简单</strong></li>
-</ol>
-<h2 id="Java的I-O演进"><a href="#Java的I-O演进" class="headerlink" title="Java的I/O演进"></a>Java的I/O演进</h2><p>在JDK 1.4 推出Java NIO 之前，基于Java 的所有Socket 通信都采用同步阻塞模式(BIO)，这种一请求一问答的通信模型简化了上层的应用开发，但是在性能和可靠性方面却存在巨大的瓶颈。因此很长的一段时间里，大型的应用服务器都采用C 或者 C++ 语言开发，因为他们可以直接使用操作系统中的异步I/O或者AIO能力，当并发访问量增大、响应时间延迟增大之后，采用Java BIO开发的服务端软件只有通过硬件的不断扩容来满足高并发和低延时，它极大的增加了企业的成本，并且随着集群规模的不断膨胀，系统的可维护性也面临巨大的挑战，只有通过采购性能更好的硬件服务器来解决问题，这导致恶性的循环。</p>
-<p>正是Java 传统的BIO的劣性，才使得Java 支持非阻塞I/O的呼声日渐个高涨，最终 JDK 1.4 中提供了新的NIO 类库，Java也可以支持非阻塞I/O了。</p>
-<h3 id="Java-的I-O-发展"><a href="#Java-的I-O-发展" class="headerlink" title="Java 的I/O 发展"></a>Java 的I/O 发展</h3><p>JDK1.4 新增 java.nio 包，提供了很多进行异步I/O开发的API和类库，主要的类和接口如下：</p>
-<ul>
-<li>进行异步I/O操作的缓冲区ByteBuffer等</li>
-<li>进行异步I/O操作的管道Pipe</li>
-<li>进行各种I/O操作(异步或者同步)的Channel，包括ServerSocketChannel和SocketChannel;</li>
-<li>多种字符集的编码能力和解码能力;</li>
-<li>实现非阻塞I/O操作的多路复用器selector;</li>
-<li>基于流行的Perl实现的正则表达式类库;</li>
-<li>基于流行的Perl 实现的正则表达式类库;</li>
-<li>文件通道FileChannel</li>
-</ul>
-<p>新的NIO类库的提供极大的促进基于Java 的异步非阻塞编程的发展和应用,但是，它依然有不完善的地方，特别是对文件系统的处理能力仍显得不足，主要的问题如下：</p>
-<ul>
-<li>没有统一的文件属性(例如读写权限)</li>
-<li>API能力比较弱，例如目录的级联创建和递归遍历，往往需要自己实现</li>
-<li>底层存储系统的一些高级API无法使用</li>
-<li>所有的文件操作都是同步阻塞调用，不支持异步文件读写操作</li>
-</ul>
-<p>2011 年 JDK1.7正式发布，它的一个比较大的亮点是将原来的NIO类库进行了升级，被称为 NIO2.0， 它主要有如下三个方面的改进：</p>
-<ul>
-<li>提供能够批量获取文件属性的API，这些API具有平台无关性，不与特定的文件系统相耦合，另外它还提供了标准文件系统的SPI，供各个服务提供商扩展实现</li>
-<li>提供AIO功能，支持基于文件的异步操作和针对网络套接字的异步操作</li>
-</ul>
+        <p><img src="/picture/mysql/cloudpic_ai.jpg" alt="cloud"><br>对学生党而言，在开发自己项目的时候，肯定有用过云服务器， 一个云服务器。说白了就是一个有公网IP的电脑，暴露在公网上。现在大部分的运服务器中都没有安装数据库，通常我都是自己安装MySQL数据库(当然，有钱的同学可以直接去购买云数据库，这样就可以方便的进行管理了，其实这又是一个各种云的一种增值服务而以).</p>
+<p>当我们在linux服务器上操作数据库的时候，肯定是相当的麻烦，如何能够做到方便，高效的工作呢？ (对，方便，高效一直是我推崇的，不管你用什么方式，方便，高效而又完美的完成工作就是棒的)</p>
+<a id="more"></a>
+<h3 id="Navicat连接远程云服务器数据库"><a href="#Navicat连接远程云服务器数据库" class="headerlink" title="Navicat连接远程云服务器数据库"></a>Navicat连接远程云服务器数据库</h3><p>如何高效的管理远程数据，当然是使用数据库管理工具了。数据库管理工具有很多: 例如<code>Navicat</code>,<code>MyDB</code>, <code>DataGrip</code>等等。</p>
+<p>那么我就来介绍一下如何使用<code>Navicat</code>来管理远程数据库吧！<br>首先确保远程数据库中已经安装好，并且能够正常在mysql shell 中进行操作数据库。</p>
+<h4 id="首先下载好Navicat"><a href="#首先下载好Navicat" class="headerlink" title="首先下载好Navicat"></a>首先下载好<code>Navicat</code></h4><p><code>http://www.formysql.com/</code> ,  下载<code>Navicat</code>和安装就不再多余讲述了，同学们自行操作。</p>
+<h4 id="使用连接Navicat连接远程数据库"><a href="#使用连接Navicat连接远程数据库" class="headerlink" title="使用连接Navicat连接远程数据库"></a>使用连接<code>Navicat</code>连接远程数据库</h4><p>打开<code>Navicat</code>的界面中选择 <strong>连接</strong></p>
+<p><img src="http://i4.bvimg.com/641253/430f7e11b55b8f28.png" alt="image"></p>
+<p>然后在连接中的<strong>常规</strong>中就可以选择 <em>连接名，主机名和IP地址， 用户名，密码，端口</em>.这里的主机名可以是你的域名也可以是具体的IP地址，连接数据库的端口是<code>3306</code>, 这里需要确保服务器中的端口是否已经打开，一般情况该端口是打开的。</p>
+<p>连接好之后，可以测试是否与远程主机连通：选择“连接测试”即可测试是否已经连通。</p>
+<p>但是通常会出现以下的问题：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">2003 can&apos;t connect to mysql server on 10038</div></pre></td></tr></table></figure></p>
+<p>出现下面的问题，一般是服务器的端口和授权的问题，如果出现这个问题，请看下面对云服务器的配置：</p>
+<p>1.首先，查看<code>mysql</code>默认端口<code>3306</code>是否开启，允许哪个IP 使用，可以过下面命令进行查询<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;</span> netstat -an|grep 3306</div></pre></td></tr></table></figure></p>
+<p>如果你发现前面之有<code>127.0.0.1</code>, 就说明,<code>3306</code>端口只能本机<code>ip</code>使用. </p>
+<p>2.所以，我们需要对<code>mysql</code>中的配置文件进行修改 将<code>/etc/mysql/mysql.conf.d/mysqld.cnf</code>中的 <code>bing-address = 127.0.0.1</code> 注释掉，如下所示:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span> Copyright (c) 2014, 2016, Oracle and/or its affiliates. All rights reserved.</div><div class="line"><span class="meta">#</span></div><div class="line"><span class="meta">#</span> This program is free software; you can redistribute it and/or modify</div><div class="line"><span class="meta">#</span> it under the terms of the GNU General Public License as published by</div><div class="line"><span class="meta">#</span> the Free Software Foundation; version 2 of the License.</div><div class="line"><span class="meta">#</span></div><div class="line"><span class="meta">#</span> This program is distributed in the hope that it will be useful,</div><div class="line"><span class="meta">#</span> but WITHOUT ANY WARRANTY; without even the implied warranty of</div><div class="line"><span class="meta">#</span> MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</div><div class="line"><span class="meta">#</span> GNU General Public License for more details.</div><div class="line"><span class="meta">#</span></div><div class="line"><span class="meta">#</span> You should have received a copy of the GNU General Public License</div><div class="line"><span class="meta">#</span> along with this program; if not, write to the Free Software</div><div class="line"><span class="meta">#</span> Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA</div><div class="line"><span class="meta"></span></div><div class="line">#</div><div class="line"><span class="meta">#</span> The MySQL  Server configuration file.</div><div class="line"><span class="meta">#</span></div><div class="line"><span class="meta">#</span> For explanations see</div><div class="line"><span class="meta">#</span> http://dev.mysql.com/doc/mysql/en/server-system-variables.html</div><div class="line"></div><div class="line">[mysqld]</div><div class="line">pid-file	= /var/run/mysqld/mysqld.pid</div><div class="line">socket		= /var/run/mysqld/mysqld.sock</div><div class="line">datadir		= /var/lib/mysql</div><div class="line">log-error	= /var/log/mysql/error.log</div><div class="line"><span class="meta">#</span> By default we only accept connections from localhost</div><div class="line"><span class="meta">#</span> bind-address	= 127.0.0.1</div><div class="line"><span class="meta">#</span> Disabling symbolic-links is recommended to prevent assorted security risks</div><div class="line">symbolic-links=0</div></pre></td></tr></table></figure>
+<p>3.修改了是配置文件之后，再重新进行启动<code>MySQL</code>服务：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&gt; sudo service mysql restart</div></pre></td></tr></table></figure></p>
+<p>4.然后再进入<code>mysql</code>，对远程用户进行授权</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&gt; grant all privileges on *.* to &apos;root&apos;@&apos;%&apos; identified by &apos;xxxxxx&apos;;</div></pre></td></tr></table></figure>
+<p>这里的<code>root</code>是远程登录的用户, <code>xxxx</code>是登录使用的密码，然后可以在<code>mysql</code>数据库表中就可以查看到这个用户,该用户经被添加到<code>user</code>表中, 这样通过<code>Navicat</code>就可以连接上数据库了。</p>
+<h3 id="Navicat本地数据库迁移到远程数据库"><a href="#Navicat本地数据库迁移到远程数据库" class="headerlink" title="Navicat本地数据库迁移到远程数据库"></a>Navicat本地数据库迁移到远程数据库</h3><p>在本地把项目做好之后，本地数据库中表结构，表的基本数据需要在云服务器上创建， 如果是在服务器上手动创建，那么这真是一个效率很低,很费时的操作(我并不认为这个是多么牛逼的一个做法)，即使通过本地数据库导出 SQL文件，然后再通过SQL文件导入到云服务器上，这样的做法还是有些麻烦，而且操作失误的概率比较大。有更加方便高效的做法，就是使用Navicat可以轻易的将本地数据库中表结构，基本数据复制到远程服务器的数据库中.</p>
+<p>1.首先，选择你需要传输的数据库， 选择“数据传输”, 如下图:</p>
+<p><img src="http://i2.bvimg.com/641253/222307b6c824f026.png" alt="image"></p>
+<p>2.然后在传输的数据库中选择需要传输的表， 然后在对应侧的 “目标”中选择<strong>连接</strong>, 选择对应的ip和数据库名称, 如下图所示:</p>
+<p><img src="http://i1.bvimg.com/641253/0ccc127ed18e91b6.png" alt="image2"></p>
+<p>3.选择好之后点击“开始” 就可以将数据进行转移了</p>
+<p><img src="http://i1.bvimg.com/641253/3aaf5dfd7cfce5b5.png" alt="image3"></p>
+<p>这样你的远程数据库的数据就自动和你的本地的数据一致了，更为重要的是:这个方法真的是方便，高效，出错率低。</p>
 
       
     </div>
@@ -504,7 +477,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Netty/" rel="tag"># Netty</a>
+            <a href="/tags/MySQL/" rel="tag"># MySQL</a>
           
         </div>
       
@@ -517,8 +490,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/06/13/Java并发(一)/" rel="next" title="Java并发(一)">
-                <i class="fa fa-chevron-left"></i> Java并发(一)
+              <a href="/2018/04/18/Java自定义异常打印非堆栈信息/" rel="next" title="Java自定义异常打印非堆栈信息">
+                <i class="fa fa-chevron-left"></i> Java自定义异常打印非堆栈信息
               </a>
             
           </div>
@@ -526,10 +499,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/09/28/Ubuntu-16-04上安装Hadoop并成功运行/" rel="prev" title="Ubuntu 16.04上安装Hadoop并成功运行">
-                Ubuntu 16.04上安装Hadoop并成功运行 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -555,8 +524,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2017/06/24/Java中的I-O演进之路/"
-           data-title="Java中的I/O演进之路" data-url="http://yoursite.com/2017/06/24/Java中的I-O演进之路/">
+      <div class="ds-thread" data-thread-key="2018/04/23/Navicat连接远程MySQL并做数据迁移/"
+           data-title="Navicat连接远程MySQL并做数据迁移" data-url="http://yoursite.com/2018/04/23/Navicat连接远程MySQL并做数据迁移/">
       </div>
     
   </div>
@@ -714,7 +683,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#I-O基础入门"><span class="nav-number">1.</span> <span class="nav-text">I/O基础入门</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux-网络I-O模型简介"><span class="nav-number">1.1.</span> <span class="nav-text">Linux 网络I/O模型简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#I-O多路复用技术"><span class="nav-number">1.2.</span> <span class="nav-text">I/O多路复用技术</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java的I-O演进"><span class="nav-number">2.</span> <span class="nav-text">Java的I/O演进</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-的I-O-发展"><span class="nav-number">2.1.</span> <span class="nav-text">Java 的I/O 发展</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Navicat连接远程云服务器数据库"><span class="nav-number">1.</span> <span class="nav-text">Navicat连接远程云服务器数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#首先下载好Navicat"><span class="nav-number">1.1.</span> <span class="nav-text">首先下载好Navicat</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用连接Navicat连接远程数据库"><span class="nav-number">1.2.</span> <span class="nav-text">使用连接Navicat连接远程数据库</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Navicat本地数据库迁移到远程数据库"><span class="nav-number">2.</span> <span class="nav-text">Navicat本地数据库迁移到远程数据库</span></a></li></ol></div>
             
 
           </div>
