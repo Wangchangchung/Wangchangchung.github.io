@@ -86,7 +86,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Java,JVM," />
+  <meta name="keywords" content="Java,Netty," />
 
 
 
@@ -102,17 +102,20 @@
 
 
 
-<meta name="description" content="最近在技术博客中看到一篇关于 HashMap 的优化使用建议，觉得非常有意思，于是转载该篇博文，和大家一起分享技术。">
-<meta name="keywords" content="Java,JVM">
+<meta name="description" content="有过TCP编程的开发者都可能直到，无论是服务端还是客户端，当我们读取或者发送消息的时候，都需要考虑TCP底层的粘包/拆包机制，那么什么是TCP粘包和拆包问题呢？那么就请看下面吧． TCP粘包/拆包TCP是个”流”协议，所谓流，就是没有界限的一串数据，大家可以想想河里的流水，他们是连成一片的，其间没有分界线，TCP底层并不了解上层业务数据的具体含义，它会根据TCP缓冲区的实际情况进行化包的划分，所以">
+<meta name="keywords" content="Java,Netty">
 <meta property="og:type" content="article">
-<meta property="og:title" content="高性能场景下,HashMap的优化使用建议">
-<meta property="og:url" content="http://yoursite.com/2016/10/02/高性能场景下-HashMap的优化使用建议/index.html">
+<meta property="og:title" content="Netty的TCP粘包&#x2F;拆包问题的解决之道">
+<meta property="og:url" content="http://yoursite.com/2018/11/03/Netty的TCP粘包-拆包问题的解决之道/index.html">
 <meta property="og:site_name" content="Charse&#39;s Blog">
-<meta property="og:description" content="最近在技术博客中看到一篇关于 HashMap 的优化使用建议，觉得非常有意思，于是转载该篇博文，和大家一起分享技术。">
-<meta property="og:updated_time" content="2017-05-30T07:55:18.344Z">
+<meta property="og:description" content="有过TCP编程的开发者都可能直到，无论是服务端还是客户端，当我们读取或者发送消息的时候，都需要考虑TCP底层的粘包/拆包机制，那么什么是TCP粘包和拆包问题呢？那么就请看下面吧． TCP粘包/拆包TCP是个”流”协议，所谓流，就是没有界限的一串数据，大家可以想想河里的流水，他们是连成一片的，其间没有分界线，TCP底层并不了解上层业务数据的具体含义，它会根据TCP缓冲区的实际情况进行化包的划分，所以">
+<meta property="og:image" content="http://static.zybuluo.com/CharseWan/kes7mipw93gg2c7dt0li5kxh/TCP%E7%B2%98%E5%8C%85-%E6%8B%86%E5%8C%85%E5%8F%91%E7%94%9F%E7%9A%84%E5%8E%9F%E5%9B%A0.png">
+<meta property="og:image" content="http://static.zybuluo.com/CharseWan/6h868ksrrz0suy66j3ss7hhi/TCP%E7%B2%98%E5%8C%85-%E6%8B%86%E5%8C%85%E9%97%AE%E9%A2%98%E5%8E%9F%E5%9B%A0.png">
+<meta property="og:updated_time" content="2018-11-03T08:22:08.121Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="高性能场景下,HashMap的优化使用建议">
-<meta name="twitter:description" content="最近在技术博客中看到一篇关于 HashMap 的优化使用建议，觉得非常有意思，于是转载该篇博文，和大家一起分享技术。">
+<meta name="twitter:title" content="Netty的TCP粘包&#x2F;拆包问题的解决之道">
+<meta name="twitter:description" content="有过TCP编程的开发者都可能直到，无论是服务端还是客户端，当我们读取或者发送消息的时候，都需要考虑TCP底层的粘包/拆包机制，那么什么是TCP粘包和拆包问题呢？那么就请看下面吧． TCP粘包/拆包TCP是个”流”协议，所谓流，就是没有界限的一串数据，大家可以想想河里的流水，他们是连成一片的，其间没有分界线，TCP底层并不了解上层业务数据的具体含义，它会根据TCP缓冲区的实际情况进行化包的划分，所以">
+<meta name="twitter:image" content="http://static.zybuluo.com/CharseWan/kes7mipw93gg2c7dt0li5kxh/TCP%E7%B2%98%E5%8C%85-%E6%8B%86%E5%8C%85%E5%8F%91%E7%94%9F%E7%9A%84%E5%8E%9F%E5%9B%A0.png">
 
 
 
@@ -140,13 +143,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2016/10/02/高性能场景下-HashMap的优化使用建议/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/11/03/Netty的TCP粘包-拆包问题的解决之道/"/>
 
 
 
 
 
-  <title>高性能场景下,HashMap的优化使用建议 | Charse's Blog</title>
+  <title>Netty的TCP粘包/拆包问题的解决之道 | Charse's Blog</title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="en">
@@ -286,7 +289,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/02/高性能场景下-HashMap的优化使用建议/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/03/Netty的TCP粘包-拆包问题的解决之道/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Charse">
@@ -303,7 +306,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">高性能场景下,HashMap的优化使用建议</h1>
+          <h1 class="post-title" itemprop="name headline">Netty的TCP粘包/拆包问题的解决之道</h1>
         
 
         <div class="post-meta">
@@ -315,8 +318,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-10-02T22:11:12+08:00">
-                2016-10-02
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-03T16:15:23+08:00">
+                2018-11-03
               </time>
             
 
@@ -338,8 +341,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
+                  <a href="/categories/Netty/" itemprop="url" rel="index">
+                    <span itemprop="name">Netty</span>
                   </a>
                 </span>
 
@@ -356,8 +359,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/10/02/高性能场景下-HashMap的优化使用建议/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/02/高性能场景下-HashMap的优化使用建议/" itemprop="commentCount"></span>
+                <a href="/2018/11/03/Netty的TCP粘包-拆包问题的解决之道/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/11/03/Netty的TCP粘包-拆包问题的解决之道/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -365,7 +368,7 @@
 
           
           
-             <span id="/2016/10/02/高性能场景下-HashMap的优化使用建议/" class="leancloud_visitors" data-flag-title="高性能场景下,HashMap的优化使用建议">
+             <span id="/2018/11/03/Netty的TCP粘包-拆包问题的解决之道/" class="leancloud_visitors" data-flag-title="Netty的TCP粘包/拆包问题的解决之道">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -393,53 +396,38 @@
       
 
       
-        <p>最近在技术博客中看到一篇关于 HashMap 的优化使用建议，觉得非常有意思，于是转载该篇博文，和大家一起分享技术。<br> <a id="more"></a></p>
-<h3 id="HashMap-在JDK-7-与-JDK8-下的差别"><a href="#HashMap-在JDK-7-与-JDK8-下的差别" class="headerlink" title="HashMap 在JDK 7 与 JDK8 下的差别"></a><strong>HashMap 在JDK 7 与 JDK8 下的差别</strong></h3><p>顺便理一下HashMap.get(Object key)的几个关键步骤，作为后面讨论的基础。</p>
-<h4 id="1-1-获取key的HashCode并二次加工"><a href="#1-1-获取key的HashCode并二次加工" class="headerlink" title="1.1 获取key的HashCode并二次加工"></a><strong>1.1 获取key的HashCode并二次加工</strong></h4><p>因为对原Key的hashCode质量没信心，怕会存在大量冲突，HashMap进行了二次加工。</p>
-<p>JDK7的做法：</p>
-<blockquote>
-<p>h ^= (h &gt;&gt;&gt; 20) ^ (h &gt;&gt;&gt; 12);<br>return h ^ (h &gt;&gt;&gt; 7) ^ (h &gt;&gt;&gt; 4);</p>
-</blockquote>
-<p>JDK8 因为对自己改造过的哈希大量冲突时的红黑树有信心，所以简单一些，只是把高16位异或下来。</p>
-<blockquote>
-<p>return h ^ (h &gt;&gt;&gt; 16);</p>
-</blockquote>
-<p>所以即使Key比较均匀无哈希冲突，JDK8也比JDK7略快的原因大概于此。</p>
-<p>顺便科普一下，Integer的HashCode就是自己，Long要把高32位异或下来变成int， String则是循环累计结果＊31＋下一个字符，不过因为String是不可变对象，所以生成完一次就会自己cache起来。</p>
-<h4 id="1-2-落桶"><a href="#1-2-落桶" class="headerlink" title="1.2 落桶"></a><strong>1.2 落桶</strong></h4><blockquote>
-<p>index = hash &amp; (array.length-1);</p>
-</blockquote>
-<p>桶数组大小是2的指数的好处，通过一次&amp;就够了，而不是代价稍大的取模。</p>
-<h4 id="1-3-最后选择Entry"><a href="#1-3-最后选择Entry" class="headerlink" title="1.3 最后选择Entry"></a><strong>1.3 最后选择Entry</strong></h4><p>判断Entry是否符合，都是首先哈希值要相等，但因为哈希值不是唯一的，所以还要对比key是否相等，最好是同一个对象，能用＝＝对比，否则要走equals()。 比如String，如果不是同一个对象，equals()起来要一个个字符做比较也是挺累的。 </p>
-<blockquote>
-<p>if (e.hash == hash &amp;&amp; ((k = e.key) == key || key.equals(k)))<br>return e.value;</p>
-</blockquote>
-<p>更累的是存在哈希冲突的情况，比如两个哈希值取模后落在同一个桶上，或者两条不同的key有相同的哈希值。</p>
-<p>JDK7的做法是建一条链表，后插入的元素在上面，一个个地执行上面的判断。<br>而JDK8则在链表长度达到8，而且桶数量达到64时，建一棵红黑树，解决严重冲突时的性能问题。</p>
-<h3 id="2-很多人忽视的加载因子Load-Factor"><a href="#2-很多人忽视的加载因子Load-Factor" class="headerlink" title="2. 很多人忽视的加载因子Load Factor"></a><strong>2. 很多人忽视的加载因子Load Factor</strong></h3><p>加载因子存在的原因，还是因为减缓哈希冲突，如果初始桶为16，等到满16个元素才扩容，某些桶里可能就有不止一个元素了。所以加载因子默认为0.75，也就是说大小为16的HashMap，到了第13个元素，就会扩容成32。</p>
-<h4 id="2-1-考虑加载因子地设定初始大小"><a href="#2-1-考虑加载因子地设定初始大小" class="headerlink" title="2.1 考虑加载因子地设定初始大小"></a><strong>2.1 考虑加载因子地设定初始大小</strong></h4><p>相比扩容时只是System.arraycopy()的ArrayList，HashMap扩容的代价其实蛮大的，首先，要生成一个新的桶数组，然后要把所有元素都重新Hash落桶一次，几乎等于重新执行了一次所有元素的put。</p>
-<p>所以如果你心目中有明确的Map 大小，设定时一定要考虑加载因子的存在。</p>
-<p>Map map = new HashMap(srcMap.size())这样的写法肯定是不对的，有25%的可能会遇上扩容。</p>
-<p>Thrift里的做法比较粗暴， Map map = new HashMap( 2* srcMap.size()), 直接两倍又有点浪费空间。</p>
-<p>Guava的做法则是加上如下计算</p>
-<blockquote>
-<p>(int) ((float) expectedSize / 0.75F + 1.0F);</p>
-</blockquote>
-<h4 id="2-2-减小加载因子"><a href="#2-2-减小加载因子" class="headerlink" title="2.2 减小加载因子"></a><strong>2.2 减小加载因子</strong></h4><p>在构造函数里，设定加载因子是0.5甚至0.25。</p>
-<p>如果你的Map是一个长期存在而不是每次动态生成的，而里面的key又是没法预估的，那可以适当加大初始大小，同时减少加载因子，降低冲突的机率。毕竟如果是长期存在的map，浪费点数组大小不算啥，降低冲突概率，减少比较的次数更重要。</p>
-<h3 id="3-Key的设计"><a href="#3-Key的设计" class="headerlink" title="3. Key的设计"></a><strong>3. Key的设计</strong></h3><p>对于String型的Key，如果无法保证无冲突而且能用==来对比，那就尽量搞短点，否则一个个字符的equals还是花时间的。</p>
-<p>甚至，对于已知的预定义Key，可以自己试着放一下，看冲不冲突。比如，像”a1”,”a2”,”a3” 这种，hashCode是个小数字递增，绝对是不冲突的：）</p>
-<h3 id="4-EnumMap"><a href="#4-EnumMap" class="headerlink" title="4. EnumMap"></a><strong>4. EnumMap</strong></h3><p>对于上面的问题，有些同学可能会很冲动的想，这么麻烦，我还是换回用数组，然后用常量来定义一些下标算了。其实不用自己来，EnumMap就是可读性与性能俱佳的实现。</p>
-<p>EnumMap的原理是，在构造函数里要传入枚举类，那它就构建一个与枚举的所有值等大的数组，按Enum. ordinal()下标来访问数组，不就是你刚才想做的事情么？</p>
-<p>美中不足的是，因为要实现Map接口，而 V get(Object key)中key是Object而不是泛型K，所以安全起见，EnumMap每次访问都要先对Key进行类型判断。在JMC里录得不低的采样命中频率。</p>
-<p>所以也可以自己再port一个类出来，不实现Map接口，或者自己增加fastGet(),fastPut()的函数。</p>
-<h3 id="5-IntObjectHashMap"><a href="#5-IntObjectHashMap" class="headerlink" title="5. IntObjectHashMap"></a><strong>5. IntObjectHashMap</strong></h3><p>Netty以及其他FastUtils之类的原始类型map，都支持key是int或 long。但两者的区别并不仅仅在于int 换 Integer的那点空间，而是整个存储结构和Hash冲突的解决方法都不一样。</p>
-<p>HashMap的结构是 Node[] table; Node 下面有Hash，Key，Value，Next四个属性。</p>
-<p>而IntObjectHashMap的结构是int[] keys 和 Object[] values.</p>
-<p>在插入时，同样把int先取模落桶，如果遇到冲突，则不采样HashMap的链地址法，而是用开放地址法（线性探测法）index＋1找下一个空桶，最后在keys[index]，values[index]中分别记录。在查找时也是先落桶，然后在key[index++]中逐个比较key。</p>
-<p>所以，对比整个数据结构，省的不止是int vs Integer，还有每个Node的内容。<br>而性能嘛，IntObjectHashMap还是稳赢一点的，随便测了几种场景，耗时至少都有24ms vs 28ms的样子，好的时候甚至快1/3。</p>
-<h3 id="优化建议"><a href="#优化建议" class="headerlink" title="优化建议"></a><strong>优化建议</strong></h3><p>考虑加载因子地设定初始大小<br>减小加载因子<br>String类型的key，不能用==判断或者可能有哈希冲突时，尽量减少长度<br>使用定制版的EnumMap<br>使用IntObjectHashMap</p>
-<p>本文本转载自：[江南白衣](calvin1978.blogcn.com/articles/hashmap.html)calvin1978.blogcn.com/articles/hashmap.html</p>
+        <p>有过TCP编程的开发者都可能直到，无论是服务端还是客户端，当我们读取或者发送消息的时候，都需要考虑TCP底层的粘包/拆包机制，那么什么是TCP粘包和拆包问题呢？那么就请看下面吧．</p>
+<h2 id="TCP粘包-拆包"><a href="#TCP粘包-拆包" class="headerlink" title="TCP粘包/拆包"></a>TCP粘包/拆包</h2><p>TCP是个”流”协议，所谓流，就是没有界限的一串数据，大家可以想想河里的流水，他们是连成一片的，其间没有分界线，TCP底层并不了解上层业务数据的具体含义，它会根据TCP缓冲区的实际情况进行化包的划分，所以在业务上认为，一个完整的包可能会被TCP拆成多个包进行发送，也有多个小的包封装成一个大的数据包发送，这就是所谓的TCP粘包和拆包问题．</p>
+<a id="more"></a>
+<h2 id="TCP粘包-拆包问题说明"><a href="#TCP粘包-拆包问题说明" class="headerlink" title="TCP粘包/拆包问题说明"></a>TCP粘包/拆包问题说明</h2><p>我们可以通过图解对TCP粘包和拆包问题进行说明，粘包问题实例如下图：<br><img src="http://static.zybuluo.com/CharseWan/kes7mipw93gg2c7dt0li5kxh/TCP%E7%B2%98%E5%8C%85-%E6%8B%86%E5%8C%85%E5%8F%91%E7%94%9F%E7%9A%84%E5%8E%9F%E5%9B%A0.png" alt="TCP粘包-拆包发生的原因.png-7kB"><br>假设客户端分别发送了两个数据包D1和D2给服务器，由于服务端一次读取到的字节数是不确定的，故可能存在以下的４种请况．</p>
+<p>1.　服务端分两次读取到两个独立的数据包，分别是D1和D2,没有粘包和拆包<br>2.　服务端一次接收到了两个数据包，<strong>D1和D2粘合在一起，被称为TCP粘包</strong><br>3.　服务端分两次读取到两个数据包，<strong>第一次读取到了完整的D1包和D2包的部分内容，第二次读取了D2的剩余内容，这被称为TCP拆包</strong><br>4.　服务段分两次读取到了两个数据包，第一次读取到了D1包的部分内容D1_1,第二次读取到了D1包剩余的内容D1_2和D2包的整包．</p>
+<p>如果此时服务端TCP接收滑窗口非常小，而数据包D1和D2比较大，很有可能会发生第5种可能，即服务端分多次才能将D1和D2包接收完全，期间发生多次拆包．</p>
+<h2 id="TCP粘包-拆包发生的原因"><a href="#TCP粘包-拆包发生的原因" class="headerlink" title="TCP粘包/拆包发生的原因"></a>TCP粘包/拆包发生的原因</h2><p>问题产生的原因有三个，分别如下：</p>
+<ol>
+<li>应用程序write写入的字节大小大于套接口发送缓冲区的大小；</li>
+<li>进行MSS大小的TCP分段；</li>
+<li>以太网帧的payload大于MTU进行IP分片</li>
+</ol>
+<p>如下图：<br><img src="http://static.zybuluo.com/CharseWan/6h868ksrrz0suy66j3ss7hhi/TCP%E7%B2%98%E5%8C%85-%E6%8B%86%E5%8C%85%E9%97%AE%E9%A2%98%E5%8E%9F%E5%9B%A0.png" alt="TCP粘包-拆包问题原因.png-28kB"></p>
+<h2 id="粘包问题的解决策略"><a href="#粘包问题的解决策略" class="headerlink" title="粘包问题的解决策略"></a>粘包问题的解决策略</h2><p>由于底层的TCP无法理解上层的业务数据，所以在底层是无法保证数据包不被拆分和重组的，这个问题只能通过上层的应用协议栈设计来解决，根据业界的主流协议的解决方案，可以归纳如下：</p>
+<ol>
+<li>消息定长，例如每个报文的大小为固定长度200字节，如果不够，空位不空格；</li>
+<li>在包尾增加回车换行符进行分割，例如FTP协议</li>
+<li>将消息分为消息头和消息体，消息头中包含表示消息总长度(或者消息体长度)<br>的字段，通常设计思路为消息头的第一个字段使用int32来表示消息的总长度．</li>
+<li>更复杂的应用层协议</li>
+</ol>
+<h2 id="Netty的解决方案"><a href="#Netty的解决方案" class="headerlink" title="Netty的解决方案"></a>Netty的解决方案</h2><p>Netty为了解决TCP粘包和拆包导致的半包读写问题，提供了多种的编码解码器用于处理半包，只要能够熟练的掌握这些类库的使用，TCP粘包问题就可以变得非常容易，这个就是其他NIO框架和JDK原生的NIO　API无法匹敌的．</p>
+<h3 id="利用LineBasedFrameDecoder解决TCP粘包问题"><a href="#利用LineBasedFrameDecoder解决TCP粘包问题" class="headerlink" title="利用LineBasedFrameDecoder解决TCP粘包问题"></a>利用LineBasedFrameDecoder解决TCP粘包问题</h3><p>在原来的代码中增加两个解码器: LineBasedFrameDecoder　和　StringDecoder，　这个两个类的个个的功能如下面的原理可所分析的．<br><strong>LineBasedFrameDecoder和StringDecoder的原理分析</strong><br>LineBasedFrameDecoder的工作原理是它依次遍历ByteBuf中的可读字节<br>判断是否有”\n”　或者”\r\n”, 如果有，就以此位置为结束位置，从可读索引到结束<br>位置区间的字节就组成了一行.<br>它是以换行符为结束标志的解码器, 支持携带结束符或者不携带结束符两种解码方式，同时支持配置单行的最大长度<br>如果连续读取到最大长度之后,仍然没有发现换行符就会抛出异常，同时忽略掉之前读到的异常码流．<br>StringDecoder的功能非常简单,就是将接收到的对象换成字符串，然后继续调用后面的Handller　LineBasedFrameDecoder + StringDecoder组合就是按行切换的文本解码器，它被设计用来支持TCP的粘包和拆包</p>
+<p>如果发送的消息不是以换行符结束的，该怎么办呢？或者没有回车换行符，靠消息头中的长度字符来分段分包怎么办呢?是不是需要自己写半包解码器呢?</p>
+<p>其实Netty提供了多种支持TCP粘包/拆包的解码器，用来满足不同的诉求.</p>
+<h3 id="分隔符和定长解码器的应用"><a href="#分隔符和定长解码器的应用" class="headerlink" title="分隔符和定长解码器的应用"></a>分隔符和定长解码器的应用</h3><p>TCP以流的方法，进行数据传输，上层的应用协议为了堆消息进行区分，往往采用如下的４中方式：</p>
+<ol>
+<li>消息长度固定，累计读取到长度总和为定长LEN的报文后，就认为读取到了一个完整的消息，将技术器置位，重新开始读取下一个数据报．</li>
+<li>将回车换行作为消息多结束符，例如：FTP协议，这种方式在文本协议中应用比较广泛;</li>
+<li>将特殊的分隔符作为消息的结束标志．回车换行符就是一种特殊的结束分隔符</li>
+<li>通过在消息头中定义长度字段来表示消息的总长度．</li>
+</ol>
+<p>Netty对上面的4种应用做了统一的抽象，提供了4种解码器来解决对应的问题，使用起来非常方便，有了这些解码器，用户不需要自己对读取的报文进行人工解码，也不需要考虑TCP的粘包和拆包．</p>
 
       
     </div>
@@ -492,7 +480,7 @@
           
             <a href="/tags/Java/" rel="tag"># Java</a>
           
-            <a href="/tags/JVM/" rel="tag"># JVM</a>
+            <a href="/tags/Netty/" rel="tag"># Netty</a>
           
         </div>
       
@@ -505,8 +493,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/09/22/MySQL-B+-树的索引使用/" rel="next" title="MySQL B+ 树的索引使用">
-                <i class="fa fa-chevron-left"></i> MySQL B+ 树的索引使用
+              <a href="/2018/04/26/No-converter-found-for-return-value-of-type-xxx-异常解决/" rel="next" title="No converter found for return value of type xxx 异常解决">
+                <i class="fa fa-chevron-left"></i> No converter found for return value of type xxx 异常解决
               </a>
             
           </div>
@@ -514,10 +502,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/10/05/Hibernate框架——基本操作/" rel="prev" title="Hibernate框架——基本操作">
-                Hibernate框架——基本操作 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -543,8 +527,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/10/02/高性能场景下-HashMap的优化使用建议/"
-           data-title="高性能场景下,HashMap的优化使用建议" data-url="http://yoursite.com/2016/10/02/高性能场景下-HashMap的优化使用建议/">
+      <div class="ds-thread" data-thread-key="2018/11/03/Netty的TCP粘包-拆包问题的解决之道/"
+           data-title="Netty的TCP粘包/拆包问题的解决之道" data-url="http://yoursite.com/2018/11/03/Netty的TCP粘包-拆包问题的解决之道/">
       </div>
     
   </div>
@@ -702,7 +686,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#HashMap-在JDK-7-与-JDK8-下的差别"><span class="nav-number">1.</span> <span class="nav-text">HashMap 在JDK 7 与 JDK8 下的差别</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-获取key的HashCode并二次加工"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 获取key的HashCode并二次加工</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-落桶"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 落桶</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-最后选择Entry"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 最后选择Entry</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-很多人忽视的加载因子Load-Factor"><span class="nav-number">2.</span> <span class="nav-text">2. 很多人忽视的加载因子Load Factor</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-考虑加载因子地设定初始大小"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 考虑加载因子地设定初始大小</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-减小加载因子"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 减小加载因子</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Key的设计"><span class="nav-number">3.</span> <span class="nav-text">3. Key的设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-EnumMap"><span class="nav-number">4.</span> <span class="nav-text">4. EnumMap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-IntObjectHashMap"><span class="nav-number">5.</span> <span class="nav-text">5. IntObjectHashMap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优化建议"><span class="nav-number">6.</span> <span class="nav-text">优化建议</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP粘包-拆包"><span class="nav-number">1.</span> <span class="nav-text">TCP粘包/拆包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP粘包-拆包问题说明"><span class="nav-number">2.</span> <span class="nav-text">TCP粘包/拆包问题说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP粘包-拆包发生的原因"><span class="nav-number">3.</span> <span class="nav-text">TCP粘包/拆包发生的原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#粘包问题的解决策略"><span class="nav-number">4.</span> <span class="nav-text">粘包问题的解决策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Netty的解决方案"><span class="nav-number">5.</span> <span class="nav-text">Netty的解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#利用LineBasedFrameDecoder解决TCP粘包问题"><span class="nav-number">5.1.</span> <span class="nav-text">利用LineBasedFrameDecoder解决TCP粘包问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分隔符和定长解码器的应用"><span class="nav-number">5.2.</span> <span class="nav-text">分隔符和定长解码器的应用</span></a></li></ol></li></ol></div>
             
 
           </div>
