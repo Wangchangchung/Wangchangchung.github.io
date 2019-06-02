@@ -111,10 +111,10 @@
 <meta property="og:description" content="对学生党而言，在开发自己项目的时候，肯定有用过云服务器， 一个云服务器。说白了就是一个有公网IP的电脑，暴露在公网上。现在大部分的运服务器中都没有安装数据库，通常我都是自己安装MySQL数据库(当然，有钱的同学可以直接去购买云数据库，这样就可以方便的进行管理了，其实这又是一个各种云的一种增值服务而以). 当我们在linux服务器上操作数据库的时候，肯定是相当的麻烦，如何能够做到方便，高效的工作呢？">
 <meta property="og:image" content="http://yoursite.com/picture/mysql/cloudpic_ai.jpg">
 <meta property="og:image" content="http://p7qgi56uk.bkt.clouddn.com/navicat.PNG">
-<meta property="og:image" content="http://p7qgi56uk.bkt.clouddn.com/datasend.png">
-<meta property="og:image" content="http://p7qgi56uk.bkt.clouddn.com/navicatsource.png">
-<meta property="og:image" content="http://p7qgi56uk.bkt.clouddn.com/navicatsuccess.png">
-<meta property="og:updated_time" content="2018-05-03T06:45:28.138Z">
+<meta property="og:image" content="http://pic.chares.dingxings.cn/datasend.png">
+<meta property="og:image" content="http://pic.chares.dingxings.cn/navicatsource.png">
+<meta property="og:image" content="http://pic.chares.dingxings.cn/navicatsuccess.png">
+<meta property="og:updated_time" content="2019-06-02T14:41:18.140Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Navicat连接远程MySQL并做数据迁移">
 <meta name="twitter:description" content="对学生党而言，在开发自己项目的时候，肯定有用过云服务器， 一个云服务器。说白了就是一个有公网IP的电脑，暴露在公网上。现在大部分的运服务器中都没有安装数据库，通常我都是自己安装MySQL数据库(当然，有钱的同学可以直接去购买云数据库，这样就可以方便的进行管理了，其实这又是一个各种云的一种增值服务而以). 当我们在linux服务器上操作数据库的时候，肯定是相当的麻烦，如何能够做到方便，高效的工作呢？">
@@ -421,11 +421,11 @@
 <p>这里的<code>root</code>是远程登录的用户, <code>xxxx</code>是登录使用的密码，然后可以在<code>mysql</code>数据库表中就可以查看到这个用户,该用户经被添加到<code>user</code>表中, 这样通过<code>Navicat</code>就可以连接上数据库了。</p>
 <h3 id="Navicat本地数据库迁移到远程数据库"><a href="#Navicat本地数据库迁移到远程数据库" class="headerlink" title="Navicat本地数据库迁移到远程数据库"></a>Navicat本地数据库迁移到远程数据库</h3><p>在本地把项目做好之后，本地数据库中表结构，表的基本数据需要在云服务器上创建， 如果是在服务器上手动创建，那么这真是一个效率很低,很费时的操作(我并不认为这个是多么牛逼的一个做法)，即使通过本地数据库导出 SQL文件，然后再通过SQL文件导入到云服务器上，这样的做法还是有些麻烦，而且操作失误的概率比较大。有更加方便高效的做法，就是使用Navicat可以轻易的将本地数据库中表结构，基本数据复制到远程服务器的数据库中.</p>
 <p>1.首先，选择你需要传输的数据库， 选择“数据传输”, 如下图:</p>
-<p><img src="http://p7qgi56uk.bkt.clouddn.com/datasend.png" alt="image"></p>
+<p><img src="http://pic.chares.dingxings.cn/datasend.png" alt="datasend"></p>
 <p>2.然后在传输的数据库中选择需要传输的表， 然后在对应侧的 “目标”中选择<strong>连接</strong>, 选择对应的ip和数据库名称, 如下图所示:</p>
-<p><img src="http://p7qgi56uk.bkt.clouddn.com/navicatsource.png" alt="image2"></p>
+<p><img src="http://pic.chares.dingxings.cn/navicatsource.png" alt="navicatsource"></p>
 <p>3.选择好之后点击“开始” 就可以将数据进行转移了</p>
-<p><img src="http://p7qgi56uk.bkt.clouddn.com/navicatsuccess.png" alt="image3"></p>
+<p><img src="http://pic.chares.dingxings.cn/navicatsuccess.png" alt="navicatsuccess"></p>
 <p>这样你的远程数据库的数据就自动和你的本地的数据一致了，更为重要的是:这个方法真的是方便，高效，出错率低。</p>
 
       
@@ -449,13 +449,13 @@
     <div id="QR" style="display: none;">
       
         <div id="wechat" style="display: inline-block">
-          <img id="wechat_qr" src="http://p7qgi56uk.bkt.clouddn.com/WechatPaysmall.jpg" alt="Chares WeChat Pay"/>
+          <img id="wechat_qr" src="http://pic.chares.dingxings.cn/WechatPaysmall.jpg" alt="Chares WeChat Pay"/>
           <p>微信打赏</p>
         </div>
       
       
         <div id="alipay" style="display: inline-block">
-          <img id="alipay_qr" src="http://p7qgi56uk.bkt.clouddn.com/Alipaysmall.jpg" alt="Chares Alipay"/>
+          <img id="alipay_qr" src="http://pic.chares.dingxings.cn/Alipaysmall.jpg" alt="Chares Alipay"/>
           <p>支付宝打赏</p>
         </div>
       

@@ -109,15 +109,15 @@
 <meta property="og:url" content="http://yoursite.com/2018/04/25/IDEA多模块父子依赖maven项目war包部署/index.html">
 <meta property="og:site_name" content="Chares&#39;s Blog">
 <meta property="og:description" content="IDEA全称为IntrlliJ IDEA，它是一款非常智能，方便，高效的Java开发工具，IDEA是JetBrains公司的产品，这家公司总部位于捷克共和国的首都布拉格，开发人员以严谨著称的东欧程序员为主。其实是无论是Java开发工具还是其他语言的开发工具，JetBrains公司的产品都是极为好用的(真的是匠心制造)。IDEA社区版是免费的，但是专业版是收费的，所以对于学生党来说购买专业版无疑是一">
-<meta property="og:image" content="http://p7qgi56uk.bkt.clouddn.com/war_projetc.png">
-<meta property="og:image" content="http://p7qgi56uk.bkt.clouddn.com/war_projectstructe.png">
-<meta property="og:image" content="http://p7qgi56uk.bkt.clouddn.com/war_buildstract.png">
-<meta property="og:image" content="http://p7qgi56uk.bkt.clouddn.com/war_target.png">
-<meta property="og:updated_time" content="2018-04-25T12:10:05.540Z">
+<meta property="og:image" content="http://pic.chares.dingxings.cn/war_projetc.png">
+<meta property="og:image" content="http://pic.chares.dingxings.cn/war_projectstructe.png">
+<meta property="og:image" content="http://pic.chares.dingxings.cn/war_buildstract.png">
+<meta property="og:image" content="http://pic.chares.dingxings.cn/war_target.png">
+<meta property="og:updated_time" content="2019-06-02T14:31:34.559Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="IDEA多模块父子依赖maven项目war包部署">
 <meta name="twitter:description" content="IDEA全称为IntrlliJ IDEA，它是一款非常智能，方便，高效的Java开发工具，IDEA是JetBrains公司的产品，这家公司总部位于捷克共和国的首都布拉格，开发人员以严谨著称的东欧程序员为主。其实是无论是Java开发工具还是其他语言的开发工具，JetBrains公司的产品都是极为好用的(真的是匠心制造)。IDEA社区版是免费的，但是专业版是收费的，所以对于学生党来说购买专业版无疑是一">
-<meta name="twitter:image" content="http://p7qgi56uk.bkt.clouddn.com/war_projetc.png">
+<meta name="twitter:image" content="http://pic.chares.dingxings.cn/war_projetc.png">
 
 
 
@@ -402,12 +402,12 @@
 <p>废话不多说了，进入我们的题目正题是时候给大家介绍如何将多模块的<code>maven</code>项目打包成<code>war</code>包部署在<code>tomcat</code>上了。<br><a id="more"></a></p>
 <h3 id="项目打war包"><a href="#项目打war包" class="headerlink" title="项目打war包"></a>项目打war包</h3><p>当项目开发好， 并且测试好了之后，那么我们应该怎么将项目部署到服务器上呢？如果你是在公司做项目开发，并且公司开发较为规范，公司一般有自动化的部署平台，我们只需要将项目的代码提交到指定的代码仓库中(如<code>master</code>分支), 再通过自动化部署平台，部署平台就自动对项目进行编译，打包，部署等一系列的工作。但是，我们学生党自己做项目开发，只能自己动手了，那么如何使用IDEA将项目打包成<code>war</code>包呢，请看下面的讲解:</p>
 <p>1.首先使用<code>IDEA</code>打开项目，在<code>File</code> –&gt;<code>Project Structure</code> 打开项目的结构，如下图:</p>
-<p><img src="http://p7qgi56uk.bkt.clouddn.com/war_projetc.png" alt="image"></p>
-<p>2.选择<code>Artifacts</code>, 然后选择项目中的一个部署<code>war</code>包, 其实<code>Artifacts</code> 中可以有打成多个不同的<code>war</code>包， <code>war</code>包的名称就是右侧<code>name</code> 中命名的<code>war</code>包名称。<br><img src="http://p7qgi56uk.bkt.clouddn.com/war_projectstructe.png" alt="image"><br>这个名称也是部署在<code>tomcat</code>之后，你需要访问项目时 在端口后面跟上的项目名称，例如: 我这里的<code>web</code> 项目之前的名称是<code>greenhouse-monitor-web.war</code>， 但是我重新命名war包的名称为<code>monitor.war</code>， 所以当我把打好的war包部署在<code>tomcat</code>之后，我访问该项目的路径就是<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://xxx.xxx.xx.xx:8080/monitor</div></pre></td></tr></table></figure></p>
+<p><img src="http://pic.chares.dingxings.cn/war_projetc.png" alt="image"></p>
+<p>2.选择<code>Artifacts</code>, 然后选择项目中的一个部署<code>war</code>包, 其实<code>Artifacts</code> 中可以有打成多个不同的<code>war</code>包， <code>war</code>包的名称就是右侧<code>name</code> 中命名的<code>war</code>包名称。<br><img src="http://pic.chares.dingxings.cn/war_projectstructe.png" alt="image"><br>这个名称也是部署在<code>tomcat</code>之后，你需要访问项目时 在端口后面跟上的项目名称，例如: 我这里的<code>web</code> 项目之前的名称是<code>greenhouse-monitor-web.war</code>， 但是我重新命名war包的名称为<code>monitor.war</code>， 所以当我把打好的war包部署在<code>tomcat</code>之后，我访问该项目的路径就是<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://xxx.xxx.xx.xx:8080/monitor</div></pre></td></tr></table></figure></p>
 <p>并且在<code>Artifacts</code>中可以定义<code>war</code>的输出文件位置，即在<code>Output directory</code> 中进行设置。所以知道了<code>Artifacts</code>的设置之后，就可以对项目进行打包了。</p>
-<p>3.选择<code>Build</code> –&gt; <code>Build Artifacts</code> , 如图：<br><img src="http://p7qgi56uk.bkt.clouddn.com/war_buildstract.png" alt="image"></p>
+<p>3.选择<code>Build</code> –&gt; <code>Build Artifacts</code> , 如图：<br><img src="http://pic.chares.dingxings.cn/war_buildstract.png" alt="image"></p>
 <p>4.然后会弹出如下的选择框，可以看到，这里面的选项也就是我们在项目结构中的<code>Artifacts</code>中所有定义的<code>war</code>名称，选择对应的一个war，<br>选择<code>build</code>选项，这样就可以对项目进行构建了，稍等一会儿就可以将项目构建，打包成<code>war</code>包了，那么打好的<code>war</code>生成在那里呢？ 对了，之前在项目结构中不是有指定的war包项目目录吗？ 是的<code>war</code>包就打在那个指定的目录下，如下图，我的<code>monitor.war</code> 就生成在我指定的目录下:</p>
-<p><img src="http://p7qgi56uk.bkt.clouddn.com/war_target.png" alt="image"></p>
+<p><img src="http://pic.chares.dingxings.cn/war_target.png" alt="image"></p>
 <p>这样就可以直接将这个是<code>war</code>包放在是<code>tomcat</code>的<code>webapp</code>下面， 在<code>tomcat</code>启动的时候是会自动对<code>war</code>进行解压的，这个完全不用担心，里面就是一些编译后的<code>calss</code>文件和一些静态资源和配置文件了。</p>
 
       
@@ -431,13 +431,13 @@
     <div id="QR" style="display: none;">
       
         <div id="wechat" style="display: inline-block">
-          <img id="wechat_qr" src="http://p7qgi56uk.bkt.clouddn.com/WechatPaysmall.jpg" alt="Chares WeChat Pay"/>
+          <img id="wechat_qr" src="http://pic.chares.dingxings.cn/WechatPaysmall.jpg" alt="Chares WeChat Pay"/>
           <p>微信打赏</p>
         </div>
       
       
         <div id="alipay" style="display: inline-block">
-          <img id="alipay_qr" src="http://p7qgi56uk.bkt.clouddn.com/Alipaysmall.jpg" alt="Chares Alipay"/>
+          <img id="alipay_qr" src="http://pic.chares.dingxings.cn/Alipaysmall.jpg" alt="Chares Alipay"/>
           <p>支付宝打赏</p>
         </div>
       
