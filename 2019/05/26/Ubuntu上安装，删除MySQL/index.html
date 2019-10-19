@@ -1,0 +1,961 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="MySQL," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="在Linux环境上操作MySQL服务，相信对MySQL初学者来说，是一个挑战，那么本篇文章将向大家介绍如何在Ubuntu上卸载，安装MySQL服务，并介绍一些简单管理MySQL服务的操作。">
+<meta name="keywords" content="MySQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ubuntu上安装，删除MySQL">
+<meta property="og:url" content="http://yoursite.com/2019/05/26/Ubuntu上安装，删除MySQL/index.html">
+<meta property="og:site_name" content="Chares&#39;s Blog">
+<meta property="og:description" content="在Linux环境上操作MySQL服务，相信对MySQL初学者来说，是一个挑战，那么本篇文章将向大家介绍如何在Ubuntu上卸载，安装MySQL服务，并介绍一些简单管理MySQL服务的操作。">
+<meta property="og:updated_time" content="2019-10-19T15:37:34.279Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ubuntu上安装，删除MySQL">
+<meta name="twitter:description" content="在Linux环境上操作MySQL服务，相信对MySQL初学者来说，是一个挑战，那么本篇文章将向大家介绍如何在Ubuntu上卸载，安装MySQL服务，并介绍一些简单管理MySQL服务的操作。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/05/26/Ubuntu上安装，删除MySQL/"/>
+
+
+
+
+
+  <title>Ubuntu上安装，删除MySQL | Chares's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Chares's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/26/Ubuntu上安装，删除MySQL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chares">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chares's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Ubuntu上安装，删除MySQL</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-26T23:10:59+08:00">
+                2019-05-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL/" itemprop="url" rel="index">
+                    <span itemprop="name">MySQL</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/05/26/Ubuntu上安装，删除MySQL/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/05/26/Ubuntu上安装，删除MySQL/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2019/05/26/Ubuntu上安装，删除MySQL/" class="leancloud_visitors" data-flag-title="Ubuntu上安装，删除MySQL">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Visitors </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在Linux环境上操作MySQL服务，相信对MySQL初学者来说，是一个挑战，那么本篇文章将向大家介绍如何在Ubuntu上卸载，安装MySQL服务，并介绍一些简单管理MySQL服务的操作。<br><a id="more"></a></p>
+<h1 id="卸载MySQL服务"><a href="#卸载MySQL服务" class="headerlink" title="卸载MySQL服务"></a>卸载MySQL服务</h1><p>有时候可能因为某写原因，MySQL没有安装好，导致很多人会产生卸载MySQL数据库，重新安装的想法(这种情况大家还是少遇到好)，那么在Linux下如何进行卸载MySQL服务</p>
+<h2 id="删除MySQL数据文件"><a href="#删除MySQL数据文件" class="headerlink" title="删除MySQL数据文件"></a>删除MySQL数据文件</h2><p>从上面MySQL的配置信息可以看到,MySQL的数据文件目录,那么在删除MySQL数据文件的时候就可以进行删除了.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo rm /var/lib/mysql/ -R</div></pre></td></tr></table></figure></p>
+<h2 id="删除MySQL配置文件"><a href="#删除MySQL配置文件" class="headerlink" title="删除MySQL配置文件"></a>删除MySQL配置文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo rm /etc/mysql/ -R</div></pre></td></tr></table></figure>
+<h2 id="删除MySQL服务-包括Server和Client"><a href="#删除MySQL服务-包括Server和Client" class="headerlink" title="删除MySQL服务(包括Server和Client)"></a>删除MySQL服务(包括Server和Client)</h2><p>执行如下的命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ubuntu@VM-0-8-ubuntu:/etc$ sudo apt-get autoremove mysql* --purge</div><div class="line">ubuntu@VM-0-8-ubuntu:/etc$ sudo apt-get remove apparmor</div></pre></td></tr></table></figure></p>
+<p>如果出现下面的问题<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">......</div><div class="line">Package &apos;mysql-testsuite-5.7&apos; is not installed, so not removed</div><div class="line">You might want to run &apos;apt-get -f install&apos; to correct these:</div><div class="line">The following packages have unmet dependencies:</div><div class="line"> libmysqlclient20 : Depends: mysql-common (&gt;= 5.5) but it is not going to be installed</div><div class="line"> libmysqld-dev : Depends: libmysqlclient-dev (= 5.7.17-1ubuntu16.10) but 5.7.22-0ubuntu0.16.04.1 is to be installed</div><div class="line">E: Unmet dependencies. Try &apos;apt-get -f install&apos; with no packages (or specify a solution).</div></pre></td></tr></table></figure></p>
+<p>说明在安装MySQL的时候,可能是安装的其他软件包不兼容导致了安装包出错时,根据提示,可以通过<strong>apt-get -f install</strong> 来进行修复<strong>sudo apt-get -f install</strong> 是修复损坏的软件包，尝试卸载出错的包，重新安装正确版本的<strong>-f</strong>是参数放在install前面跟后面是一样的效果</p>
+<p>执行下面的命令之后,对有刚才的冲突进行解决.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">ubuntu@VM-0-8-ubuntu:/etc$ sudo apt-get --fix-broken install</div><div class="line">Reading package lists... Done</div><div class="line">Building dependency tree       </div><div class="line">Reading state information... Done</div><div class="line">Correcting dependencies... Done</div><div class="line">The following additional packages will be installed:</div><div class="line">  libmysqld-dev</div><div class="line">The following packages will be upgraded:</div><div class="line">  libmysqld-dev</div><div class="line">1 upgraded, 0 newly installed, 0 to remove and 11 not upgraded.</div><div class="line">5 not fully installed or removed.</div><div class="line">Need to get 0 B/6,761 kB of archives.</div><div class="line">After this operation, 122 MB disk space will be freed.</div><div class="line">Do you want to continue? [Y/n] Y</div><div class="line">(Reading database ... 105598 files and directories currently installed.)</div><div class="line">Preparing to unpack .../libmysqld-dev_5.7.22-0ubuntu0.16.04.1_amd64.deb ...</div><div class="line">Unpacking libmysqld-dev (5.7.22-0ubuntu0.16.04.1) over (5.7.17-1ubuntu16.10) ...</div><div class="line">Setting up linux-base (4.5ubuntu1~16.04.1) ...</div><div class="line">Setting up libaio-dev (0.3.110-2) ...</div><div class="line">Setting up libnuma-dev:amd64 (2.0.11-1ubuntu1.1) ...</div><div class="line">Setting up libmysqlclient20:amd64 (5.7.22-0ubuntu0.16.04.1) ...</div><div class="line">Setting up libmysqlclient-dev (5.7.22-0ubuntu0.16.04.1) ...</div><div class="line">Setting up libmysqld-dev (5.7.22-0ubuntu0.16.04.1) ...</div><div class="line">Processing triggers for libc-bin (2.23-0ubuntu10) ...</div></pre></td></tr></table></figure></p>
+<p>冲突解决之后,再执行上面的命令就可以了.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">ubuntu@VM-0-8-ubuntu:/etc$ sudo apt-get autoremove mysql* --purge</div><div class="line">Reading package lists... Done</div><div class="line">Building dependency tree       </div><div class="line">Reading state information... Done</div><div class="line">Note, selecting &apos;mysqltcl&apos; for glob &apos;mysql*&apos;</div><div class="line">Note, selecting &apos;mysql-mmm-agent&apos; for glob &apos;mysql*&apos;</div><div class="line">Note, selecting &apos;mysql-workbench&apos; for glob &apos;mysql*&apos;</div><div class="line">Note, selecting &apos;mysql-client-5.0&apos; for glob &apos;mysql*&apos;</div><div class="line">Note, selecting &apos;mysql-client-5.1&apos; for glob &apos;mysql*&apos;</div><div class="line">......</div><div class="line">......</div><div class="line">Package &apos;mysql-server-5.7&apos; is not installed, so not removed</div><div class="line">Package &apos;mysql-server-core-5.7&apos; is not installed, so not removed</div><div class="line">Package &apos;mysql-source-5.7&apos; is not installed, so not removed</div><div class="line">Package &apos;mysql-testsuite&apos; is not installed, so not removed</div><div class="line">Package &apos;mysql-testsuite-5.7&apos; is not installed, so not removed</div><div class="line">The following packages will be REMOVED:</div><div class="line">  libaio-dev* libmysqlclient-dev* libmysqlclient20* libmysqld-dev* libnuma-dev* mysql-client* mysql-common* mysql-community-client* mysql-community-server* mysql-community-source*</div><div class="line">0 upgraded, 0 newly installed, 10 to remove and 10 not upgraded.</div><div class="line">After this operation, 464 MB disk space will be freed.</div><div class="line">Do you want to continue? [Y/n] Y</div><div class="line">(Reading database ... 105596 files and directories currently installed.)</div><div class="line">Removing libmysqld-dev (5.7.22-0ubuntu0.16.04.1) ...</div><div class="line">Removing libaio-dev (0.3.110-2) ...</div><div class="line">Removing libmysqlclient-dev (5.7.22-0ubuntu0.16.04.1) ...</div><div class="line">Removing libmysqlclient20:amd64 (5.7.22-0ubuntu0.16.04.1) ...</div><div class="line">Removing libnuma-dev:amd64 (2.0.11-1ubuntu1.1) ...</div><div class="line">Removing mysql-community-server (5.7.17-1ubuntu16.10) ...</div><div class="line">update-alternatives: warning: alternative /etc/mysql/my.cnf.fallback (part of link group my.cnf) doesn&apos;t exist; removing from list of alternatives</div><div class="line">update-alternatives: warning: alternative /etc/mysql/mysql.cnf (part of link group my.cnf) doesn&apos;t exist; removing from list of alternatives</div><div class="line">update-alternatives: warning: /etc/alternatives/my.cnf is dangling; it will be updated with best choice</div><div class="line">Purging configuration files for mysql-community-server (5.7.17-1ubuntu16.10) ...</div><div class="line">.</div><div class="line">Removing mysql-client (5.7.17-1ubuntu16.10) ...</div><div class="line">Removing mysql-community-client (5.7.17-1ubuntu16.10) ...</div><div class="line">Removing mysql-common (5.7.22-0ubuntu0.16.04.1) ...</div><div class="line">Purging configuration files for mysql-common (5.7.22-0ubuntu0.16.04.1) ...</div><div class="line">Removing mysql-community-source (5.7.17-1ubuntu16.10) ...</div><div class="line">Processing triggers for man-db (2.7.5-1) ...</div><div class="line">Processing triggers for libc-bin (2.23-0ubuntu10) ...</div><div class="line">ubuntu@VM-0-8-ubuntu:/etc$ </div><div class="line">`</div></pre></td></tr></table></figure></p>
+<p>在执行该条命令之后,会弹出提示框,确认是否删除MySQL服务, 并且显示出,会删除的文件会有哪些.<br>进行确认之后,选择YES,那么就将MySQL进行卸载了</p>
+<h2 id="检查是否卸载干净"><a href="#检查是否卸载干净" class="headerlink" title="检查是否卸载干净"></a>检查是否卸载干净</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">ubuntu@VM-0-8-ubuntu:/etc$ mysql</div><div class="line">The program &apos;mysql&apos; can be found in the following packages:</div><div class="line"> * mysql-client-core-5.7</div><div class="line"> * mariadb-client-core-10.0</div><div class="line">Try: sudo apt install &lt;selected package&gt;</div><div class="line">ubuntu@VM-0-8-ubuntu:/etc$ dpkg -l | grep mysql</div><div class="line">ubuntu@VM-0-8-ubuntu:/etc$</div></pre></td></tr></table></figure>
+<p>可以看到，已经没有任何任何关于MySQL的东西。说明已经卸载干净了。</p>
+<h1 id="安装MySQL服务"><a href="#安装MySQL服务" class="headerlink" title="安装MySQL服务"></a>安装MySQL服务</h1><p>卸载好了MySQL之后，如何安装呢, 下面就介绍如何Linux下快速安装MySQL.</p>
+<h2 id="安装server和client"><a href="#安装server和client" class="headerlink" title="安装server和client"></a>安装server和client</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">ubuntu@VM-0-8-ubuntu:/usr$ sudo apt-get install mysql-server mysql-client</div><div class="line">Reading package lists... Done</div><div class="line">Building dependency tree       </div><div class="line">Reading state information... Done</div><div class="line">The following additional packages will be installed:</div><div class="line">  libcgi-fast-perl libcgi-pm-perl libencode-locale-perl libevent-core-2.0-5 libfcgi-perl libhtml-parser-perl libhtml-tagset-perl libhtml-template-perl libhttp-date-perl</div><div class="line">  libhttp-message-perl libio-html-perl liblwp-mediatypes-perl libtimedate-perl liburi-perl mysql-client-5.7 mysql-client-core-5.7 mysql-common mysql-server-5.7 mysql-server-core-5.7</div><div class="line">Suggested packages:</div><div class="line">  libdata-dump-perl libipc-sharedcache-perl libwww-perl mailx tinyca</div><div class="line">The following NEW packages will be installed:</div><div class="line">  libcgi-fast-perl libcgi-pm-perl libencode-locale-perl libevent-core-2.0-5 libfcgi-perl libhtml-parser-perl libhtml-tagset-perl libhtml-template-perl libhttp-date-perl</div><div class="line">  libhttp-message-perl libio-html-perl liblwp-mediatypes-perl libtimedate-perl liburi-perl mysql-client mysql-client-5.7 mysql-client-core-5.7 mysql-common mysql-server</div><div class="line">  mysql-server-5.7 mysql-server-core-5.7</div><div class="line">0 upgraded, 21 newly installed, 0 to remove and 10 not upgraded.</div><div class="line">Need to get 18.7 MB of archives.</div><div class="line">After this operation, 162 MB of additional disk space will be used.</div><div class="line">Do you want to continue? [Y/n]</div></pre></td></tr></table></figure>
+<p>如果发现源获取失败的,那么就先更新本地的源,执行<strong>apt-get update</strong>,<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">ubuntu@VM-0-8-ubuntu:/usr$ apt-get update</div><div class="line">Reading package lists... Done</div><div class="line">W: chmod 0700 of directory /var/lib/apt/lists/partial failed - SetupAPTPartialDirectory (1: Operation not permitted)</div><div class="line">E: Could not open lock file /var/lib/apt/lists/lock - open (13: Permission denied)</div><div class="line">E: Unable to lock directory /var/lib/apt/lists/</div><div class="line">W: Problem unlinking the file /var/cache/apt/pkgcache.bin - RemoveCaches (13: Permission denied)</div><div class="line">W: Problem unlinking the file /var/cache/apt/srcpkgcache.bin - RemoveCaches (13: Permission denied)</div><div class="line">ubuntu@VM-0-8-ubuntu:/usr$ sudo apt-get update</div><div class="line">Hit:1 http://mirrors.tencentyun.com/ubuntu xenial InRelease</div><div class="line">Get:2 http://mirrors.tencentyun.com/ubuntu xenial-security InRelease [107 kB]</div><div class="line">Get:3 http://mirrors.tencentyun.com/ubuntu xenial-updates InRelease [109 kB]</div><div class="line">Get:4 http://mirrors.tencentyun.com/ubuntu xenial-security/main Sources [134 kB]</div><div class="line">......</div><div class="line">Get:22 http://mirrors.tencentyun.com/ubuntu xenial-updates/main amd64 Packages [849 kB]</div><div class="line">Get:23 http://mirrors.tencentyun.com/ubuntu xenial-updates/main i386 Packages [763 kB]</div><div class="line">Get:24 http://mirrors.tencentyun.com/ubuntu xenial-updates/main Translation-en [347 kB]</div><div class="line">Get:25 http://mirrors.tencentyun.com/ubuntu xenial-updates/restricted amd64 Packages [7,556 B]</div><div class="line">Get:26 http://mirrors.tencentyun.com/ubuntu xenial-updates/restricted i386 Packages [7,524 B]</div><div class="line">Get:27 http://mirrors.tencentyun.com/ubuntu xenial-updates/restricted Translation-en [2,272 B]</div><div class="line">Get:28 http://mirrors.tencentyun.com/ubuntu xenial-updates/universe amd64 Packages [691 kB]</div><div class="line">Get:29 http://mirrors.tencentyun.com/ubuntu xenial-updates/universe i386 Packages [632 kB]</div><div class="line">Get:30 http://mirrors.tencentyun.com/ubuntu xenial-updates/universe Translation-en [279 kB]</div><div class="line">Get:31 http://mirrors.tencentyun.com/ubuntu xenial-updates/multiverse amd64 Packages [16.4 kB]</div><div class="line">Get:32 http://mirrors.tencentyun.com/ubuntu xenial-updates/multiverse i386 Packages [15.5 kB]</div><div class="line">Fetched 6,736 kB in 5s (1,218 kB/s)</div><div class="line">Reading package lists... Done</div></pre></td></tr></table></figure></p>
+<p>更新好了之后,就进行下载了,下载进行安装的过程会设置mysql的root密码,设置完密码,MySQL服务就安装好了.</p>
+<p>此时查看mysql的服务,就可以看到服务已经开启了:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">ubuntu@VM-0-8-ubuntu:/usr$ service mysql status</div><div class="line">● mysql.service - MySQL Community Server</div><div class="line">   Loaded: loaded (/lib/systemd/system/mysql.service; enabled; vendor preset: enabled)</div><div class="line">   Active: active (running) since Tue 2018-10-02 00:11:42 CST; 4min 33s ago</div><div class="line"> Main PID: 9141 (mysqld)</div><div class="line">   CGroup: /system.slice/mysql.service</div><div class="line">           └─9141 /usr/sbin/mysqld</div><div class="line"></div><div class="line">Oct 02 00:11:41 VM-0-8-ubuntu systemd[1]: Starting MySQL Community Server...</div><div class="line">Oct 02 00:11:42 VM-0-8-ubuntu systemd[1]: Started MySQL Community Server.</div></pre></td></tr></table></figure></p>
+<h2 id="开启MySQL日志记录"><a href="#开启MySQL日志记录" class="headerlink" title="开启MySQL日志记录"></a>开启MySQL日志记录</h2><p>如果想要记录每次对MySQL实例的操作记录都能够记录下来，查看是否开启了日志记录可以通过如下的命令查询：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">mysql&gt; show variables like &apos;general%&apos;;</div><div class="line">+------------------+----------------------------------+</div><div class="line">| Variable_name    | Value                            |</div><div class="line">+------------------+----------------------------------+</div><div class="line">| general_log      | OFF                              |</div><div class="line">| general_log_file | /var/lib/mysql/VM-0-8-ubuntu.log |</div><div class="line">+------------------+----------------------------------+</div><div class="line">2 rows in set (0.00 sec)</div></pre></td></tr></table></figure></p>
+<p>上面<code>general_log</code>，<code>general_log_file</code>就是 是否打开的开关，和日志保存的文件目录，当然可以修改mysql日志文件的记录的文件存放地址,上面的MySQL设置,默认是没有进行开启日志记录的。</p>
+<p>可以通过对全局进行修改，如下的命令:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">mysql&gt; set GLOBAL general_log=&apos;ON&apos;;</div><div class="line">Query OK, 0 rows affected (0.01 sec)</div><div class="line"></div><div class="line">mysql&gt; show variables like &apos;general%&apos;;</div><div class="line">+------------------+----------------------------------+</div><div class="line">| Variable_name    | Value                            |</div><div class="line">+------------------+----------------------------------+</div><div class="line">| general_log      | ON                               |</div><div class="line">| general_log_file | /var/lib/mysql/VM-0-8-ubuntu.log |</div><div class="line">+------------------+----------------------------------+</div><div class="line">2 rows in set (0.00 sec)</div></pre></td></tr></table></figure></p>
+<h1 id="对MySQL服务基本管理操作"><a href="#对MySQL服务基本管理操作" class="headerlink" title="对MySQL服务基本管理操作"></a>对MySQL服务基本管理操作</h1><h2 id="开启mysql服务"><a href="#开启mysql服务" class="headerlink" title="开启mysql服务"></a>开启mysql服务</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&gt; service mysql start</div></pre></td></tr></table></figure>
+<h2 id="停止mysql服务"><a href="#停止mysql服务" class="headerlink" title="停止mysql服务"></a>停止mysql服务</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&gt; service mysql stop</div></pre></td></tr></table></figure>
+<h2 id="重启mysql服务"><a href="#重启mysql服务" class="headerlink" title="重启mysql服务"></a>重启mysql服务</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&gt; service mysql restart</div></pre></td></tr></table></figure>
+<h2 id="查看mysql状态"><a href="#查看mysql状态" class="headerlink" title="查看mysql状态"></a>查看mysql状态</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service mysql status</div></pre></td></tr></table></figure>
+<p>如果输出的是如下的提示,说明MySQL服务已经停止(<code>dead</code>), 下面中就说明了mysql的当前状态：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">● mysql.service - MySQL Community Server</div><div class="line">   Loaded: loaded (/lib/systemd/system/mysql.service; enabled; vendor preset: enabled)</div><div class="line">   Active: inactive (dead) since Mon 2018-10-01 22:00:02 CST; 1min 40s ago</div><div class="line"> Main PID: 1268 (code=exited, status=0/SUCCESS)</div><div class="line"></div><div class="line">Oct 01 22:00:00 VM-0-8-ubuntu systemd[1]: Stopping MySQL Community Server...</div><div class="line">Oct 01 22:00:02 VM-0-8-ubuntu systemd[1]: Stopped MySQL Community Server.</div><div class="line">Warning: Journal has been rotated since unit was started. Log output is incomplete or unavailable.</div></pre></td></tr></table></figure></p>
+<p>如果输出如下的信息,说明mysql服务是正在运行着(<code>running</code>).<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">ubuntu@VM-0-8-ubuntu:/usr$ service mysql status</div><div class="line">● mysql.service - MySQL Community Server</div><div class="line">   Loaded: loaded (/lib/systemd/system/mysql.service; enabled; vendor preset: enabled)</div><div class="line">   Active: active (running) since Tue 2018-10-02 00:11:42 CST; 4min 33s ago</div><div class="line"> Main PID: 9141 (mysqld)</div><div class="line">   CGroup: /system.slice/mysql.service</div><div class="line">           └─9141 /usr/sbin/mysqld</div><div class="line"></div><div class="line">Oct 02 00:11:41 VM-0-8-ubuntu systemd[1]: Starting MySQL Community Server...</div><div class="line">Oct 02 00:11:42 VM-0-8-ubuntu systemd[1]: Started MySQL Community Server.</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="http://pic.chares.dingxings.cn/WechatPaysmall.jpg" alt="Chares WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="http://pic.chares.dingxings.cn/Alipaysmall.jpg" alt="Chares Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/03/Netty的TCP粘包-拆包问题的解决之道/" rel="next" title="Netty的TCP粘包/拆包问题的解决之道">
+                <i class="fa fa-chevron-left"></i> Netty的TCP粘包/拆包问题的解决之道
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2019/05/26/Ubuntu上安装，删除MySQL/"
+           data-title="Ubuntu上安装，删除MySQL" data-url="http://yoursite.com/2019/05/26/Ubuntu上安装，删除MySQL/">
+      </div>
+    
+  </div>
+
+
+
+
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="Chares" />
+          <p class="site-author-name" itemprop="name">Chares</p>
+           
+              <p class="site-description motion-element" itemprop="description">Stay hungry, Stay foolish.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">54</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Wangchangchung" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/5470218610" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/wang-chang-chun-84" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#卸载MySQL服务"><span class="nav-number">1.</span> <span class="nav-text">卸载MySQL服务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#删除MySQL数据文件"><span class="nav-number">1.1.</span> <span class="nav-text">删除MySQL数据文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#删除MySQL配置文件"><span class="nav-number">1.2.</span> <span class="nav-text">删除MySQL配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#删除MySQL服务-包括Server和Client"><span class="nav-number">1.3.</span> <span class="nav-text">删除MySQL服务(包括Server和Client)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#检查是否卸载干净"><span class="nav-number">1.4.</span> <span class="nav-text">检查是否卸载干净</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装MySQL服务"><span class="nav-number">2.</span> <span class="nav-text">安装MySQL服务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装server和client"><span class="nav-number">2.1.</span> <span class="nav-text">安装server和client</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开启MySQL日志记录"><span class="nav-number">2.2.</span> <span class="nav-text">开启MySQL日志记录</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#对MySQL服务基本管理操作"><span class="nav-number">3.</span> <span class="nav-text">对MySQL服务基本管理操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#开启mysql服务"><span class="nav-number">3.1.</span> <span class="nav-text">开启mysql服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#停止mysql服务"><span class="nav-number">3.2.</span> <span class="nav-text">停止mysql服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重启mysql服务"><span class="nav-number">3.3.</span> <span class="nav-text">重启mysql服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看mysql状态"><span class="nav-number">3.4.</span> <span class="nav-text">查看mysql状态</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chares</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"charsewan"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("hoyPJdam7ySwVSOa3IpHGgpU-gzGzoHsz", "tSe2gMzMGHhTWXbxL4Cr8bgP");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
